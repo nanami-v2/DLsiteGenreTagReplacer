@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "@types/firefox-webext-browser": "^120.0.3",
+    "esbuild": "^0.20.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.3"
+  }
+}

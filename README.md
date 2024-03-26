@@ -1,15 +1,29 @@
 # Anti-Word Hunting <!-- omit in toc -->
 
-- [技術要素](#技術要素)
-- [開発環境構築](#開発環境構築)
+- [本拡張機能に関して](#本拡張機能に関して)
+  - [対応ブラウザ](#対応ブラウザ)
+- [開発環境](#開発環境)
+  - [セットアップ手順](#セットアップ手順)
+- [リンク](#リンク)
 
-## 技術要素
+## 本拡張機能に関して
 
-- [TypeScript](https://www.typescriptlang.org/)
+クレカ会社が原因と思われる、[DLsite.com](https://www.dlsite.com/index.html)に対する表現規制（言葉狩り）への対策を行うためのものになります。
 
-## 開発環境構築
+### 対応ブラウザ
 
-**WSL2** 上で作業する。[こちらの手順](https://learn.microsoft.com/en-us/windows/dev-environment/javascript/nodejs-on-wsl#install-nvm-nodejs-and-npm)にしたがって以下をインストールする。
+- Firefox
+
+## 開発環境
+
+開発にあたっては[TypeScript](https://www.typescriptlang.org/)を使用しています。また、以下の利用を前提としています。
+
+- [VSCode](https://code.visualstudio.com/)
+- [WSL2](https://learn.microsoft.com/en-us/windows/wsl/install)
+
+### セットアップ手順
+
+**WSL2** 上で、以下をインストールします。
 
 - [Node Version Manager](https://github.com/nvm-sh/nvm)
 
@@ -24,10 +38,21 @@
     nvm install --lts
     ```
 
-- ビルドおよびバンドルに必要な各種`node-modules`
+- ビルドやバンドルに必要な`node_modules`
 
     ```sh
     npm install --save-dev typescript ts-node
     npm install --save-dev esbuild
     npm install --save-dev @types/firefox-webext-browser
     ```
+
+- [Gnu Make](https://www.gnu.org/software/make/)
+
+    ```sh
+    apt install -y make
+    ```
+
+## リンク
+
+- [TypeScript](https://www.typescriptlang.org/)
+- [esbuild](https://esbuild.github.io/)

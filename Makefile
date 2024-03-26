@@ -1,7 +1,7 @@
 
 srcDir      := src
 outDir      := dist
-entryPoints := $(addprefix $(srcDir)/,main-background.ts main-contents.ts)
+entryPoints := $(shell find $(srcDir) -type f -name main-*)
 
 .PHONY: build
 build:

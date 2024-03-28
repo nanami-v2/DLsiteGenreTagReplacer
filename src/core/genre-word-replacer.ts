@@ -26,7 +26,8 @@ export class GenreWordReplacer {
                     continue;
 
                 const newWord = genreTags[j].textContent!;
-                const oldWord = genreWordConvertionMap.mapToOldWord.get(newWord);
+                const entry   = genreWordConvertionMap.entries.find((e) => e.newWord === newWord);
+                const oldWord = (entry) ? entry.oldWord : null;
 
                 if (oldWord)
                     genreTags[j].textContent = oldWord;

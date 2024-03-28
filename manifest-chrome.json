@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "Anti-WordHunting",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "クレカ会社による言葉狩りへの対応",
     "content_scripts": [
       {
@@ -11,7 +11,7 @@
       }
     ],
     "background": {
-      "scripts": ["main-background.js"],
+      "service_worker": "main-background.js",
       "type": "module"
     },
     "web_accessible_resources": [

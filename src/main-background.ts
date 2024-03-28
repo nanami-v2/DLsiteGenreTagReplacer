@@ -9,7 +9,7 @@ import { GenreWordConversionMapLoader } from "./core/genre-word-conversion-map-l
 let g_conversionMap = new GenreWordConversionMap();
 
 /* 初期化 */
-browser.runtime.onInstalled.addListener(() => {
+chrome.runtime.onInstalled.addListener(() => {
     /*
         contets-script側で読み込むと、毎ページで読み込むことになるので無駄
         なのでbackground側で読み込んでおいて、キャッシュしておく
@@ -29,9 +29,9 @@ browser.runtime.onInstalled.addListener(() => {
     /*
         メッセージハンドラを登録
     */
-    browser.runtime.onMessage.addListener((
+    chrome.runtime.onMessage.addListener((
         message: Message,
-        messageSender: browser.runtime.MessageSender,
+        messageSender: chrome.runtime.MessageSender,
         sendResponse: (response: any) => void
     ) => {
         if (message.type === MessageType.GetGenreWordConversionMap)

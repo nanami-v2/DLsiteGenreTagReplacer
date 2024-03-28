@@ -3,7 +3,7 @@ import { MessageGetGenreWordConversionMap } from "./message";
 import { GenreWordConversionMap } from "./core/genre-word-conversion-map";
 import { GenreWordReplacer } from './core/genre-word-replacer';
 
-browser.runtime.sendMessage(
+chrome.runtime.sendMessage(
     new MessageGetGenreWordConversionMap()
 )
 .then((conversionMap: GenreWordConversionMap) => {

@@ -13,6 +13,7 @@
 
 ### 対応ブラウザ
 
+- Chrome
 - Firefox
 
 ### 変換用語一覧
@@ -49,6 +50,7 @@
     npm install --save-dev typescript ts-node
     npm install --save-dev esbuild
     npm install --save-dev @types/firefox-webext-browser
+    npm install --save-dev @types/chrome
     ```
 
 - [Gnu Make](https://www.gnu.org/software/make/)

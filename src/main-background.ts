@@ -98,14 +98,13 @@ chrome.runtime.onInstalled.addListener(() => {
     });
     /*
         タブ更新時にも置換する必要がある
+        例えば検索結果でジャンルを選ぶとページの内容が更新されるため
     */
     chrome.tabs.onUpdated.addListener((
         tabId        : number,
         tabChangeInfo: chrome.tabs.TabChangeInfo,
         tab          : chrome.tabs.Tab
     ) => {
-        console.log(tab, tab.url!.match('*://*.dlsite.com/*'));
-
         if (tabChangeInfo.status === 'complete')
             chrome.tabs.sendMessage(tabId, new MessageReplaceGenreWord(), (response: any) => void {});
     });

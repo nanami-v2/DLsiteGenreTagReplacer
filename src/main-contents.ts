@@ -16,4 +16,4 @@ browser.runtime.sendMessage(
 })
 .catch((err) => {
     console.log(err);
-})
+});

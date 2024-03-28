@@ -8,9 +8,10 @@ import { GenreWordConversionMapLoader } from "./core/genre-word-conversion-map-l
 
 let g_conversionMap = new GenreWordConversionMap();
 
+/* 初期化 */
 browser.runtime.onInstalled.addListener(() => {
     /*
-        リソースを読み込んでキャッシュ
+        変換表は読み込んでキャッシュ
     */
     const conversionMapLoader   = new GenreWordConversionMapLoader();
     const conversionMapFilePath = '/assets/genre-word-conversion-map.json';
@@ -20,7 +21,7 @@ browser.runtime.onInstalled.addListener(() => {
     )
     .then((conversionMap) => {
         g_conversionMap = conversionMap;
-    });    
+    })
     /*
         メッセージハンドラを登録
     */

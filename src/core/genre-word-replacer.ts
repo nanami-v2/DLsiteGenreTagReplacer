@@ -5,7 +5,7 @@ export class GenreWordReplacer {
     public replaceGenreWords(
         htmlDocument      : Document,
         genreWordConverter: GenreWordConverter
-    ) {
+    ): void {
         /*
             特にいい感じの方法が思いつかなかったので地道に頑張る
             ...DLsite側の変更に対して脆弱だけど、しょうがない

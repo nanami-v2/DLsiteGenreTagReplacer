@@ -1,7 +1,8 @@
 
 srcDir        := src
-outDirFirefox := dist-firefox
-outDirChrome  := dist-chrome
+outDir        := dist
+outDirFirefox := dist/firefox
+outDirChrome  := dist/chrome
 assetDir      := assets
 entryPoints   := $(shell find $(srcDir) -type f -name main-*)
 
@@ -9,15 +10,14 @@ entryPoints   := $(shell find $(srcDir) -type f -name main-*)
 build:
 	npx esbuild $(entryPoints) --bundle --outdir=$(outDirFirefox)
 	npx esbuild $(entryPoints) --bundle --outdir=$(outDirChrome)
-	cp $(assetDir) $(outDirFirefox)/ -r
-	cp $(assetDir) $(outDirChrome)/ -r
-	cp manifest.json.firefox $(outDirFirefox)/manifest.json
-	cp manifest.json.chrome $(outDirChrome)/manifest.json
+	mkdir $(outDirFirefox) -p && cp $(assetDir) $(outDirFirefox)/ -r
+	mkdir $(outDirChrome) -p && cp $(assetDir) $(outDirChrome)/ -r
+	cp manifest-firefox.json $(outDirFirefox)/manifest.json
+	cp manifest-chrome.json $(outDirChrome)/manifest.json
 
 .PHONY: clean
 clean:
-	rm -rf $(outDirFirefox)/*
-	rm -rf $(outDirChrome)/*
+	rm -rf $(outDir)
 
 .PHONY: check-type
 check-type:

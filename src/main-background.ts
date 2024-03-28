@@ -5,6 +5,7 @@ import {
 } from "./message";
 import { GenreWordConversionMap } from "./core/genre-word-conversion-map";
 import { GenreWordConversionMapLoader } from "./core/genre-word-conversion-map-loader";
+import { GenreWordConversionMode } from "./core/genre-word-conversion-mode";
 
 let g_conversionMap = new GenreWordConversionMap();
 
@@ -34,7 +35,11 @@ chrome.runtime.onInstalled.addListener(() => {
         messageSender: chrome.runtime.MessageSender,
         sendResponse: (response: any) => void
     ) => {
-        if (message.type === MessageType.GetGenreWordConversionMap)
-            sendResponse(g_conversionMap);
+        switch (message.type) {
+            case MessageType.GetGenreWordConversionMap:
+                return sendResponse(g_conversionMap);
+            case MessageType.GetGenerWordConversionMode:
+                return sendResponse(GenreWordConversionMode.ToOldWords);
+        }
     });
 });

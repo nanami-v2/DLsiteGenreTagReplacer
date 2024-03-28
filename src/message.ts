@@ -1,6 +1,7 @@
 
 export enum MessageType {
     GetGenreWordConversionMap,
+    GetGenerWordConversionMode,
 }
 
 export interface Message {
@@ -9,4 +10,8 @@ export interface Message {
 
 export class MessageGetGenreWordConversionMap implements Message {
     type: MessageType = MessageType.GetGenreWordConversionMap;
+}
+
+export class MessageGetGenreWordConversionMode implements Message {
+    type: MessageType = MessageType.GetGenerWordConversionMode;
 }

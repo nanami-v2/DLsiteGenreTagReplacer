@@ -1,31 +1,71 @@
 
-import { AppMessageClickContextMenu } from "./app-message";
+import {
+    AppMessage,
+    AppMessageType,
+    AppMessageStartGenreWordConversion,
+} from "./app-message";
+import { GenreWordConversionMap } from './core/genre-word-conversion-map';
+import { GenreWordConversionMapLoader } from "./core/genre-word-conversion-map-loader";
 
 const CONTEXT_MENU_ID    = '43ae9812-9ca5-425d-b12f-c617f91f9095'; /* GUID */
 const CONTEXT_MENU_TITLE = 'Execute Anti-WordHunting';
 
-console.log('background');
+browser.runtime.onInstalled.addListener(() => {
+    /*
+        コンテキストメニューを生成
+    */
+    browser.menus.create({
+        type               : 'normal',
+        id                 : CONTEXT_MENU_ID,
+        title              : CONTEXT_MENU_TITLE,
+        contexts           : ['page'],
+        documentUrlPatterns: ['*://*.dlsite.com/*']
+    });
+    browser.menus.onClicked.addListener(onClickContextMenu);
 
+    browser.runtime.onMessage.addListener((
+        message: AppMessage,
+        messageSender: browser.runtime.MessageSender,
+        sendResponse: (response: any) => void
+    ) => {
+        switch (message.type) {
+            case AppMessageType.GetGenreWordConversionMap:
+                return onGetGenreWordConversionMap(
+                    message,
+                    messageSender,
+                    sendResponse
+                );
+        }
+    });
+});
 
 function onClickContextMenu(
     info: browser.menus.OnClickData,
     tab : browser.tabs.Tab | undefined
-): void {
+) {
     const tabId   = tab!.id!;
-    const message = new AppMessageClickContextMenu();
+    const message = new AppMessageStartGenreWordConversion();
 
     browser.tabs.sendMessage(tabId, message);
 }
 
-/*
-    https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Background_scripts#initialize_the_extension
-    にある通り、本来は browser.runtime.onInstalled でコンテキストメニューを作るべき
-*/
-browser.menus.create({
-    type               : 'normal',
-    id                 : CONTEXT_MENU_ID,
-    title              : CONTEXT_MENU_TITLE,
-    contexts           : ['page'],
-    documentUrlPatterns: ['*://*.dlsite.com/*']
-});
-browser.menus.onClicked.addListener(onClickContextMenu);
+function onGetGenreWordConversionMap(
+    message      : AppMessage,
+    messageSender: browser.runtime.MessageSender,
+    sendResponse : (response: any) => void
+) {
+    const conversionMapLoader   = new GenreWordConversionMapLoader();
+    const conversionMapFilePath = '/assets/genre-word-conversion-map.json';
+
+    return (
+        conversionMapLoader.load(
+            conversionMapFilePath
+        )
+        .then((conversionMap) => {
+            return Promise.resolve(conversionMap);
+        })
+        .catch((err) => {
+            return Promise.reject(err);
+        })
+    );
+}

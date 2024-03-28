@@ -1,12 +1,19 @@
 
+
 export enum AppMessageType {
-    ClickContextMenu,
+    StartGenreWordConversion,
+    GetGenreWordConversionMap,
 }
 
 export interface AppMessage {
     type: AppMessageType;
 }
 
-export class AppMessageClickContextMenu implements AppMessage {
-    type: AppMessageType = AppMessageType.ClickContextMenu;
+export class AppMessageGetGenreWordConversionMap implements AppMessage {
+    type: AppMessageType = AppMessageType.GetGenreWordConversionMap;
+}
+
+export class AppMessageStartGenreWordConversion implements AppMessage {
+    type: AppMessageType = AppMessageType.StartGenreWordConversion;
 };
+

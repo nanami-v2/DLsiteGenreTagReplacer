@@ -1,21 +1,26 @@
 
-import { AppMessage, AppMessageType, AppMessageClickContextMenu } from "./app-message";
-
-//console.log(document.getElementsByClassName('main_genre'));
-console.log('content');
-
-const g_data = {
-    isClicked: false,
-};
+import { GenreWordConversionMap } from "./core/genre-word-conversion-map";
+import { GenreWordUpdater } from './core/genre-word-updater';
+import {
+    AppMessage,
+    AppMessageType,
+    AppMessageGetGenreWordConversionMap,
+} from "./app-message";
 
 browser.runtime.onMessage.addListener((
     message      : AppMessage,
     messageSender: browser.runtime.MessageSender,
     sendResponse : (response: any) => void
 ) => {
+    console.log('onMessage', message);
+
     switch (message.type) {
-        case AppMessageType.ClickContextMenu:
-            return onClickContextMenu(message, messageSender, sendResponse);
+        case AppMessageType.StartGenreWordConversion:
+            return onStartGenreWordConversion(
+                message,
+                messageSender,
+                sendResponse
+            );
     }
 });
 
@@ -23,19 +28,20 @@ browser.runtime.onMessage.addListener((
  * 
  * @param {} message 
  */
-function onClickContextMenu(
+function onStartGenreWordConversion(
     message      : AppMessage,
     messageSender: browser.runtime.MessageSender,
     sendResponse : (response: any) => void
 ) {
-    if (!g_data.isClicked) {
-        g_data.isClicked = true;
+    browser.runtime.sendMessage(
+        new AppMessageGetGenreWordConversionMap()
+    )
+    .then((conversionMap: GenreWordConversionMap) => {
+        const wordUpdater = new GenreWordUpdater();
 
-        console.log(message, 'listended!!!');
-        document.body.style.border = '5px solid red';
-    }
-    else {
-        console.log(message, 'listended!!!');
-        document.body.style.border = '';
-    }
+        wordUpdater.updateGenreWords(
+            document,
+            conversionMap
+        );
+    });
 }

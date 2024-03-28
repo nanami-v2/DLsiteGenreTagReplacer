@@ -1,11 +1,8 @@
 {
-    "manifest_version": 2,
+    "manifest_version": 3,
     "name": "Anti-WordHunting",
     "version": "0.0.1",
     "description": "クレカ会社による言葉狩りへの対応",  
-    "icons": {
-      "48": "icons/border-48x48.png"
-    },
     "permissions": [
       "menus"
     ],
@@ -18,6 +15,12 @@
     "background": {
       "scripts": ["main-background.js"],
       "type": "module"
-    }
+    },
+    "web_accessible_resources": [
+      {
+        "resources": ["/assets/*"],
+        "matches": ["*://*.dlsite.com/*"]
+      }
+    ]
   }
   

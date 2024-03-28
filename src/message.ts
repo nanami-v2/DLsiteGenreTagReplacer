@@ -17,6 +17,6 @@ export class MessageGetGenreWordConversionMode implements Message {
     type: MessageType = MessageType.GetGenerWordConversionMode;
 }
 
-export class MessageUpdateGenreWord implements Message {
+export class MessageReplaceGenreWord implements Message {
     type: MessageType = MessageType.ReplaceGenreWord;
 }

@@ -1,5 +1,5 @@
 
-import { Message, MessageType, MessageUpdateGenreWord } from "./message";
+import { Message, MessageType, MessageReplaceGenreWord } from "./message";
 import { GenreWordConversionMap } from "./core/genre-word-conversion-map";
 import { GenreWordConversionMapLoader } from "./core/genre-word-conversion-map-loader";
 import { GenreWordConversionMode } from "./core/genre-word-conversion-mode";
@@ -59,10 +59,6 @@ chrome.runtime.onInstalled.addListener(() => {
         info: chrome.contextMenus.OnClickData,
         tab : chrome.tabs.Tab | undefined
     ) => {
-        g_conversionMode = (g_conversionMode === GenreWordConversionMode.ToOldWords)
-            ? GenreWordConversionMode.ToNewWords
-            : GenreWordConversionMode.ToOldWords;
-
         const menuId    = info.menuItemId;
         const menuTitle = (g_conversionMode === GenreWordConversionMode.ToOldWords)
             ? CONTEXT_MENU_TITLE_TO_OLD
@@ -70,8 +66,21 @@ chrome.runtime.onInstalled.addListener(() => {
 
         chrome.contextMenus.update(menuId, {title: menuTitle});
 
+        g_conversionMode = (g_conversionMode === GenreWordConversionMode.ToOldWords)
+            ? GenreWordConversionMode.ToNewWords
+            : GenreWordConversionMode.ToOldWords;
+
         const tabId   = tab!.id!;
-        const message = new MessageUpdateGenreWord();
+        const message = new MessageReplaceGenreWord();
+
+        chrome.tabs.sendMessage(tabId, message, (response: any) => void {});
+    });
+
+    chrome.tabs.onActivated.addListener((
+        activeInfo: chrome.tabs.TabActiveInfo
+    ) => {
+        const tabId   = activeInfo.tabId;
+        const message = new MessageReplaceGenreWord();
 
         chrome.tabs.sendMessage(tabId, message, (response: any) => void {});
     });

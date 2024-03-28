@@ -16,7 +16,7 @@
 
 ### 対応ブラウザ
 
-- Chrome
+- Chrome (Edge)
 - Firefox
 
 ### 変換用語一覧

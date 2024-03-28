@@ -61,3 +61,4 @@
 
 - [TypeScript](https://www.typescriptlang.org/)
 - [esbuild](https://esbuild.github.io/)
+- [Web Extensions Reference](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions)

@@ -2,70 +2,36 @@
 import {
     AppMessage,
     AppMessageType,
-    AppMessageStartGenreWordConversion,
 } from "./app-message";
-import { GenreWordConversionMap } from './core/genre-word-conversion-map';
+import { GenreWordConversionMap } from "./core/genre-word-conversion-map";
 import { GenreWordConversionMapLoader } from "./core/genre-word-conversion-map-loader";
 
-const CONTEXT_MENU_ID    = '43ae9812-9ca5-425d-b12f-c617f91f9095'; /* GUID */
-const CONTEXT_MENU_TITLE = 'Execute Anti-WordHunting';
+let g_conversionMap = new GenreWordConversionMap();
 
+/* 初期化 */
 browser.runtime.onInstalled.addListener(() => {
     /*
-        コンテキストメニューを生成
+        contets-script側で読み込むと、毎ページで読み込むことになるので無駄
+        なのでbackground側で読み込んでおいて、キャッシュしておく
     */
-    browser.menus.create({
-        type               : 'normal',
-        id                 : CONTEXT_MENU_ID,
-        title              : CONTEXT_MENU_TITLE,
-        contexts           : ['page'],
-        documentUrlPatterns: ['*://*.dlsite.com/*']
-    });
-    browser.menus.onClicked.addListener(onClickContextMenu);
+    const conversionMapLoader   = new GenreWordConversionMapLoader();
+    const conversionMapFilePath = '/assets/genre-word-conversion-map.json';
 
+    conversionMapLoader.load(
+        conversionMapFilePath
+    )
+    .then((conversionMap) => {
+        g_conversionMap = conversionMap;
+    })
+    /*
+        メッセージハンドラを登録
+    */
     browser.runtime.onMessage.addListener((
         message: AppMessage,
         messageSender: browser.runtime.MessageSender,
         sendResponse: (response: any) => void
     ) => {
-        switch (message.type) {
-            case AppMessageType.GetGenreWordConversionMap:
-                return onGetGenreWordConversionMap(
-                    message,
-                    messageSender,
-                    sendResponse
-                );
-        }
+        if (message.type === AppMessageType.GetGenreWordConversionMap)
+            sendResponse(g_conversionMap);
     });
 });
-
-function onClickContextMenu(
-    info: browser.menus.OnClickData,
-    tab : browser.tabs.Tab | undefined
-) {
-    const tabId   = tab!.id!;
-    const message = new AppMessageStartGenreWordConversion();
-
-    browser.tabs.sendMessage(tabId, message);
-}
-
-function onGetGenreWordConversionMap(
-    message      : AppMessage,
-    messageSender: browser.runtime.MessageSender,
-    sendResponse : (response: any) => void
-) {
-    const conversionMapLoader   = new GenreWordConversionMapLoader();
-    const conversionMapFilePath = '/assets/genre-word-conversion-map.json';
-
-    return (
-        conversionMapLoader.load(
-            conversionMapFilePath
-        )
-        .then((conversionMap) => {
-            return Promise.resolve(conversionMap);
-        })
-        .catch((err) => {
-            return Promise.reject(err);
-        })
-    );
-}

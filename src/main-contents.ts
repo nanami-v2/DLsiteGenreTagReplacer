@@ -2,14 +2,17 @@
 import { GenreWordConversionMap } from "./core/genre-word-conversion-map";
 import { GenreWordConversionMapLoader } from "./core/genre-word-conversion-map-loader";
 import { GenreWordReplacer } from './core/genre-word-replacer';
+import {
+    AppMessageGetGenreWordConversionMap,
+} from "./app-message";
 
-const conversionMapLoader   = new GenreWordConversionMapLoader();
-const conversionMapFilePath = '/assets/genre-word-conversion-map.json';
+console.log('FFFFFFFFFFFFFFFFF');
 
-conversionMapLoader.load(
-    conversionMapFilePath
+browser.runtime.sendMessage(
+    new AppMessageGetGenreWordConversionMap()
 )
-.then((conversionMap) => {
+.then((conversionMap: GenreWordConversionMap) => {
+    console.log('BBBBBBBBBB');
     const wordReplacer = new GenreWordReplacer();
 
     wordReplacer.replaceGenreWords(
@@ -19,4 +22,4 @@ conversionMapLoader.load(
 })
 .catch((err) => {
     console.log(err);
-});
+})

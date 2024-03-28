@@ -9,8 +9,7 @@
     "content_scripts": [
       {
         "matches": ["*://*.dlsite.com/*"],
-        "js": ["main-contents.js"],
-        "run_at": "document_idle"
+        "js": ["main-contents.js"]
       }
     ],
     "background": {

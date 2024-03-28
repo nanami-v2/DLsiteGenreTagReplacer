@@ -1,8 +1,8 @@
 
 import { GenreWordConversionMap } from "./genre-word-conversion-map";
 
-export class GenreWordUpdater {
-    public updateGenreWords(
+export class GenreWordReplacer {
+    public replaceGenreWords(
         htmlDocument          : Document,
         genreWordConvertionMap: GenreWordConversionMap
     ) {

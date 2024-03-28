@@ -1,6 +1,6 @@
 
 import { GenreWordConversionMap } from "./core/genre-word-conversion-map";
-import { GenreWordUpdater } from './core/genre-word-updater';
+import { GenreWordReplacer } from './core/genre-word-replacer';
 import {
     AppMessage,
     AppMessageType,
@@ -37,9 +37,9 @@ function onStartGenreWordConversion(
         new AppMessageGetGenreWordConversionMap()
     )
     .then((conversionMap: GenreWordConversionMap) => {
-        const wordUpdater = new GenreWordUpdater();
+        const wordReplacer = new GenreWordReplacer();
 
-        wordUpdater.updateGenreWords(
+        wordReplacer.replaceGenreWords(
             document,
             conversionMap
         );

@@ -1,6 +1,7 @@
 
 import { MessageGetGenreWordConversionMap } from "./message";
 import { GenreWordConversionMap } from "./core/genre-word-conversion-map";
+import { GenreWordConversionMode } from "./core/genre-word-conversion-mode";
 import { GenreWordReplacer } from './core/genre-word-replacer';
 
 chrome.runtime.sendMessage(
@@ -11,7 +12,8 @@ chrome.runtime.sendMessage(
 
     wordReplacer.replaceGenreWords(
         document,
-        conversionMap
+        conversionMap,
+        GenreWordConversionMode.ToOldWords
     );
 })
 .catch((err) => {

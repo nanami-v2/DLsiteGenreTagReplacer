@@ -4,7 +4,7 @@ import { GenreWordConversionMap } from "./genre-word-conversion-map";
 export class GenreWordConversionMapLoader {
     public load(filePath: string): Promise<GenreWordConversionMap> {
         return (
-            fetch(browser.runtime.getURL(filePath))
+            fetch(chrome.runtime.getURL(filePath))
             .then((res: Response) => {
                 if (!res.ok)
                     throw new Error(res.statusText);

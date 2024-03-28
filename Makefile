@@ -7,13 +7,13 @@ assetDir      := assets
 entryPoints   := $(shell find $(srcDir) -type f -name main-*)
 
 .PHONY: build
-build:
-	npx esbuild $(entryPoints) --bundle --outdir=$(outDirFirefox)
-	npx esbuild $(entryPoints) --bundle --outdir=$(outDirChrome)
-	mkdir $(outDirFirefox) -p && cp $(assetDir) $(outDirFirefox)/ -r
-	mkdir $(outDirChrome) -p && cp $(assetDir) $(outDirChrome)/ -r
-	cp manifest-firefox.json $(outDirFirefox)/manifest.json
-	cp manifest-chrome.json $(outDirChrome)/manifest.json
+build: build-firefox build-chrome
+
+.PHONY: build-%
+build-%:
+	npx esbuild $(entryPoints) --bundle --outdir=$(outDir)/$*
+	mkdir $(outDir)/$* -p && cp $(assetDir) $(outDir)/$*/ -r
+	cp manifest-$*.json $(outDir)/$*/manifest.json
 
 .PHONY: clean
 clean:

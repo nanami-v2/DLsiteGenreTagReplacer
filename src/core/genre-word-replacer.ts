@@ -40,7 +40,7 @@ function replaceGenreWordsOfProductPage(
             if (convertedWord)
                 genreTags[j].textContent = convertedWord;
 
-            console.log(currentWord, convertedWord);
+            console.log('main_genres', genreTags[j], currentWord);
         }
     }
 }

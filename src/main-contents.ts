@@ -50,3 +50,11 @@ chrome.runtime.onMessage.addListener((
         });
     }
 });
+
+const mutationObserver = new MutationObserver((
+    mutations: MutationRecord[],
+    observer : MutationObserver
+) => {
+    console.log(mutations, observer);
+});
+mutationObserver.observe(document);

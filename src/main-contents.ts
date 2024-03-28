@@ -50,11 +50,36 @@ chrome.runtime.onMessage.addListener((
         });
     }
 });
-
-const mutationObserver = new MutationObserver((
+/*
+    「他のジャンルで探す」などの場合、サーバーから取得したデータを基にダイアログを作成している
+    なので、このような場合にも表記を変えるため、mutatioObserver で対象のノード――検索モーダル――を監視する必要がある 
+*/
+const mutationObserverTarget  = document.getElementById('container')!.children[3];
+const mutationObserverOptions = {childList: true};
+const mutationObserver       = new MutationObserver((
     mutations: MutationRecord[],
     observer : MutationObserver
 ) => {
-    console.log(mutations, observer);
+    console.log('mutationObserver', mutations, observer);
+
+    Promise.all([
+        chrome.runtime.sendMessage(new MessageGetGenreWordConversionMap()),
+        chrome.runtime.sendMessage(new MessageGetGenreWordConversionMode())
+    ])
+    .then((results: Array<any>) => {
+        const conversionMap  = results[0] as GenreWordConversionMap;
+        const conversionMode = results[1] as GenreWordConversionMode;
+    
+        const wordConverter = new GenreWordConverter(conversionMap, conversionMode);
+        const wordReplacer  = new GenreWordReplacer();
+    
+        wordReplacer.replaceGenreWords(document, wordConverter);
+    })
+    .catch((err) => {
+        console.log(err);
+    });
 });
-mutationObserver.observe(document);
+mutationObserver.observe(
+    mutationObserverTarget,
+    mutationObserverOptions
+);

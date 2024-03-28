@@ -17,13 +17,13 @@ export class GenreWordUpdater {
                 if (!genreTags[j].textContent)
                     continue;
 
-                const oldWord = genreTags[j].textContent!;
-                const newWord = genreWordConvertionMap.toNewWord(oldWord);
+                const newWord = genreTags[j].textContent!;
+                const oldWord = genreWordConvertionMap.mapToOldWord.get(newWord);
 
-                console.log(oldWord, newWord);
+                console.log(newWord, oldWord);
 
-                if (newWord)
-                    genreTags[j].textContent = newWord;
+                if (oldWord)
+                    genreTags[j].textContent = oldWord;
             }
         }
     }

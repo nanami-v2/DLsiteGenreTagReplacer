@@ -99,7 +99,7 @@ function onGetGenreWordConversionMap(
     sendResponse : (response: any) => void
 ) {
     const conversionMapLoader   = new GenreWordConversionMapLoader();
-    const conversionMapFilePath = '/assets/genre-word-conversion-map-entries.json';
+    const conversionMapFilePath = '/assets/genre-word-conversion-map.json';
 
     return (
         conversionMapLoader.load(

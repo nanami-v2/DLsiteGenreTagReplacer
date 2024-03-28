@@ -18,7 +18,8 @@ export class GenreWordConversionMapLoader {
                     const oldWord: string = entry.oldWord;
                     const newWord: string = entry.newWord;
 
-                    conversionMap.addRecord(oldWord, newWord);
+                    conversionMap.mapToNewWord.set(oldWord, newWord);
+                    conversionMap.mapToOldWord.set(newWord, oldWord);
                 }
                 return Promise.resolve(conversionMap);
             })

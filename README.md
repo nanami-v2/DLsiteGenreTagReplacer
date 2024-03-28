@@ -16,8 +16,8 @@
 
 ### 対応ブラウザ
 
-- Firefox
 - Chrome
+- Firefox
 
 ### 変換用語一覧
 

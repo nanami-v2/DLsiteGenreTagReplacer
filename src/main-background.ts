@@ -1,8 +1,8 @@
 
 import {
-    AppMessage,
-    AppMessageType,
-} from "./app-message";
+    Message,
+    MessageType,
+} from "./message";
 import { GenreWordConversionMap } from "./core/genre-word-conversion-map";
 import { GenreWordConversionMapLoader } from "./core/genre-word-conversion-map-loader";
 
@@ -23,15 +23,18 @@ browser.runtime.onInstalled.addListener(() => {
     .then((conversionMap) => {
         g_conversionMap = conversionMap;
     })
+    .catch((err) => {
+        console.log(err);
+    });
     /*
         メッセージハンドラを登録
     */
     browser.runtime.onMessage.addListener((
-        message: AppMessage,
+        message: Message,
         messageSender: browser.runtime.MessageSender,
         sendResponse: (response: any) => void
     ) => {
-        if (message.type === AppMessageType.GetGenreWordConversionMap)
+        if (message.type === MessageType.GetGenreWordConversionMap)
             sendResponse(g_conversionMap);
     });
 });

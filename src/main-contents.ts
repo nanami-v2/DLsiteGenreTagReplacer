@@ -6,13 +6,12 @@ import {
     AppMessageGetGenreWordConversionMap,
 } from "./app-message";
 
-console.log('FFFFFFFFFFFFFFFFF');
+console.log('Contents-Script is loaded...');
 
 browser.runtime.sendMessage(
     new AppMessageGetGenreWordConversionMap()
 )
 .then((conversionMap: GenreWordConversionMap) => {
-    console.log('BBBBBBBBBB');
     const wordReplacer = new GenreWordReplacer();
 
     wordReplacer.replaceGenreWords(

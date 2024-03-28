@@ -1,15 +1,14 @@
 {
     "manifest_version": 3,
     "name": "Anti-WordHunting",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "クレカ会社による言葉狩りへの対応",  
-    "permissions": [
-      "menus"
-    ],
+    "permissions": [],
     "content_scripts": [
       {
         "matches": ["*://*.dlsite.com/*"],
-        "js": ["main-contents.js"]
+        "js": ["main-contents.js"],
+        "run_at": "document_idle"
       }
     ],
     "background": {

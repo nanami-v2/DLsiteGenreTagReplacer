@@ -6,13 +6,14 @@ import {
 import { GenreWordConversionMapLoader } from "./core/genre-word-conversion-map-loader";
 
 browser.runtime.onInstalled.addListener(() => {
-    console.log('AAAAAAAA');
+    console.log('Installed...');
+    
     browser.runtime.onMessage.addListener((
         message: AppMessage,
         messageSender: browser.runtime.MessageSender,
         sendResponse: (response: any) => void
     ) => {
-        console.log('BBBBB');
+        console.log('MESSAGE-RECEIVED');
         switch (message.type) {
             case AppMessageType.GetGenreWordConversionMap:
                 return onGetGenreWordConversionMap(

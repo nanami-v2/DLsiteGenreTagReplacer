@@ -2,28 +2,35 @@
 import {
     AppMessage,
     AppMessageType,
+    AppMessageGetGenreWordConversionMap,
     AppMessageStartGenreWordConversion,
     AppMessageGetConvertedGenreWordsRequest,
     AppMessageGetConvertedGenreWordsResponse
 } from "./app-message";
-
-console.log('AAAAAAAAAAAAAAAAAAAAAAA');
+import { GenreWordConversionMap } from "./core/genre-word-conversion-map";
+import { GenreWordUpdater } from './core/genre-word-updater';
 
 browser.runtime.onMessage.addListener((
     message      : AppMessage,
     messageSender: browser.runtime.MessageSender,
     sendResponse : (response: any) => void
 ) => {
-    console.log(message);
+    console.log('onMessage', message);
 
-    //switch (message.type) {
-    //    case AppMessageType.StartGenreWordConversion:
-    //        return onStartGenreWordConversion(
-    //            message,
-    //            messageSender,
-    //            sendResponse
-    //        );
-    //}
+    switch (message.type) {
+        case AppMessageType.StartGenreWordConversion:
+            return onStartGenreWordConversion(
+                message,
+                messageSender,
+                sendResponse
+            );
+        //case AppMessageType.GetConvertedGenreWordsResponse:
+        //    return onGetConvertedGenreWordsResponse(
+        //        message,
+        //        messageSender,
+        //        sendResponse
+        //    );
+    }
 });
 
 /**
@@ -35,24 +42,17 @@ function onStartGenreWordConversion(
     messageSender: browser.runtime.MessageSender,
     sendResponse : (response: any) => void
 ) {
-    const genreContainers     = document.getElementsByClassName('main_genre');
-    const genreContainerCount = genreContainers.length;
-    const genreWords          = new Array<string>();
+    browser.runtime.sendMessage(
+        new AppMessageGetGenreWordConversionMap()
+    )
+    .then((conversionMap: GenreWordConversionMap) => {
+        console.log(conversionMap);
 
-    for (let i = 0; i < genreContainerCount; ++i) {
-        const genreTags     = genreContainers[i].children;
-        const genreTagCount = genreTags.length;
-
-        for (let j = 0; j < genreTagCount; ++j) {
-            genreWords.push(genreTags[j].textContent ? genreTags[j].textContent! : '');
-        }
-    }
-
-    console.log(genreWords);
-    //browser.runtime.sendMessage(
-    //    new AppMessageGetConvertedGenreWordsRequest(genreWords)
-    //)
-    //.then((res: AppMessageGetConvertedGenreWordsResponse) => {
-    //    console.log(res);
-    //});
+        const wordUpdater = new GenreWordUpdater();
+        
+        wordUpdater.updateGenreWords(
+            document,
+            conversionMap
+        );
+    });
 }

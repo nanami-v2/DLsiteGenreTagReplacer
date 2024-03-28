@@ -19,6 +19,6 @@ export class GenreWordConversionMap {
     public size(): number {
         return this.mapToNewWord_.size;
     }
-    private mapToOldWord_: Map<string, string> = new Map<string, string>();
-    private mapToNewWord_: Map<string, string> = new Map<string, string>();
+    mapToOldWord_: Map<string, string> = new Map<string, string>();
+    mapToNewWord_: Map<string, string> = new Map<string, string>();
 }

@@ -27,7 +27,6 @@ browser.runtime.onInstalled.addListener(() => {
     /*
         リソースを読み込み
     */
-    /*
     const wordConversionMapLoader   = new GenreWordConversionMapLoader();
     const wordConversionMapFilePath = '/assets/genre-word-conversion-map-entries.json';
 
@@ -39,9 +38,7 @@ browser.runtime.onInstalled.addListener(() => {
     .catch((err) => {
         console.log(err);
     });
-    */
 
-    /*
     browser.runtime.onMessage.addListener((
         message: AppMessage,
         messageSender: browser.runtime.MessageSender,
@@ -54,9 +51,14 @@ browser.runtime.onInstalled.addListener(() => {
                     messageSender,
                     sendResponse
                 );
+            case AppMessageType.GetGenreWordConversionMap:
+                return onGetGenreWordConversionMap(
+                    message,
+                    messageSender,
+                    sendResponse
+                );
         }
     });
-    */
 });
 
 function onClickContextMenu(
@@ -66,7 +68,6 @@ function onClickContextMenu(
     const tabId   = tab!.id!;
     const message = new AppMessageStartGenreWordConversion();
 
-    console.log(tabId, message);
     browser.tabs.sendMessage(tabId, message);
 }
 
@@ -75,6 +76,40 @@ function onGetConvertedGenreWordsRequest(
     messageSender: browser.runtime.MessageSender,
     sendResponse : (response: any) => void
 ) {
-    /* ここでワードを変換して、返す */
-    //sendResponse('AAAA');    
+    const requestMessage = message as AppMessageGetConvertedGenreWordsRequest;
+    const originalWords  = requestMessage.originalWords;
+    const convertedWords = new Array<string>();
+    const isConverted    = new Array<boolean>();
+
+    for (const originalWord of originalWords) {
+        convertedWords.push(originalWord);
+        isConverted.push(false);
+    }
+
+    sendResponse(new AppMessageGetConvertedGenreWordsResponse(
+        originalWords,
+        convertedWords,
+        isConverted
+    ));
+}
+
+function onGetGenreWordConversionMap(
+    message      : AppMessage,
+    messageSender: browser.runtime.MessageSender,
+    sendResponse : (response: any) => void
+) {
+    const conversionMapLoader   = new GenreWordConversionMapLoader();
+    const conversionMapFilePath = '/assets/genre-word-conversion-map-entries.json';
+
+    return (
+        conversionMapLoader.load(
+            conversionMapFilePath
+        )
+        .then((conversionMap) => {
+            return Promise.resolve(conversionMap);
+        })
+        .catch((err) => {
+            return Promise.reject(err);
+        })
+    );
 }

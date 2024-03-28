@@ -3,6 +3,9 @@
     "name": "Anti-WordHunting",
     "version": "0.0.3",
     "description": "クレカ会社による言葉狩りへの対応",
+    "permissions": [
+      "contextMenus"
+    ],
     "content_scripts": [
       {
         "matches": ["*://*.dlsite.com/*"],

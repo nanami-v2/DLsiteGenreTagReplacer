@@ -1,10 +1,15 @@
 
-import { Message, MessageType } from "./message";
+import { Message, MessageType, MessageUpdateGenreWord } from "./message";
 import { GenreWordConversionMap } from "./core/genre-word-conversion-map";
 import { GenreWordConversionMapLoader } from "./core/genre-word-conversion-map-loader";
 import { GenreWordConversionMode } from "./core/genre-word-conversion-mode";
 
-let g_conversionMap = new GenreWordConversionMap();
+const CONTEXT_MENU_ID           = '43ae9812-9ca5-425d-b12f-c617f91f9095'; /* GUID */
+const CONTEXT_MENU_TITLE_TO_OLD = '旧タグ名で表示';
+const CONTEXT_MENU_TITLE_TO_NEW = '新タグ名で表示';
+
+let g_conversionMap  = new GenreWordConversionMap();
+let g_conversionMode = GenreWordConversionMode.ToOldWords;
 
 /* 初期化 */
 chrome.runtime.onInstalled.addListener(() => {
@@ -28,15 +33,46 @@ chrome.runtime.onInstalled.addListener(() => {
         メッセージハンドラを登録
     */
     chrome.runtime.onMessage.addListener((
-        message      : Message,
+        message      : any,
         messageSender: chrome.runtime.MessageSender,
         sendResponse : (response: any) => void
     ) => {
-        switch (message.type) {
+        const msg     = message as Message;
+        const msgType = msg.type;
+
+        switch (msgType) {
             case MessageType.GetGenreWordConversionMap:
                 return sendResponse(g_conversionMap);
             case MessageType.GetGenerWordConversionMode:
-                return sendResponse(GenreWordConversionMode.ToOldWords);
+                return sendResponse(g_conversionMode);
         }
+    });
+
+    chrome.contextMenus.create({
+        type               : 'normal',
+        id                 : CONTEXT_MENU_ID,
+        title              : CONTEXT_MENU_TITLE_TO_NEW,
+        contexts           : ['page'],
+        documentUrlPatterns: ['*://*.dlsite.com/*']
+    });
+    chrome.contextMenus.onClicked.addListener((
+        info: chrome.contextMenus.OnClickData,
+        tab : chrome.tabs.Tab | undefined
+    ) => {
+        g_conversionMode = (g_conversionMode === GenreWordConversionMode.ToOldWords)
+            ? GenreWordConversionMode.ToNewWords
+            : GenreWordConversionMode.ToOldWords;
+
+        const menuId    = info.menuItemId;
+        const menuTitle = (g_conversionMode === GenreWordConversionMode.ToOldWords)
+            ? CONTEXT_MENU_TITLE_TO_OLD
+            : CONTEXT_MENU_TITLE_TO_NEW;
+
+        chrome.contextMenus.update(menuId, {title: menuTitle});
+
+        const tabId   = tab!.id!;
+        const message = new MessageUpdateGenreWord();
+
+        chrome.tabs.sendMessage(tabId, message, (response: any) => void {});
     });
 });

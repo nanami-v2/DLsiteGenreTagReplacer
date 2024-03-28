@@ -22,9 +22,10 @@ browser.runtime.onInstalled.addListener(() => {
     )
     .then((conversionMap) => {
         g_conversionMap = conversionMap;
+    })
+    .catch((err) => {
+        console.log(err);
     });
-
-
     /*
         メッセージハンドラを登録
     */

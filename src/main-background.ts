@@ -3,45 +3,33 @@ import {
     AppMessage,
     AppMessageType,
 } from "./app-message";
+import { GenreWordConversionMap } from "./core/genre-word-conversion-map";
 import { GenreWordConversionMapLoader } from "./core/genre-word-conversion-map-loader";
 
+let g_conversionMap = new GenreWordConversionMap();
+
 browser.runtime.onInstalled.addListener(() => {
-    console.log('Installed...');
-    
+    /*
+        リソースを読み込んでキャッシュ
+    */
+    const conversionMapLoader   = new GenreWordConversionMapLoader();
+    const conversionMapFilePath = '/assets/genre-word-conversion-map.json';
+
+    conversionMapLoader.load(
+        conversionMapFilePath
+    )
+    .then((conversionMap) => {
+        g_conversionMap = conversionMap;
+    });    
+    /*
+        メッセージハンドラを登録
+    */
     browser.runtime.onMessage.addListener((
         message: AppMessage,
         messageSender: browser.runtime.MessageSender,
         sendResponse: (response: any) => void
     ) => {
-        console.log('MESSAGE-RECEIVED');
-        switch (message.type) {
-            case AppMessageType.GetGenreWordConversionMap:
-                return onGetGenreWordConversionMap(
-                    message,
-                    messageSender,
-                    sendResponse
-                );
-        }
+        if (message.type === AppMessageType.GetGenreWordConversionMap)
+            sendResponse(g_conversionMap);
     });
 });
-
-function onGetGenreWordConversionMap(
-    message      : AppMessage,
-    messageSender: browser.runtime.MessageSender,
-    sendResponse : (response: any) => void
-) {
-    const conversionMapLoader   = new GenreWordConversionMapLoader();
-    const conversionMapFilePath = '/assets/genre-word-conversion-map.json';
-
-    return (
-        conversionMapLoader.load(
-            conversionMapFilePath
-        )
-        .then((conversionMap) => {
-            return Promise.resolve(conversionMap);
-        })
-        .catch((err) => {
-            return Promise.reject(err);
-        })
-    );
-}

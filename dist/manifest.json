@@ -3,9 +3,6 @@
     "name": "Anti-WordHunting",
     "version": "0.0.1",
     "description": "クレカ会社による言葉狩りへの対応",  
-    "icons": {
-      "48": "/assets/icon-border-48x48.png"
-    },
     "permissions": [
       "menus"
     ],

@@ -17,7 +17,7 @@
 
 ### 変換用語一覧
 
-[jsonファイル](./assets/genre-word-conversion-map-entries.json)をご参照ください。
+[jsonファイル](./assets/genre-word-conversion-map.json)をご参照ください。
 
 ## 開発環境
 

@@ -1,10 +1,8 @@
 
 import {
-    AppMessageStartGenreWordConversion,
-    AppMessageGetConvertedGenreWordsRequest,
-    AppMessageGetConvertedGenreWordsResponse,
     AppMessage,
     AppMessageType,
+    AppMessageStartGenreWordConversion,
 } from "./app-message";
 import { GenreWordConversionMap } from './core/genre-word-conversion-map';
 import { GenreWordConversionMapLoader } from "./core/genre-word-conversion-map-loader";
@@ -24,20 +22,6 @@ browser.runtime.onInstalled.addListener(() => {
         documentUrlPatterns: ['*://*.dlsite.com/*']
     });
     browser.menus.onClicked.addListener(onClickContextMenu);
-    /*
-        リソースを読み込み
-    */
-    const wordConversionMapLoader   = new GenreWordConversionMapLoader();
-    const wordConversionMapFilePath = '/assets/genre-word-conversion-map-entries.json';
-
-    wordConversionMapLoader
-    .load(wordConversionMapFilePath)
-    .then((wordConversionMap) => {
-        console.log(wordConversionMap)
-    })
-    .catch((err) => {
-        console.log(err);
-    });
 
     browser.runtime.onMessage.addListener((
         message: AppMessage,
@@ -45,12 +29,6 @@ browser.runtime.onInstalled.addListener(() => {
         sendResponse: (response: any) => void
     ) => {
         switch (message.type) {
-            case AppMessageType.GetConvertedGenreWordsRequest:
-                return onGetConvertedGenreWordsRequest(
-                    message,
-                    messageSender,
-                    sendResponse
-                );
             case AppMessageType.GetGenreWordConversionMap:
                 return onGetGenreWordConversionMap(
                     message,
@@ -69,28 +47,6 @@ function onClickContextMenu(
     const message = new AppMessageStartGenreWordConversion();
 
     browser.tabs.sendMessage(tabId, message);
-}
-
-function onGetConvertedGenreWordsRequest(
-    message      : AppMessage,
-    messageSender: browser.runtime.MessageSender,
-    sendResponse : (response: any) => void
-) {
-    const requestMessage = message as AppMessageGetConvertedGenreWordsRequest;
-    const originalWords  = requestMessage.originalWords;
-    const convertedWords = new Array<string>();
-    const isConverted    = new Array<boolean>();
-
-    for (const originalWord of originalWords) {
-        convertedWords.push(originalWord);
-        isConverted.push(false);
-    }
-
-    sendResponse(new AppMessageGetConvertedGenreWordsResponse(
-        originalWords,
-        convertedWords,
-        isConverted
-    ));
 }
 
 function onGetGenreWordConversionMap(

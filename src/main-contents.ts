@@ -1,14 +1,11 @@
 
+import { GenreWordConversionMap } from "./core/genre-word-conversion-map";
+import { GenreWordUpdater } from './core/genre-word-updater';
 import {
     AppMessage,
     AppMessageType,
     AppMessageGetGenreWordConversionMap,
-    AppMessageStartGenreWordConversion,
-    AppMessageGetConvertedGenreWordsRequest,
-    AppMessageGetConvertedGenreWordsResponse
 } from "./app-message";
-import { GenreWordConversionMap } from "./core/genre-word-conversion-map";
-import { GenreWordUpdater } from './core/genre-word-updater';
 
 browser.runtime.onMessage.addListener((
     message      : AppMessage,
@@ -24,12 +21,6 @@ browser.runtime.onMessage.addListener((
                 messageSender,
                 sendResponse
             );
-        //case AppMessageType.GetConvertedGenreWordsResponse:
-        //    return onGetConvertedGenreWordsResponse(
-        //        message,
-        //        messageSender,
-        //        sendResponse
-        //    );
     }
 });
 
@@ -46,10 +37,8 @@ function onStartGenreWordConversion(
         new AppMessageGetGenreWordConversionMap()
     )
     .then((conversionMap: GenreWordConversionMap) => {
-        console.log(conversionMap);
-
         const wordUpdater = new GenreWordUpdater();
-        
+
         wordUpdater.updateGenreWords(
             document,
             conversionMap

@@ -1,13 +1,10 @@
 
-import { GenreWordConversionMap } from "./genre-word-conversion-map";
-import { GenreWordConversionMode } from "./genre-word-conversion-mode";
 import { GenreWordConverter } from "./genre-word-converter";
 
 export class GenreWordReplacer {
     public replaceGenreWords(
-        htmlDocument           : Document,
-        genreWordConvertionMap : GenreWordConversionMap,
-        genreWordConversionMode: GenreWordConversionMode
+        htmlDocument      : Document,
+        genreWordConverter: GenreWordConverter
     ) {
         /*
             特にいい感じの方法が思いつかなかったので地道に頑張る
@@ -20,10 +17,6 @@ export class GenreWordReplacer {
         const genreTagContainers = htmlDocument.getElementsByClassName('main_genre');
         const genreTags          = genreTagContainers[0].children;
         const genreTagCount      = genreTags.length;
-        const genreWordConverter = new GenreWordConverter(
-            genreWordConversionMode,
-            genreWordConvertionMap
-        );
     
         for (let i = 0; i < genreTagCount; ++i) {
             const currentWord   = genreTags[i].textContent!

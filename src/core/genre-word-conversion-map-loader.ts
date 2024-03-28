@@ -1,5 +1,8 @@
 
-import { GenreWordConversionMap } from "./genre-word-conversion-map";
+import {
+    GenreWordConversionMap,
+    GenreWordConversionMapEntry
+} from "./genre-word-conversion-map";
 
 export class GenreWordConversionMapLoader {
     public load(filePath: string): Promise<GenreWordConversionMap> {
@@ -18,9 +21,14 @@ export class GenreWordConversionMapLoader {
                     const oldWord: string = entry.oldWord;
                     const newWord: string = entry.newWord;
 
-                    conversionMap.mapToNewWord.set(oldWord, newWord);
-                    conversionMap.mapToOldWord.set(newWord, oldWord);
+                    conversionMap.entries.push(
+                        new GenreWordConversionMapEntry(
+                            oldWord,
+                            newWord
+                        )
+                    );
                 }
+                console.log(conversionMap);
                 return Promise.resolve(conversionMap);
             })
             .catch((err) => { throw err; })

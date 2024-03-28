@@ -4,17 +4,20 @@
   - [対応ブラウザ](#対応ブラウザ)
   - [変換用語一覧](#変換用語一覧)
 - [開発環境](#開発環境)
-  - [セットアップ手順](#セットアップ手順)
+  - [セットアップ方法](#セットアップ方法)
+  - [ビルド方法](#ビルド方法)
 - [リンク](#リンク)
 
 ## 本拡張機能に関して
 
-クレジットカード会社が原因と思われる、[DLsite.com](https://www.dlsite.com/index.html)に対する表現規制（言葉狩り）への対策を行うためのものになります。
+[DLsite.com](https://www.dlsite.com/index.html)において **2024年3月** に行われた、ジャンルタグの表記置き換えに対処するための拡張機能です。
+
+具体的には、**ジャンルタグを「置き換え前のもの」で表示** します。
 
 ### 対応ブラウザ
 
-- Chrome
 - Firefox
+- Chrome
 
 ### 変換用語一覧
 
@@ -27,7 +30,7 @@
 - [VSCode](https://code.visualstudio.com/)
 - [WSL2](https://learn.microsoft.com/en-us/windows/wsl/install)
 
-### セットアップ手順
+### セットアップ方法
 
 **WSL2** 上で、以下をインストールします。
 
@@ -59,8 +62,17 @@
     apt install -y make
     ```
 
+### ビルド方法
+
+プロジェクトディレクトリ――`Makefile`が存在するディレクトリ――で以下を実行します。
+
+```sh
+make
+```
+
 ## リンク
 
 - [TypeScript](https://www.typescriptlang.org/)
 - [esbuild](https://esbuild.github.io/)
-- [Web Extensions Reference](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions)
+- [Web Extensions Reference (Firefox)](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions)
+- [Web Extensions Reference (Chrome)](https://developer.chrome.com/docs/extensions/reference)

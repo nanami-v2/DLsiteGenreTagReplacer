@@ -4,14 +4,12 @@ outDir      := dist
 assetDir    := assets
 entryPoints := $(shell find $(srcDir) -type f -name main-*)
 
-.PHONY: build
-build: build-firefox build-chrome
+srcFiles      := $(shell find $(srcDir) -type f) 
+assertFiles   := $(shell find $(assetDir) -type f)
+manifestFiles := manifest-chrome.json manifest-firefox.json
 
-.PHONY: build-%
-build-%:
-	npx esbuild $(entryPoints) --bundle --outdir=$(outDir)/$*
-	mkdir $(outDir)/$* -p && cp $(assetDir) $(outDir)/$*/ -r
-	cp manifest-$*.json $(outDir)/$*/manifest.json
+.PHONY: build
+build: $(outDir)/chrome $(outDir)/firefox
 
 .PHONY: clean
 clean:
@@ -21,3 +19,8 @@ clean:
 check-type:
 	npx tsc $(srcDir)/*.ts --noEmit --strict
 
+$(outDir)/%: $(srcFiles) $(assertFiles) $(manifestFiles)
+	npx esbuild $(entryPoints) --bundle --outdir=$(outDir)/$*
+	mkdir $(outDir)/$* -p && cp $(assetDir) $(outDir)/$*/ -r
+	cp manifest-$*.json $(outDir)/$*/manifest.json
+	touch $@

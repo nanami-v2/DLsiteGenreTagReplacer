@@ -11,7 +11,8 @@ let g_conversionMap = new GenreWordConversionMap();
 /* 初期化 */
 browser.runtime.onInstalled.addListener(() => {
     /*
-        変換表は読み込んでキャッシュ
+        contets-script側で読み込むと、毎ページで読み込むことになるので無駄
+        なのでbackground側で読み込んでおいて、キャッシュしておく
     */
     const conversionMapLoader   = new GenreWordConversionMapLoader();
     const conversionMapFilePath = '/assets/genre-word-conversion-map.json';

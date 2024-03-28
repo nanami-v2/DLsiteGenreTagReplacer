@@ -18,13 +18,15 @@ export class GenreWordReplacer {
             const genreTagCount = genreTags.length;
     
             for (let j = 0; j < genreTagCount; ++j) {
-                if (!genreTags[j].textContent)
+                /*
+                    何故か「ファイル容量」の箇所にもgenreクラスがかかっているので、
+                    aタグか否かでジャンルタグかどうかを判定
+                */
+                if (genreTags[j].tagName !== 'A' || !genreTags[j].textContent)
                     continue;
 
                 const newWord = genreTags[j].textContent!;
                 const oldWord = genreWordConvertionMap.mapToOldWord.get(newWord);
-
-                console.log(newWord, oldWord);
 
                 if (oldWord)
                     genreTags[j].textContent = oldWord;

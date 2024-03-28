@@ -1,7 +1,6 @@
 
 
 export enum AppMessageType {
-    StartGenreWordConversion,
     GetGenreWordConversionMap,
 }
 

@@ -96,4 +96,15 @@ chrome.runtime.onInstalled.addListener(() => {
 
         chrome.tabs.sendMessage(tabId, message, (response: any) => void {});
     });
+    /*
+        タブ更新時にも置換する必要がある
+    */
+    chrome.tabs.onUpdated.addListener((
+        tabId        : number,
+        tabChangeInfo: chrome.tabs.TabChangeInfo,
+        tab          : chrome.tabs.Tab
+    ) => {
+        if (tabChangeInfo.status === 'complete')
+            chrome.tabs.sendMessage(tabId, new MessageReplaceGenreWord(), (response: any) => void {});
+    });
 });

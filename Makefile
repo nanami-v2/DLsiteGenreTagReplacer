@@ -21,6 +21,6 @@ check-type:
 
 $(outDir)/%: $(srcFiles) $(assertFiles) $(manifestFiles)
 	npx esbuild $(entryPoints) --bundle --outdir=$(outDir)/$*
-	mkdir $(outDir)/$* -p && cp $(assetDir) $(outDir)/$*/ -r
+	cp $(assetDir) $(outDir)/$*/ -r
 	cp manifest-$*.json $(outDir)/$*/manifest.json
 	touch $@

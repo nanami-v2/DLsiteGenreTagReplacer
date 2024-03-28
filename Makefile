@@ -1,10 +1,8 @@
 
-srcDir        := src
-outDir        := dist
-outDirFirefox := dist/firefox
-outDirChrome  := dist/chrome
-assetDir      := assets
-entryPoints   := $(shell find $(srcDir) -type f -name main-*)
+srcDir      := src
+outDir      := dist
+assetDir    := assets
+entryPoints := $(shell find $(srcDir) -type f -name main-*)
 
 .PHONY: build
 build: build-firefox build-chrome

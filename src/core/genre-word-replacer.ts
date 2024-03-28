@@ -8,6 +8,7 @@ export class GenreWordReplacer {
     ): void {
         replaceGenreWordsOfProductPage(htmlDocument, genreWordConverter);
         replaceGenreWordsOfSearchResultPage(htmlDocument, genreWordConverter);
+        replaceGenreWordsOfGenreListPage(htmlDocument, genreWordConverter);
     }
 }
 
@@ -71,7 +72,7 @@ function replaceGenreWordsOfSearchResultPage(
             const currentWord   = (aTag) ? aTag.textContent! : '';
             const convertedWord = (aTag) ? genreWordConverter.convertGenreWord(currentWord) : null;
 
-            console.log(aTag, currentWord);
+            console.log('search_tag_items', aTag, currentWord);
 
             if (convertedWord)
                 aTag.textContent = convertedWord;
@@ -80,12 +81,6 @@ function replaceGenreWordsOfSearchResultPage(
     /*
         画面左側の検索タグ
         
-        <li class="left_refine_list_add">
-          <a href="#"></a>
-        </li>
-  
-        あるいは
-
         <li class="left_refine_list_item refine_checkbox">
           <a href="#"></a>
         </li>
@@ -104,10 +99,43 @@ function replaceGenreWordsOfSearchResultPage(
             const currentWord   = (aTag) ? aTag.textContent! : '';
             const convertedWord = (aTag) ? genreWordConverter.convertGenreWord(currentWord) : null;
 
-            console.log('XXXX', aTags[j], currentWord);
+            console.log('left_refine_list_item', aTags[j], currentWord);
 
             if (convertedWord)
                 aTag.textContent = convertedWord;
+        }
+    }
+}
+
+function replaceGenreWordsOfGenreListPage(
+    htmlDocument      : Document,
+    genreWordConverter: GenreWordConverter
+): void {
+    /*
+        <li class="versatility_linklist_item">
+          <a href="...">
+            <span class="number"></span>
+          </a>
+        </li>
+
+        という形式になっている
+    */
+    const linkListItems     = htmlDocument.getElementsByClassName('versatility_linklist_item');
+    const linkListItemCount = linkListItems.length;
+
+    for (let i = 0; i < linkListItemCount; ++i) {
+        const aTags     = linkListItems[i].children;
+        const aTagCount = aTags.length;
+
+        for (let j = 0; j < aTagCount; ++j) {
+            const aTag          = aTags[j];
+            const currentWord   = (aTag) ? aTag.childNodes[0].textContent! : '';
+            const convertedWord = (aTag) ? genreWordConverter.convertGenreWord(currentWord) : null;
+
+            console.log('versatility_linklist_item', aTags[j], aTags[j].childNodes, aTags[j].children, currentWord);
+
+            if (convertedWord)
+                aTag.childNodes[0].textContent = convertedWord;
         }
     }
 }

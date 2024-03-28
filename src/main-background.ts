@@ -104,6 +104,8 @@ chrome.runtime.onInstalled.addListener(() => {
         tabChangeInfo: chrome.tabs.TabChangeInfo,
         tab          : chrome.tabs.Tab
     ) => {
+        console.log(tab, tab.url!.match('*://*.dlsite.com/*'));
+
         if (tabChangeInfo.status === 'complete')
             chrome.tabs.sendMessage(tabId, new MessageReplaceGenreWord(), (response: any) => void {});
     });

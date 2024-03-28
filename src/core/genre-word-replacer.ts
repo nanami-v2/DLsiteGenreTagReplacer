@@ -1,37 +1,32 @@
 
-import { GenreWordConversionMap } from "./genre-word-conversion-map";
+import { GenreWordConverter } from "./genre-word-converter";
 
 export class GenreWordReplacer {
     public replaceGenreWords(
-        htmlDocument          : Document,
-        genreWordConvertionMap: GenreWordConversionMap
-    ) {
+        htmlDocument      : Document,
+        genreWordConverter: GenreWordConverter
+    ): void {
         /*
             特にいい感じの方法が思いつかなかったので地道に頑張る
             ...DLsite側の変更に対して脆弱だけど、しょうがない
+
+            NOTE
+            何故か「ファイル容量」の箇所にもgenreクラスがかかっているので、
+            最初のもの――本当の意味でジャンルタグになっているもの――だけに限定
         */
-        const genreContainers     = htmlDocument.getElementsByClassName('main_genre');
-        const genreContainerCount = genreContainers.length;
-
-        for (let i = 0; i < genreContainerCount; ++i) {
-            const genreTags     = genreContainers[i].children;
-            const genreTagCount = genreTags.length;
+        const genreTagContainers = htmlDocument.getElementsByClassName('main_genre');
+        const genreTags          = genreTagContainers[0].children;
+        const genreTagCount      = genreTags.length;
     
-            for (let j = 0; j < genreTagCount; ++j) {
-                /*
-                    何故か「ファイル容量」の箇所にもgenreクラスがかかっているので、
-                    aタグか否かでジャンルタグかどうかを判定
-                */
-                if (genreTags[j].tagName !== 'A' || !genreTags[j].textContent)
-                    continue;
+        for (let i = 0; i < genreTagCount; ++i) {
+            if (!genreTags[i].textContent)
+                continue;
 
-                const newWord = genreTags[j].textContent!;
-                const entry   = genreWordConvertionMap.entries.find((e) => e.newWord === newWord);
-                const oldWord = (entry) ? entry.oldWord : null;
+            const currentWord   = genreTags[i].textContent!
+            const convertedWord = genreWordConverter.convertGenreWord(currentWord);
 
-                if (oldWord)
-                    genreTags[j].textContent = oldWord;
-            }
+            if (convertedWord)
+                genreTags[i].textContent = convertedWord;
         }
     }
 }

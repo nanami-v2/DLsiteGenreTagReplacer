@@ -4,11 +4,11 @@ import { GenreWordConversionMode } from "./genre-word-conversion-mode";
 
 export class GenreWordConverter {
     constructor(
-        conversionMode: GenreWordConversionMode,
         conversionMap : GenreWordConversionMap,
+        conversionMode: GenreWordConversionMode,
     ) {
-        this.conversionMode_ = conversionMode;
         this.conversionMap_  = conversionMap;
+        this.conversionMode_ = conversionMode;
     }
     public convertGenreWord(word: string): string | null {
         if (this.conversionMode_ === GenreWordConversionMode.ToOldWords) {
@@ -25,6 +25,6 @@ export class GenreWordConverter {
         }
     }
 
-    private conversionMode_: GenreWordConversionMode;
     private conversionMap_ : GenreWordConversionMap;
+    private conversionMode_: GenreWordConversionMode;
 }

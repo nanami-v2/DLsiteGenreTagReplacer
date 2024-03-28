@@ -19,6 +19,9 @@ export class GenreWordReplacer {
         const genreTagCount      = genreTags.length;
     
         for (let i = 0; i < genreTagCount; ++i) {
+            if (!genreTags[i].textContent)
+                continue;
+
             const currentWord   = genreTags[i].textContent!
             const convertedWord = genreWordConverter.convertGenreWord(currentWord);
 

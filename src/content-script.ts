@@ -1,16 +1,33 @@
 
-import { Message, MessageGetGenreWordConversionMap, MessageGetGenreWordConversionMode, MessageType } from "./message";
+import { Message } from "./message";
 import { GenreWordConversionMap } from "./core/genre-word-conversion-map";
 import { GenreWordConversionMode } from "./core/genre-word-conversion-mode";
 import { GenreWordReplacer } from './core/genre-word-replacer';
 import { GenreWordConverter } from "./core/genre-word-converter";
 import { GenreWordConverterFactory } from "./core/genre-word-converter-factory";
 import { GenreWordReplacerFactory } from "./core/genre-word-replacer-factory";
+import { MessageType } from "./message-type";
+import { MessageDataGetGenreWordConversionMap, MessageDataGetGenreWordConversionMode } from "./message-data";
 
+
+const msgTypeGetGenreConversionMap  = MessageType.GetGenreWordConversionMap;
+const msgTypeGenGenreConversionMode = MessageType.GetGenerWordConversionMode;
+const msgDataGetGenreConversionMap  = new MessageDataGetGenreWordConversionMap();
+const msgDataGetGenreConversionMode = new MessageDataGetGenreWordConversionMode();
 
 Promise.all([
-    chrome.runtime.sendMessage(new MessageGetGenreWordConversionMap()),
-    chrome.runtime.sendMessage(new MessageGetGenreWordConversionMode())
+    chrome.runtime.sendMessage(
+        new Message(
+            msgTypeGetGenreConversionMap,
+            msgDataGetGenreConversionMap
+        )
+    ),
+    chrome.runtime.sendMessage(
+        new Message(
+            msgTypeGenGenreConversionMode,
+            msgDataGetGenreConversionMode
+        )
+    )
 ])
 .then((results: Array<any>) => {
     const conversionMap  = results[0] as GenreWordConversionMap;
@@ -37,9 +54,24 @@ chrome.runtime.onMessage.addListener((
     const msgType = msg.type;
 
     if (msgType === MessageType.ReplaceGenreWord) {
+        const msgTypeGetGenreConversionMap  = MessageType.GetGenreWordConversionMap;
+        const msgTypeGenGenreConversionMode = MessageType.GetGenerWordConversionMode;
+        const msgDataGetGenreConversionMap  = new MessageDataGetGenreWordConversionMap();
+        const msgDataGetGenreConversionMode = new MessageDataGetGenreWordConversionMode();
+        
         Promise.all([
-            chrome.runtime.sendMessage(new MessageGetGenreWordConversionMap()),
-            chrome.runtime.sendMessage(new MessageGetGenreWordConversionMode())
+            chrome.runtime.sendMessage(
+                new Message(
+                    msgTypeGetGenreConversionMap,
+                    msgDataGetGenreConversionMap
+                )
+            ),
+            chrome.runtime.sendMessage(
+                new Message(
+                    msgTypeGenGenreConversionMode,
+                    msgDataGetGenreConversionMode
+                )
+            )
         ])
         .then((results: Array<any>) => {
             const conversionMap  = results[0] as GenreWordConversionMap;
@@ -70,9 +102,24 @@ const mutationObserver       = new MutationObserver((
 ) => {
     console.log('mutationObserver', mutations, observer);
 
+    const msgTypeGetGenreConversionMap  = MessageType.GetGenreWordConversionMap;
+    const msgTypeGenGenreConversionMode = MessageType.GetGenerWordConversionMode;
+    const msgDataGetGenreConversionMap  = new MessageDataGetGenreWordConversionMap();
+    const msgDataGetGenreConversionMode = new MessageDataGetGenreWordConversionMode();
+    
     Promise.all([
-        chrome.runtime.sendMessage(new MessageGetGenreWordConversionMap()),
-        chrome.runtime.sendMessage(new MessageGetGenreWordConversionMode())
+        chrome.runtime.sendMessage(
+            new Message(
+                msgTypeGetGenreConversionMap,
+                msgDataGetGenreConversionMap
+            )
+        ),
+        chrome.runtime.sendMessage(
+            new Message(
+                msgTypeGenGenreConversionMode,
+                msgDataGetGenreConversionMode
+            )
+        )
     ])
     .then((results: Array<any>) => {
         const conversionMap  = results[0] as GenreWordConversionMap;

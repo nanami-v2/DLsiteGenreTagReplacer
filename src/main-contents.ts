@@ -4,6 +4,7 @@ import { GenreWordConversionMap } from "./core/genre-word-conversion-map";
 import { GenreWordConversionMode } from "./core/genre-word-conversion-mode";
 import { GenreWordReplacer } from './core/genre-word-replacer';
 import { GenreWordConverter } from "./core/genre-word-converter";
+import { GenreWordConverterFactory } from "./core/genre-word-converter-factory";
 
 
 Promise.all([
@@ -14,8 +15,9 @@ Promise.all([
     const conversionMap  = results[0] as GenreWordConversionMap;
     const conversionMode = results[1] as GenreWordConversionMode;
 
-    const wordConverter = new GenreWordConverter(conversionMap, conversionMode);
-    const wordReplacer  = new GenreWordReplacer();
+    const wordConverterFactory = new GenreWordConverterFactory();
+    const wordConverter        = wordConverterFactory.createGenreWordConverter(conversionMap, conversionMode);
+    const wordReplacer         = new GenreWordReplacer();
 
     wordReplacer.replaceGenreWords(document, wordConverter);
 })
@@ -40,8 +42,9 @@ chrome.runtime.onMessage.addListener((
             const conversionMap  = results[0] as GenreWordConversionMap;
             const conversionMode = results[1] as GenreWordConversionMode;
         
-            const wordConverter = new GenreWordConverter(conversionMap, conversionMode);
-            const wordReplacer  = new GenreWordReplacer();
+            const wordConverterFactory = new GenreWordConverterFactory();
+            const wordConverter        = wordConverterFactory.createGenreWordConverter(conversionMap, conversionMode);
+            const wordReplacer         = new GenreWordReplacer();
         
             wordReplacer.replaceGenreWords(document, wordConverter);
         })
@@ -70,8 +73,9 @@ const mutationObserver       = new MutationObserver((
         const conversionMap  = results[0] as GenreWordConversionMap;
         const conversionMode = results[1] as GenreWordConversionMode;
     
-        const wordConverter = new GenreWordConverter(conversionMap, conversionMode);
-        const wordReplacer  = new GenreWordReplacer();
+        const wordConverterFactory = new GenreWordConverterFactory();
+        const wordConverter        = wordConverterFactory.createGenreWordConverter(conversionMap, conversionMode);
+        const wordReplacer         = new GenreWordReplacer();
     
         wordReplacer.replaceGenreWords(document, wordConverter);
     })

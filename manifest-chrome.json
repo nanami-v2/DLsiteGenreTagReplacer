@@ -9,12 +9,12 @@
     "content_scripts": [
       {
         "matches": ["*://*.dlsite.com/*"],
-        "js": ["main-contents.js"],
+        "js": ["content-script.js"],
         "run_at": "document_idle"
       }
     ],
     "background": {
-      "service_worker": "main-background.js",
+      "service_worker": "background-script.js",
       "type": "module"
     },
     "web_accessible_resources": [

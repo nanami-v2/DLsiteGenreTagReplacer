@@ -2,7 +2,7 @@
 srcDir      := src
 outDir      := dist
 assetDir    := assets
-entryPoints := $(shell find $(srcDir) -type f -name main-*)
+entryPoints := $(shell find $(srcDir) -type f -name *-script.ts)
 
 srcFiles      := $(shell find $(srcDir) -type f) 
 assertFiles   := $(shell find $(assetDir) -type f)

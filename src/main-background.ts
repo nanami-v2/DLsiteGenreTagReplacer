@@ -20,7 +20,7 @@ chrome.runtime.onInstalled.addListener(() => {
     const conversionMapLoader   = new GenreWordConversionMapLoader();
     const conversionMapFilePath = '/assets/genre-word-conversion-map.json';
 
-    conversionMapLoader.load(
+    conversionMapLoader.loadGenreWordConversionMap(
         conversionMapFilePath
     )
     .then((conversionMap) => {
@@ -95,5 +95,17 @@ chrome.runtime.onInstalled.addListener(() => {
         const message = new MessageReplaceGenreWord();
 
         chrome.tabs.sendMessage(tabId, message, (response: any) => void {});
+    });
+    /*
+        タブ更新時にも置換する必要がある
+        例えば検索結果でジャンルを選ぶとページの内容が更新されるため
+    */
+    chrome.tabs.onUpdated.addListener((
+        tabId        : number,
+        tabChangeInfo: chrome.tabs.TabChangeInfo,
+        tab          : chrome.tabs.Tab
+    ) => {
+        if (tabChangeInfo.status === 'complete')
+            chrome.tabs.sendMessage(tabId, new MessageReplaceGenreWord(), (response: any) => void {});
     });
 });

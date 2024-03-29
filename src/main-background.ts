@@ -20,7 +20,7 @@ chrome.runtime.onInstalled.addListener(() => {
     const conversionMapLoader   = new GenreWordConversionMapLoader();
     const conversionMapFilePath = '/assets/genre-word-conversion-map.json';
 
-    conversionMapLoader.load(
+    conversionMapLoader.loadGenreWordConversionMap(
         conversionMapFilePath
     )
     .then((conversionMap) => {

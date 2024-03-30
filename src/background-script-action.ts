@@ -32,10 +32,13 @@ export class BackgroundScriptAction {
             コンテキストメニューを作成
             コンテキストメニューの表示はタブ間を跨いで切り替わることに注意
         */
+        const nextConversionMode = getNextConversionMode(data.conversionMode);
+        const contextMenuTitle   = getContextMenuTitle(nextConversionMode);
+
         chrome.contextMenus.create({
             type               : 'normal',
             id                 : CONTEXT_MENU_ID,
-            title              : CONTEXT_MENU_TITLE_TO_NEW,
+            title              : contextMenuTitle,
             contexts           : ['page'],
             documentUrlPatterns: ['*://*.dlsite.com/*']
         });
@@ -43,16 +46,15 @@ export class BackgroundScriptAction {
             info: chrome.contextMenus.OnClickData,
             tab : chrome.tabs.Tab | undefined
         ) => {
+            const nextConversionMode      = getNextConversionMode(data.conversionMode);
+            const afterNextConversionMode = getNextConversionMode(nextConversionMode);
+
             const menuId    = info.menuItemId;
-            const menuTitle = (data.conversionMode === GenreWordConversionMode.ToOldWords)
-                ? CONTEXT_MENU_TITLE_TO_OLD
-                : CONTEXT_MENU_TITLE_TO_NEW;
+            const menuTitle = getContextMenuTitle(afterNextConversionMode);
     
-            chrome.contextMenus.update(menuId, {title: menuTitle});
-    
-            data.conversionMode = (data.conversionMode === GenreWordConversionMode.ToOldWords)
-                ? GenreWordConversionMode.ToNewWords
-                : GenreWordConversionMode.ToOldWords;
+            chrome.contextMenus.update(menuId, {title: menuTitle});        
+
+            data.conversionMode = nextConversionMode;
     
             const tabId   = tab!.id!;
             const msgType = MessageType.ReplaceGenreWord;
@@ -118,4 +120,16 @@ export class BackgroundScriptAction {
             console.log(err);
         });
     }
+}
+
+function getContextMenuTitle(conversionMode: GenreWordConversionMode): string {
+    return (conversionMode === GenreWordConversionMode.ToOldWords)
+        ? CONTEXT_MENU_TITLE_TO_OLD
+        : CONTEXT_MENU_TITLE_TO_NEW;
+}
+
+function getNextConversionMode(conversionMode: GenreWordConversionMode): GenreWordConversionMode {
+    return (conversionMode === GenreWordConversionMode.ToOldWords)
+        ? GenreWordConversionMode.ToNewWords
+        : GenreWordConversionMode.ToOldWords;
 }

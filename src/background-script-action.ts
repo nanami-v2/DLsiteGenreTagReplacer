@@ -1,22 +1,18 @@
 
 import { Message } from "./message";
 import { MessageType } from "./message-type";
-import { MessageData, MessageDataReplaceGenreWord } from "./message-data";
-import { GenreWordConversionMap } from "./core/genre-word-conversion-map";
+import { MessageDataReplaceGenreWord } from "./message-data";
 import { GenreWordConversionMapLoader } from "./core/genre-word-conversion-map-loader";
 import { GenreWordConversionMode } from "./core/genre-word-conversion-mode";
+import { BackgroundScriptData } from "./background-script-data";
 
 
 const CONTEXT_MENU_ID           = '43ae9812-9ca5-425d-b12f-c617f91f9095'; /* GUID */
 const CONTEXT_MENU_TITLE_TO_OLD = '旧タグ名で表示';
 const CONTEXT_MENU_TITLE_TO_NEW = '新タグ名で表示';
 
-let g_conversionMap  = new GenreWordConversionMap();
-let g_conversionMode = GenreWordConversionMode.ToOldWords;
-
-
 export class BackgroundScriptAction {
-    public setup(): void {
+    public setup(data: BackgroundScriptData): void {
         /*
             メッセージハンドラを登録
         */
@@ -27,9 +23,9 @@ export class BackgroundScriptAction {
         ) => {
             switch ((message as Message).type) {
                 case MessageType.GetGenreWordConversionMap:
-                    return sendResponse(g_conversionMap);
+                    return sendResponse(data.conversionMap);
                 case MessageType.GetGenerWordConversionMode:
-                    return sendResponse(g_conversionMode);
+                    return sendResponse(data.conversionMode);
             }
         });
         /*
@@ -48,13 +44,13 @@ export class BackgroundScriptAction {
             tab : chrome.tabs.Tab | undefined
         ) => {
             const menuId    = info.menuItemId;
-            const menuTitle = (g_conversionMode === GenreWordConversionMode.ToOldWords)
+            const menuTitle = (data.conversionMode === GenreWordConversionMode.ToOldWords)
                 ? CONTEXT_MENU_TITLE_TO_OLD
                 : CONTEXT_MENU_TITLE_TO_NEW;
     
             chrome.contextMenus.update(menuId, {title: menuTitle});
     
-            g_conversionMode = (g_conversionMode === GenreWordConversionMode.ToOldWords)
+            data.conversionMode = (data.conversionMode === GenreWordConversionMode.ToOldWords)
                 ? GenreWordConversionMode.ToNewWords
                 : GenreWordConversionMode.ToOldWords;
     
@@ -104,7 +100,7 @@ export class BackgroundScriptAction {
             chrome.tabs.sendMessage(tabId, msg, (response: any) => void {});
         });
     }
-    public execute(): void {
+    public execute(data: BackgroundScriptData): void {
         /*
             contets-script側で読み込むと、毎ページで読み込むことになる
             当然これは無駄なので、background側で読み込んでおいてキャッシュしておく
@@ -116,7 +112,7 @@ export class BackgroundScriptAction {
             conversionMapFilePath
         )
         .then((conversionMap) => {
-            g_conversionMap = conversionMap;
+            data.conversionMap = conversionMap;
         })
         .catch((err) => {
             console.log(err);

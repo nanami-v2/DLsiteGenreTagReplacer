@@ -8,8 +8,18 @@
     ],
     "content_scripts": [
       {
-        "matches": ["*://*.dlsite.com/*"],
-        "js": ["content-script.js"],
+        "matches": ["*://*.dlsite.com/*/work/=/product_id/*"],
+        "js": ["content-script-for-product-page.js"],
+        "run_at": "document_idle"
+      },
+      {
+        "matches": ["*://*.dlsite.com/*/genre/list"],
+        "js": ["content-script-for-genre-list-page.js"],
+        "run_at": "document_idle"
+      },
+      {
+        "matches": ["*://*.dlsite.com/*/work.genre"],
+        "js": ["content-script-for-search-result-page.js"],
         "run_at": "document_idle"
       }
     ],

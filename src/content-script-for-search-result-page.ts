@@ -5,7 +5,7 @@ import { GenreWordConversionMode } from "./core/genre-word-conversion-mode";
 import { GenreWordConverterFactory } from "./core/genre-word-converter-factory";
 import { GenreWordReplacerFactory } from "./core/genre-word-replacer-factory";
 import { MessageType } from "./message-type";
-import { MessageData,  MessageDataEchoMessage,  MessageDataGetGenreWordConversionMap, MessageDataGetGenreWordConversionMode, MessageDataReplaceGenreWord } from "./message-data";
+import { MessageDataGetGenreWordConversionMap, MessageDataGetGenreWordConversionMode } from "./message-data";
 
 chrome.runtime.onMessage.addListener((
     message      : any,
@@ -21,13 +21,9 @@ chrome.runtime.onMessage.addListener((
     「他のジャンルで探す」などの場合、サーバーから取得したデータを基にダイアログを作成している
     なので、このような場合にも表記を変えるため、mutatioObserver で対象のノード――検索モーダル――を監視する必要がある 
 
-    なお、下記は検索結果ページの一例であって、
-    
-    - 「同人」の検索結果ページ
-    - 「美少女ゲーム」の検索結果ページ
+    その対象であるが、id="wrapper"の次のノードに検索結果ダイアログを挿入するつくりになっているようなので、
+    それに従う。下記は一例
 
-    とでは微妙に構造が違う。が、いずれにしてもid="wrapper"の次に検索結果ダイアログを挿入するつくりにはなっている。
-  
     ```html
     <body>
       <div id="container">
@@ -40,9 +36,9 @@ chrome.runtime.onMessage.addListener((
     </body>
     ```      
 */
-const mutationObserverTarget  = document.getElementById('wrapper')!.nextSibling!;
+const mutationObserverTarget  = document.getElementById('wrapper')!.nextElementSibling!;
 const mutationObserverOptions = {childList: true};
-const mutationObserver       = new MutationObserver((
+const mutationObserver        = new MutationObserver((
     mutations: MutationRecord[],
     observer : MutationObserver
 ) => {

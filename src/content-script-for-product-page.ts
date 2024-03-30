@@ -5,7 +5,7 @@ import { GenreWordConversionMode } from "./core/genre-word-conversion-mode";
 import { GenreWordConverterFactory } from "./core/genre-word-converter-factory";
 import { GenreWordReplacerFactory } from "./core/genre-word-replacer-factory";
 import { MessageType } from "./message-type";
-import { MessageData,  MessageDataEchoMessage,  MessageDataGetGenreWordConversionMap, MessageDataGetGenreWordConversionMode, MessageDataReplaceGenreWord } from "./message-data";
+import { MessageDataGetGenreWordConversionMap, MessageDataGetGenreWordConversionMode } from "./message-data";
 
 chrome.runtime.onMessage.addListener((
     message      : any,

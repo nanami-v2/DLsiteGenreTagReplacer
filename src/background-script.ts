@@ -1,23 +1,17 @@
 
 import { Message } from "./message";
 import { MessageType } from "./message-type";
-import { MessageData, MessageDataReplaceGenreWord } from "./message-data";
-import { GenreWordConversionMap } from "./core/genre-word-conversion-map";
+import { MessageDataReplaceGenreWord } from "./message-data";
 import { GenreWordConversionMapLoader } from "./core/genre-word-conversion-map-loader";
+import { GenreWordConversionMap } from "./core/genre-word-conversion-map";
 import { GenreWordConversionMode } from "./core/genre-word-conversion-mode";
-
-const CONTEXT_MENU_ID           = '43ae9812-9ca5-425d-b12f-c617f91f9095'; /* GUID */
-const CONTEXT_MENU_TITLE_TO_OLD = '旧タグ名で表示';
-const CONTEXT_MENU_TITLE_TO_NEW = '新タグ名で表示';
 
 let g_conversionMap  = new GenreWordConversionMap();
 let g_conversionMode = GenreWordConversionMode.ToOldWords;
 
-/* 初期化 */
 chrome.runtime.onInstalled.addListener(() => {
     /*
-        contets-script側で読み込むと、毎ページで読み込むことになる
-        当然これは無駄なので、background側で読み込んでおいてキャッシュしておく
+        変換表を読み込みキャッシュする
     */
     const conversionMapLoader   = new GenreWordConversionMapLoader();
     const conversionMapFilePath = '/assets/genre-word-conversion-map.json';
@@ -50,60 +44,60 @@ chrome.runtime.onInstalled.addListener(() => {
         コンテキストメニューを作成
         コンテキストメニューの表示はタブ間を跨いで切り替わることに注意
     */
+    const nextConversionMode = getNextConversionMode(g_conversionMode);
+    const contextMenuTitle   = getContextMenuTitle(nextConversionMode);
+
     chrome.contextMenus.create({
         type               : 'normal',
-        id                 : CONTEXT_MENU_ID,
-        title              : CONTEXT_MENU_TITLE_TO_NEW,
+        id                 : '43ae9812-9ca5-425d-b12f-c617f91f9095', /* GUID */
+        title              : contextMenuTitle,
         contexts           : ['page'],
         documentUrlPatterns: ['*://*.dlsite.com/*']
     });
+    /*
+        コンテキストメニュークリック時の振る舞いを定義する
+    */
     chrome.contextMenus.onClicked.addListener((
         info: chrome.contextMenus.OnClickData,
         tab : chrome.tabs.Tab | undefined
     ) => {
+        const nextConversionMode      = getNextConversionMode(g_conversionMode);
+        const afterNextConversionMode = getNextConversionMode(nextConversionMode);
+        /*
+            コンテキストメニューのテキストを切り替える
+        */
         const menuId    = info.menuItemId;
-        const menuTitle = (g_conversionMode === GenreWordConversionMode.ToOldWords)
-            ? CONTEXT_MENU_TITLE_TO_OLD
-            : CONTEXT_MENU_TITLE_TO_NEW;
-
-        chrome.contextMenus.update(menuId, {title: menuTitle});
-
-        g_conversionMode = (g_conversionMode === GenreWordConversionMode.ToOldWords)
-            ? GenreWordConversionMode.ToNewWords
-            : GenreWordConversionMode.ToOldWords;
-
+        const menuTitle = getContextMenuTitle(afterNextConversionMode);
+    
+        chrome.contextMenus.update(menuId, {title: menuTitle});        
+        /*
+            強制的に置換処理を走らせる
+        */
+        g_conversionMode = nextConversionMode;
+    
         const tabId   = tab!.id!;
         const msgType = MessageType.ReplaceGenreWord;
         const msgData = new MessageDataReplaceGenreWord();
-
-        chrome.tabs.sendMessage(
-            tabId,
-            new Message(msgType, msgData),
-            (response: any) => void {}
-        );
+        const msg     = new Message(msgType, msgData);
+    
+        chrome.tabs.sendMessage(tabId, msg, (response: any) => {});
     });
     /*
         タブ切り替え時の振る舞いを定義する
-        これにより複数開いているタブの間で変換モードを共有できる
-        つまり
-        
-        - どれか一つのタブで旧版表示にしたら、残るタブもタブ切り替で旧版表示に切り替わる
-        - どれか一つのタブで新版表示にしたら、残るタブもタブ切り替で新版表示に切り替わる
-
-        …ということ
+        これにより複数開いているタブの間で変換状態を共有できる
     */
     chrome.tabs.onActivated.addListener((
         activeInfo: chrome.tabs.TabActiveInfo
     ) => {
+        /*
+            強制的に置換処理を走らせる
+        */
         const tabId   = activeInfo.tabId;
         const msgType = MessageType.ReplaceGenreWord;
         const msgData = new MessageDataReplaceGenreWord();
-
-        chrome.tabs.sendMessage(
-            tabId,
-            new Message(msgType, msgData),
-            (response: any) => void {}
-        );
+        const msg     = new Message(msgType, msgData);
+    
+        chrome.tabs.sendMessage(tabId, msg, (response: any) => {});
     });
     /*
         タブ更新時にも置換する必要がある
@@ -114,16 +108,27 @@ chrome.runtime.onInstalled.addListener(() => {
         tabChangeInfo: chrome.tabs.TabChangeInfo,
         tab          : chrome.tabs.Tab
     ) => {
-        if (tabChangeInfo.status !== 'complete')
-            return;
-
-        const msgType = MessageType.ReplaceGenreWord;
-        const msgData = new MessageDataReplaceGenreWord();
-
-        chrome.tabs.sendMessage(
-            tabId,
-            new Message(msgType, msgData),
-            (response: any) => void {}
-        );
+        if (tabChangeInfo.status === 'complete') {
+            /*
+                強制的に置換処理を走らせる
+            */
+            const msgType = MessageType.ReplaceGenreWord;
+            const msgData = new MessageDataReplaceGenreWord();
+            const msg     = new Message(msgType, msgData);
+    
+            chrome.tabs.sendMessage(tabId, msg, (response: any) => {});
+        }
     });
 });
+
+function getContextMenuTitle(conversionMode: GenreWordConversionMode): string {
+    return (conversionMode === GenreWordConversionMode.ToOldWords)
+        ? '旧タグ名で表示'
+        : '新タグ名で表示';
+}
+
+function getNextConversionMode(conversionMode: GenreWordConversionMode): GenreWordConversionMode {
+    return (conversionMode === GenreWordConversionMode.ToOldWords)
+        ? GenreWordConversionMode.ToNewWords
+        : GenreWordConversionMode.ToOldWords;
+}

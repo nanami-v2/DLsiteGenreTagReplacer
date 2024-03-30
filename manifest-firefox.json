@@ -8,16 +8,8 @@
     ],
     "content_scripts": [
       {
-        "matches": ["*://*.dlsite.com/*/genre/list"],
-        "js": ["content-script-for-genre-list-page.js"]
-      },
-      {
-        "matches": ["*://*.dlsite.com/*/work/=/product_id/*"],
-        "js": ["content-script-for-product-page.js"]
-      },
-      {
-        "matches": ["*://*.dlsite.com/*/work.genre"],
-        "js": ["content-script-for-search-result-page.js"]
+        "matches": ["*://*.dlsite.com/*"],
+        "js": ["content-script.js"]
       }
     ],
     "background": {

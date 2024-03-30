@@ -1,27 +1,34 @@
 
-import { Message } from "./message";
-import { GenreWordConversionMap } from "./core/genre-word-conversion-map";
-import { GenreWordConversionMode } from "./core/genre-word-conversion-mode";
-import { GenreWordConverterFactory } from "./core/genre-word-converter-factory";
-import { GenreWordReplacerFactory } from "./core/genre-word-replacer-factory";
-import { GenreWordReplaceTargetPage } from "./core/genre-word-replace-target-page";
-import { MessageType } from "./message-type";
-import { MessageDataGetGenreWordConversionMap, MessageDataGetGenreWordConversionMode } from "./message-data";
+import { Message } from "../message";
+import { GenreWordConversionMap } from "../core/genre-word-conversion-map";
+import { GenreWordConversionMode } from "../core/genre-word-conversion-mode";
+import { GenreWordConverterFactory } from "../core/genre-word-converter-factory";
+import { GenreWordReplacerFactory } from "../core/genre-word-replacer-factory";
+import { GenreWordReplaceTargetPage } from "../core/genre-word-replace-target-page";
+import { MessageType } from "../message-type";
+import { MessageDataGetGenreWordConversionMap, MessageDataGetGenreWordConversionMode } from "../message-data";
+import { ContentScriptAction } from "../content-script-action";
 
-chrome.runtime.onMessage.addListener((
-    message      : any,
-    messageSender: chrome.runtime.MessageSender,
-    sendResponse : (response: any) => void
-) => {
-    switch ((message as Message).type) {
-        case MessageType.ReplaceGenreWord:
-            doReplaceGenreWords();
+export class ContentScriptActionForProductPage implements ContentScriptAction {
+    public setup(): void {
+        /*
+            メッセージハンドラを登録
+        */
+        chrome.runtime.onMessage.addListener((
+            message      : any,
+            messageSender: chrome.runtime.MessageSender,
+            sendResponse : (response: any) => void
+        ) => {
+            switch ((message as Message).type) {
+                case MessageType.ReplaceGenreWord:
+                    doReplaceGenreWords();
+            }
+        });        
     }
-});
-/*
-    初回はオートで実行
-*/
-doReplaceGenreWords();
+    public excute(): void {
+        doReplaceGenreWords();
+    }
+}
 
 function doReplaceGenreWords() {
     const msgTypeGetGenreConversionMap  = MessageType.GetGenreWordConversionMap;

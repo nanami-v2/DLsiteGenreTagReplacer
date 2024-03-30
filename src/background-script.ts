@@ -11,6 +11,21 @@ let g_conversionMode = GenreWordConversionMode.ToOldWords;
 
 chrome.runtime.onInstalled.addListener(() => {
     /*
+        変換表を読み込みキャッシュする
+    */
+    const conversionMapLoader   = new GenreWordConversionMapLoader();
+    const conversionMapFilePath = '/assets/genre-word-conversion-map.json';
+
+    conversionMapLoader.loadGenreWordConversionMap(
+        conversionMapFilePath
+    )
+    .then((conversionMap) => {
+        g_conversionMap = conversionMap;
+    })
+    .catch((err) => {
+        console.log(err);
+    });
+    /*
         メッセージハンドラを登録
     */
     chrome.runtime.onMessage.addListener((
@@ -39,6 +54,9 @@ chrome.runtime.onInstalled.addListener(() => {
         contexts           : ['page'],
         documentUrlPatterns: ['*://*.dlsite.com/*']
     });
+    /*
+        コンテキストメニュークリック時の振る舞いを定義する
+    */
     chrome.contextMenus.onClicked.addListener((
         info: chrome.contextMenus.OnClickData,
         tab : chrome.tabs.Tab | undefined
@@ -62,17 +80,11 @@ chrome.runtime.onInstalled.addListener(() => {
         const msgData = new MessageDataReplaceGenreWord();
         const msg     = new Message(msgType, msgData);
     
-        chrome.tabs.sendMessage(tabId, msg, (response: any) => void {});
+        chrome.tabs.sendMessage(tabId, msg, (response: any) => {});
     });
     /*
         タブ切り替え時の振る舞いを定義する
-        これにより複数開いているタブの間で変換モードを共有できる
-        つまり
-
-        - どれか一つのタブで旧版表示にしたら、残るタブもタブ切り替え時に旧版表示に切り替わる
-        - どれか一つのタブで新版表示にしたら、残るタブもタブ切り替え時に新版表示に切り替わる
-
-        ということ
+        これにより複数開いているタブの間で変換状態を共有できる
     */
     chrome.tabs.onActivated.addListener((
         activeInfo: chrome.tabs.TabActiveInfo
@@ -85,7 +97,7 @@ chrome.runtime.onInstalled.addListener(() => {
         const msgData = new MessageDataReplaceGenreWord();
         const msg     = new Message(msgType, msgData);
     
-        chrome.tabs.sendMessage(tabId, msg, (response: any) => void {});
+        chrome.tabs.sendMessage(tabId, msg, (response: any) => {});
     });
     /*
         タブ更新時にも置換する必要がある
@@ -104,24 +116,8 @@ chrome.runtime.onInstalled.addListener(() => {
             const msgData = new MessageDataReplaceGenreWord();
             const msg     = new Message(msgType, msgData);
     
-            chrome.tabs.sendMessage(tabId, msg, (response: any) => void {});
+            chrome.tabs.sendMessage(tabId, msg, (response: any) => {});
         }
-    });
-    /*
-        contets-script側で読み込むと、毎ページで読み込むことになる
-        当然これは無駄なので、background側で読み込んでおいてキャッシュしておく
-    */
-    const conversionMapLoader   = new GenreWordConversionMapLoader();
-    const conversionMapFilePath = '/assets/genre-word-conversion-map.json';
-
-    conversionMapLoader.loadGenreWordConversionMap(
-        conversionMapFilePath
-    )
-    .then((conversionMap) => {
-        g_conversionMap = conversionMap;
-    })
-    .catch((err) => {
-        console.log(err);
     });
 });
 

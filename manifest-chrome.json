@@ -1,6 +1,6 @@
 {
     "manifest_version": 3,
-    "name": "Anti-WordHunting",
+    "name": "Anti Word Hunting",
     "version": "0.0.5",
     "description": "クレカ会社による言葉狩りへの対応",
     "permissions": [

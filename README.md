@@ -1,4 +1,4 @@
-# Anti Word Hunting <!-- omit in toc -->
+# DLSite GenreTag Replacer <!-- omit in toc -->
 
 - [本拡張機能に関して](#本拡張機能に関して)
   - [対応ブラウザ](#対応ブラウザ)
@@ -10,7 +10,7 @@
 
 ## 本拡張機能に関して
 
-[DLsite.com](https://www.dlsite.com/index.html)において **2024年3月** に行われた、ジャンルタグの表記置き換えに対処するための拡張機能です。
+[DLsite.com](https://www.dlsite.com/index.html)において 2024年3月 に行われた、ジャンルタグの表記置き換えに対処するための拡張機能です。
 
 具体的には、**ジャンルタグを「置き換え前のもの」で表示** します。
 

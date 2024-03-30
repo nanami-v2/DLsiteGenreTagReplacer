@@ -1,4 +1,4 @@
-# Anti-Word Hunting <!-- omit in toc -->
+# Anti Word Hunting <!-- omit in toc -->
 
 - [本拡張機能に関して](#本拡張機能に関して)
   - [対応ブラウザ](#対応ブラウザ)
@@ -16,8 +16,9 @@
 
 ### 対応ブラウザ
 
-- Chrome (Edge)
+- Chrome
 - Firefox
+- Edge
 
 ### 変換用語一覧
 

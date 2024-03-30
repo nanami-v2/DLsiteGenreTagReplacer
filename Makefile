@@ -20,7 +20,7 @@ check-type:
 	npx tsc $(srcDir)/*.ts --noEmit --strict
 
 $(outDir)/%: $(srcFiles) $(assertFiles) $(manifestFiles)
-	npx esbuild $(entryPoints) --bundle --outdir=$(outDir)/$*
-	cp $(assetDir) $(outDir)/$*/ -r
-	cp manifest-$*.json $(outDir)/$*/manifest.json
+	npx esbuild $(entryPoints) --bundle --outdir=$@
+	cp $(assetDir) $@/ -r
+	cp manifest-$*.json $@/manifest.json
 	touch $@

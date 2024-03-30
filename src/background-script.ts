@@ -79,7 +79,10 @@ chrome.runtime.onInstalled.addListener(() => {
         const msgType = MessageType.ReplaceGenreWord;
         const msgData = new MessageDataReplaceGenreWord();
     
-        chrome.tabs.sendMessage(tabId, new Message(msgType, msgData));
+        chrome.tabs.sendMessage(
+            tabId,
+            new Message(msgType, msgData)
+        ).catch((err) => console.log(err));
     });
     /*
         タブ切り替え時の振る舞いを定義する
@@ -95,7 +98,10 @@ chrome.runtime.onInstalled.addListener(() => {
         const msgType = MessageType.ReplaceGenreWord;
         const msgData = new MessageDataReplaceGenreWord();
     
-        chrome.tabs.sendMessage(tabId, new Message(msgType, msgData));
+        chrome.tabs.sendMessage(
+            tabId,
+            new Message(msgType, msgData)
+        ).catch((err) => console.log(err));
     });
     /*
         タブ更新時にも置換する必要がある
@@ -113,7 +119,10 @@ chrome.runtime.onInstalled.addListener(() => {
             const msgType = MessageType.ReplaceGenreWord;
             const msgData = new MessageDataReplaceGenreWord();
     
-            chrome.tabs.sendMessage(tabId, new Message(msgType, msgData));
+            chrome.tabs.sendMessage(
+                tabId,
+                new Message(msgType, msgData)
+            ).catch((err) => console.log(err));
         }
     });
 });

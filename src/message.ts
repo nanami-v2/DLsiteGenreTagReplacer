@@ -1,22 +1,13 @@
 
-export enum MessageType {
-    GetGenreWordConversionMap,
-    GetGenerWordConversionMode,
-    ReplaceGenreWord,
-}
+import { MessageType } from './message-type'
+import { MessageData } from './message-data';
 
-export interface Message {
+export class Message {
     type: MessageType;
-}
+    data: MessageData;
 
-export class MessageGetGenreWordConversionMap implements Message {
-    type: MessageType = MessageType.GetGenreWordConversionMap;
-}
-
-export class MessageGetGenreWordConversionMode implements Message {
-    type: MessageType = MessageType.GetGenerWordConversionMode;
-}
-
-export class MessageReplaceGenreWord implements Message {
-    type: MessageType = MessageType.ReplaceGenreWord;
+    constructor(type: MessageType, data: MessageData) {
+        this.type = type;
+        this.data = data;
+    }
 }

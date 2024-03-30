@@ -1,5 +1,7 @@
 
-import { Message, MessageType, MessageReplaceGenreWord } from "./message";
+import { Message } from "./message";
+import { MessageType } from "./message-type";
+import { MessageData, MessageDataReplaceGenreWord } from "./message-data";
 import { GenreWordConversionMap } from "./core/genre-word-conversion-map";
 import { GenreWordConversionMapLoader } from "./core/genre-word-conversion-map-loader";
 import { GenreWordConversionMode } from "./core/genre-word-conversion-mode";
@@ -37,10 +39,7 @@ chrome.runtime.onInstalled.addListener(() => {
         messageSender: chrome.runtime.MessageSender,
         sendResponse : (response: any) => void
     ) => {
-        const msg     = message as Message;
-        const msgType = msg.type;
-
-        switch (msgType) {
+        switch ((message as Message).type) {
             case MessageType.GetGenreWordConversionMap:
                 return sendResponse(g_conversionMap);
             case MessageType.GetGenerWordConversionMode:
@@ -74,9 +73,14 @@ chrome.runtime.onInstalled.addListener(() => {
             : GenreWordConversionMode.ToOldWords;
 
         const tabId   = tab!.id!;
-        const message = new MessageReplaceGenreWord();
+        const msgType = MessageType.ReplaceGenreWord;
+        const msgData = new MessageDataReplaceGenreWord();
 
-        chrome.tabs.sendMessage(tabId, message, (response: any) => void {});
+        chrome.tabs.sendMessage(
+            tabId,
+            new Message(msgType, msgData),
+            (response: any) => void {}
+        );
     });
     /*
         タブ切り替え時の振る舞いを定義する
@@ -92,9 +96,14 @@ chrome.runtime.onInstalled.addListener(() => {
         activeInfo: chrome.tabs.TabActiveInfo
     ) => {
         const tabId   = activeInfo.tabId;
-        const message = new MessageReplaceGenreWord();
+        const msgType = MessageType.ReplaceGenreWord;
+        const msgData = new MessageDataReplaceGenreWord();
 
-        chrome.tabs.sendMessage(tabId, message, (response: any) => void {});
+        chrome.tabs.sendMessage(
+            tabId,
+            new Message(msgType, msgData),
+            (response: any) => void {}
+        );
     });
     /*
         タブ更新時にも置換する必要がある
@@ -105,7 +114,16 @@ chrome.runtime.onInstalled.addListener(() => {
         tabChangeInfo: chrome.tabs.TabChangeInfo,
         tab          : chrome.tabs.Tab
     ) => {
-        if (tabChangeInfo.status === 'complete')
-            chrome.tabs.sendMessage(tabId, new MessageReplaceGenreWord(), (response: any) => void {});
+        if (tabChangeInfo.status !== 'complete')
+            return;
+
+        const msgType = MessageType.ReplaceGenreWord;
+        const msgData = new MessageDataReplaceGenreWord();
+
+        chrome.tabs.sendMessage(
+            tabId,
+            new Message(msgType, msgData),
+            (response: any) => void {}
+        );
     });
 });

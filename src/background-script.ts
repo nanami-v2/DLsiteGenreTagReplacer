@@ -34,7 +34,7 @@ chrome.runtime.onInstalled.addListener(() => {
         sendResponse : (response: any) => void
     ) => {
         console.log('onMessage', message);
-        
+
         switch ((message as Message).type) {
             case MessageType.GetGenreWordConversionMap:
                 return sendResponse(g_conversionMap);
@@ -93,17 +93,26 @@ chrome.runtime.onInstalled.addListener(() => {
     chrome.tabs.onActivated.addListener((
         activeInfo: chrome.tabs.TabActiveInfo
     ) => {
-        /*
-            強制的に置換処理を走らせる
-        */
-        const tabId   = activeInfo.tabId;
-        const msgType = MessageType.ReplaceGenreWord;
-        const msgData = new MessageDataReplaceGenreWord();
-    
-        chrome.tabs.sendMessage(
-            tabId,
-            new Message(msgType, msgData)
-        ).catch((err) => console.log(err));
+        chrome.tabs.get(
+            activeInfo.tabId,
+            (tab: chrome.tabs.Tab) => {
+                if (!tab.url || !tab.url.includes('dlsite.com/'))
+                    return;
+                /*
+                    強制的に置換処理を走らせる
+                */
+                const tabId   = tab.id!;
+                const msgType = MessageType.ReplaceGenreWord;
+                const msgData = new MessageDataReplaceGenreWord();
+                
+                console.log('sendMessage-ReplaceGenreWord');
+
+                chrome.tabs.sendMessage(
+                    tabId,
+                    new Message(msgType, msgData)
+                ).catch((err) => console.log(err));            
+            }
+        );
     });
     /*
         タブ更新時にも置換する必要がある
@@ -115,6 +124,7 @@ chrome.runtime.onInstalled.addListener(() => {
         tab          : chrome.tabs.Tab
     ) => {
         if (tabChangeInfo.status === 'complete') {
+            console.log('tab is updated');
             /*
                 強制的に置換処理を走らせる
             */

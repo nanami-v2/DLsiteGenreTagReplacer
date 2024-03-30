@@ -4,7 +4,8 @@
   "version": "0.0.6",
   "description": "クレカ会社による言葉狩りへの対応",
   "permissions": [
-    "contextMenus"
+    "contextMenus",
+    "tabs"
   ],
   "icons": {
     "48": "assets/icon-48x48.png",

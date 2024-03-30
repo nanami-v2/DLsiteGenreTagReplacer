@@ -1,4 +1,4 @@
-# DLSite GenreTag Replacer <!-- omit in toc -->
+# DLsite GenreTag Replacer <!-- omit in toc -->
 
 - [本拡張機能に関して](#本拡張機能に関して)
   - [対応ブラウザ](#対応ブラウザ)

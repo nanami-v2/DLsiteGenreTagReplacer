@@ -4,6 +4,7 @@ import { GenreWordConversionMap } from "./core/genre-word-conversion-map";
 import { GenreWordConversionMode } from "./core/genre-word-conversion-mode";
 import { GenreWordConverterFactory } from "./core/genre-word-converter-factory";
 import { GenreWordReplacerFactory } from "./core/genre-word-replacer-factory";
+import { GenreWordReplaceTargetPage } from "./core/genre-word-replace-target-page";
 import { MessageType } from "./message-type";
 import { MessageDataGetGenreWordConversionMap, MessageDataGetGenreWordConversionMode } from "./message-data";
 
@@ -49,10 +50,9 @@ function doReplaceGenreWords() {
         const wordConverterFactory = new GenreWordConverterFactory();
         const wordReplacerFactory  = new GenreWordReplacerFactory();
         const wordConverter        = wordConverterFactory.createGenreWordConverter(conversionMap, conversionMode);
-        const wordReplacer         = wordReplacerFactory.createGenreWordReplacer(window.location.toString());
+        const wordReplacer         = wordReplacerFactory.createGenreWordReplacer(GenreWordReplaceTargetPage.ProductPage);
     
-        if (wordReplacer)
-            wordReplacer.replaceGenreWords(document, wordConverter);
+        wordReplacer.replaceGenreWords(document, wordConverter);
     })
     .catch((err) => {
         console.log(err);

@@ -33,6 +33,8 @@ chrome.runtime.onInstalled.addListener(() => {
         messageSender: chrome.runtime.MessageSender,
         sendResponse : (response: any) => void
     ) => {
+        console.log('onMessage', message);
+        
         switch ((message as Message).type) {
             case MessageType.GetGenreWordConversionMap:
                 return sendResponse(g_conversionMap);

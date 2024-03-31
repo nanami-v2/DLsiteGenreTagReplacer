@@ -1,13 +1,15 @@
 
-import { Message } from "../message";
-import { GenreWordConversionMap } from "../core/genre-word-conversion-map";
-import { GenreWordConversionMode } from "../core/genre-word-conversion-mode";
+import { ContentScriptAction } from "../content-script-action";
 import { GenreWordConverterFactory } from "../core/genre-word-converter-factory";
 import { GenreWordReplacerFactory } from "../core/genre-word-replacer-factory";
 import { GenreWordReplaceTargetPage } from "../core/genre-word-replace-target-page";
-import { MessageType } from "../message-type";
-import { MessageDataGetGenreWordConversionMap, MessageDataGetGenreWordConversionMode } from "../message-data";
-import { ContentScriptAction } from "../content-script-action";
+import { Message } from "../message";
+import { MessageType } from "../message/type";
+import {
+    MessageDataGetConversionMapResponse,
+    MessageDataGetConversionModeResponse,
+} from "../message/data";
+import { MessageFactory } from '../message-factory';
 
 export class ContentScriptActionForGenreListPage implements ContentScriptAction {
     public setup(): void {
@@ -20,8 +22,12 @@ export class ContentScriptActionForGenreListPage implements ContentScriptAction 
             sendResponse : (response: any) => void
         ) => {
             switch ((message as Message).type) {
-                case MessageType.ReplaceGenreWord:
-                    doReplaceGenreWords();
+                case MessageType.ContextMenuClickedEvent:
+                    return doReplaceGenreWords();
+                case MessageType.TabActivatedEvent:
+                    return doReplaceGenreWords();
+                case MessageType.TabUpdatedEvent:
+                    return doReplaceGenreWords();
             }
         });
     }
@@ -31,28 +37,17 @@ export class ContentScriptActionForGenreListPage implements ContentScriptAction 
 }
 
 function doReplaceGenreWords() {
-    const msgTypeGetGenreConversionMap  = MessageType.GetGenreWordConversionMap;
-    const msgTypeGenGenreConversionMode = MessageType.GetGenerWordConversionMode;
-    const msgDataGetGenreConversionMap  = new MessageDataGetGenreWordConversionMap();
-    const msgDataGetGenreConversionMode = new MessageDataGetGenreWordConversionMode();
+    const msgFactory                  = new MessageFactory();
+    const msgGetConversionMapRequest  = msgFactory.createMessageGetConversionMapRequest();
+    const msgGetConversionModeRequest = msgFactory.createMessageGetConversionModeRequest();
 
     Promise.all([
-        chrome.runtime.sendMessage(
-            new Message(
-                msgTypeGetGenreConversionMap,
-                msgDataGetGenreConversionMap
-            )
-        ),
-        chrome.runtime.sendMessage(
-            new Message(
-                msgTypeGenGenreConversionMode,
-                msgDataGetGenreConversionMode
-            )
-        )
+        chrome.runtime.sendMessage(msgGetConversionMapRequest),
+        chrome.runtime.sendMessage(msgGetConversionModeRequest)
     ])
     .then((results: Array<any>) => {
-        const conversionMap  = results[0] as GenreWordConversionMap;
-        const conversionMode = results[1] as GenreWordConversionMode;
+        const conversionMap  = ((results[0] as Message).data as MessageDataGetConversionMapResponse ).conversionMap;
+        const conversionMode = ((results[1] as Message).data as MessageDataGetConversionModeResponse).conversionMode;
     
         const wordConverterFactory = new GenreWordConverterFactory();
         const wordReplacerFactory  = new GenreWordReplacerFactory();

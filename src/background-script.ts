@@ -1,7 +1,7 @@
 
 import { Message } from "./message";
-import { MessageType } from "./message-type";
-import { MessageDataReplaceGenreWord } from "./message-data";
+import { MessageType } from "./message/type";
+import { MessageFactory } from "./message-factory";
 import { GenreWordConversionMapLoader } from "./core/genre-word-conversion-map-loader";
 import { GenreWordConversionMap } from "./core/genre-word-conversion-map";
 import { GenreWordConversionMode } from "./core/genre-word-conversion-mode";
@@ -34,10 +34,18 @@ chrome.runtime.onInstalled.addListener(() => {
         sendResponse : (response: any) => void
     ) => {
         switch ((message as Message).type) {
-            case MessageType.GetGenreWordConversionMap:
-                return sendResponse(g_conversionMap);
-            case MessageType.GetGenerWordConversionMode:
-                return sendResponse(g_conversionMode);
+            case MessageType.GetConversionMapRequest: {
+                const msgFactory  = new MessageFactory();
+                const msgResponse = msgFactory.createMessageGetConversionMapResponse(g_conversionMap);
+
+                return sendResponse(msgResponse);
+            }
+            case MessageType.GetConversionModeRequest: {
+                const msgFactory  = new MessageFactory();
+                const msgResponse = msgFactory.createMessageGetConversionModeResponse(g_conversionMode);
+
+                return sendResponse(msgResponse);
+            }
         }
     });
     /*
@@ -70,21 +78,16 @@ chrome.runtime.onInstalled.addListener(() => {
         const menuTitle = getContextMenuTitle(afterNextConversionMode);
     
         chrome.contextMenus.update(menuId, {title: menuTitle});        
-        /*
-            強制的に置換処理を走らせる
-        */
+
         g_conversionMode = nextConversionMode;
     
-        const tabId   = tab!.id!;
-        const msgType = MessageType.ReplaceGenreWord;
-        const msgData = new MessageDataReplaceGenreWord();
+        const tabId      = tab!.id!;
+        const msgFactory = new MessageFactory();
+        const msgEvent   = msgFactory.createMessageContextMenuClickedEvent();
 
-        console.log('sendMessage-ReplaceGenreWord');
-
-        chrome.tabs.sendMessage(
-            tabId,
-            new Message(msgType, msgData)
-        ).catch((err) => console.log(err));
+        chrome.tabs
+        .sendMessage(tabId, msgEvent)
+        .catch((err) => console.log(err));
     });
     /*
         タブ切り替え時の振る舞いを定義する
@@ -98,19 +101,14 @@ chrome.runtime.onInstalled.addListener(() => {
             (tab: chrome.tabs.Tab) => {
                 if (!tab.url || !tab.url.includes('dlsite.com/'))
                     return;
-                /*
-                    強制的に置換処理を走らせる
-                */
-                const tabId   = tab.id!;
-                const msgType = MessageType.ReplaceGenreWord;
-                const msgData = new MessageDataReplaceGenreWord();
-                
-                console.log('sendMessage-ReplaceGenreWord');
 
-                chrome.tabs.sendMessage(
-                    tabId,
-                    new Message(msgType, msgData)
-                ).catch((err) => console.log(err));            
+                const tabId      = tab.id!;
+                const msgFactory = new MessageFactory();
+                const msgEvent   = msgFactory.createMessageTabActivatedEvent();
+
+                chrome.tabs
+                .sendMessage(tabId, msgEvent)
+                .catch((err) => console.log(err));
             }
         );
     });
@@ -125,18 +123,13 @@ chrome.runtime.onInstalled.addListener(() => {
     ) => {
         if (!tab.url || !tab.url.includes('dlsite.com/') || tabChangeInfo.status !== 'complete')
             return;
-        /*
-        強制的に置換処理を走らせる
-        */
-       const msgType = MessageType.ReplaceGenreWord;
-       const msgData = new MessageDataReplaceGenreWord();
-       
-       console.log('sendMessage-ReplaceGenreWord');
+        
+        const msgFactory = new MessageFactory();
+        const msgEvent   = msgFactory.createMessageTabUpdatedEvent();
 
-        chrome.tabs.sendMessage(
-            tabId,
-            new Message(msgType, msgData)
-        ).catch((err) => console.log(err));
+        chrome.tabs
+        .sendMessage(tabId, msgEvent)
+        .catch((err) => console.log(err));
     });
 });
 

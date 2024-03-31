@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "DLsite GenreTag Replacer",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "クレカ会社による言葉狩りへの対応",
   "permissions": [
     "contextMenus",

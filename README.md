@@ -2,7 +2,7 @@
 
 - [本拡張機能に関して](#本拡張機能に関して)
   - [対応ブラウザ](#対応ブラウザ)
-  - [対応状況](#対応状況)
+  - [対応ページ](#対応ページ)
   - [変換用語一覧](#変換用語一覧)
 - [開発環境](#開発環境)
   - [セットアップ方法](#セットアップ方法)
@@ -21,14 +21,12 @@
 - Firefox
 - Edge
 
-### 対応状況
+### 対応ページ
 
-| ページ名 | 対応状況 | 備考 |
-| --- | :---: | --- |
-| [検索結果ページ](https://www.dlsite.com/maniax/fsr/=/order/trend/genre[0]/525/options[0]/JPN/options[1]/NM/from/work.genre) | :white_check_mark: | ジャンル選択ダイアログは対応済。 |
-| [商品ページ](https://www.dlsite.com/books/work/=/product_id/BJ01328905.html) | :white_check_mark: | |
-| [ジャンル一覧ページ](https://www.dlsite.com/maniax/genre/list) | :white_check_mark: | |
-| [こだわり検索ページ](https://www.dlsite.com/books/fs) | | ジャンル選択ダイアログが未対応 |
+- [検索結果ページ](https://www.dlsite.com/maniax/fsr/=/order/trend/genre[0]/525/options[0]/JPN/options[1]/NM/from/work.genre)
+- [商品ページ](https://www.dlsite.com/books/work/=/product_id/BJ01328905.html)
+- [ジャンル一覧ページ](https://www.dlsite.com/maniax/genre/list)
+- [こだわり検索ページ](https://www.dlsite.com/books/fs)
 
 なお、**入力ワードの変換は現在未対応** です。
 

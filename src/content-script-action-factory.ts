@@ -15,7 +15,7 @@ export class ContentScriptActionFactory {
         if (pageUrl.includes('/work/=/product_id'))
             return new ContentScriptActionForProductPage();
 
-        if (pageUrl.includes('/work.genre'))
+        if (pageUrl.includes('/work.genre') || pageUrl.includes('from/fs.header'))
             return new ContentScriptActionForSearchResultPage();
 
         return new ContentScriptActionForOtherPage();

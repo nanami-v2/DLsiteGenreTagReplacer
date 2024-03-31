@@ -34,7 +34,7 @@ export class GenreWordReplacerForSearchResultPage implements GenreWordReplacer {
     
                 console.log('search_tag_items', aTag, currentWord);
     
-                if (convertedWord)
+                if (aTag && convertedWord)
                     aTag.textContent = convertedWord;
             }
         }
@@ -57,14 +57,19 @@ export class GenreWordReplacerForSearchResultPage implements GenreWordReplacer {
             const aTagCount = aTags.length;
     
             for (let j = 0; j < aTagCount; ++j) {
-                const aTag          = aTags[j];
-                const currentWord   = (aTag) ? aTag.textContent! : '';
-                const convertedWord = (aTag) ? genreWordConverter.convertGenreWord(currentWord) : null;
+                /*
+                    なんか atag じゃない事例もあったのでその対処
+                */
+                if (aTags[j].tagName !== 'A')
+                    continue;
+
+                const currentWord   = aTags[j].textContent!
+                const convertedWord = genreWordConverter.convertGenreWord(currentWord);
     
                 console.log('left_refine_list_item', aTags[j], currentWord);
     
                 if (convertedWord)
-                    aTag.textContent = convertedWord;
+                    aTags[j].textContent = convertedWord;
             }
         }
     }

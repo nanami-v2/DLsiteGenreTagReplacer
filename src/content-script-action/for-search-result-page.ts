@@ -3,6 +3,8 @@ import { ContentScriptAction } from "../content-script-action";
 import { GenreWordConverterFactory } from "../core/genre-word-converter-factory";
 import { GenreWordReplacerFactory } from "../core/genre-word-replacer-factory";
 import { GenreWordReplaceTargetPage } from "../core/genre-word-replace-target-page";
+import { TabTitleConverterFactory } from '../core/tab-title-converter-factory'
+import { TabTitleConverter } from '../core/tab-title-converter'
 import { Message } from "../message";
 import { MessageType } from "../message/type";
 import {
@@ -23,11 +25,11 @@ export class ContentScriptActionForSearchResultPage implements ContentScriptActi
         ) => {
             switch ((message as Message).type) {
                 case MessageType.ContextMenuClickedEvent:
-                    return doReplaceGenreWords();
+                    return doReplaceGenreWordsAndUpdateTabTitle();
                 case MessageType.TabActivatedEvent:
-                    return doReplaceGenreWords();
+                    return doReplaceGenreWordsAndUpdateTabTitle();
                 case MessageType.TabUpdatedEvent:
-                    return doReplaceGenreWords();
+                    return doReplaceGenreWordsAndUpdateTabTitle();
             }
         });
         /*
@@ -57,7 +59,7 @@ export class ContentScriptActionForSearchResultPage implements ContentScriptActi
         ) => {
             console.log('mutationObserver', mutations, observer);
         
-            doReplaceGenreWords();
+            doReplaceGenreWordsAndUpdateTabTitle();
         });
         mutationObserver.observe(
             mutationObserverTarget,
@@ -65,11 +67,11 @@ export class ContentScriptActionForSearchResultPage implements ContentScriptActi
         );
     }
     public excute(): void {
-        doReplaceGenreWords();
+        doReplaceGenreWordsAndUpdateTabTitle();
     }
 }
 
-function doReplaceGenreWords() {
+function doReplaceGenreWordsAndUpdateTabTitle() {
     const msgFactory                  = new MessageFactory();
     const msgGetConversionMapRequest  = msgFactory.createMessageGetConversionMapRequest();
     const msgGetConversionModeRequest = msgFactory.createMessageGetConversionModeRequest();
@@ -90,14 +92,10 @@ function doReplaceGenreWords() {
         if (wordReplacer)
             wordReplacer.replaceGenreWords(document, wordConverter);
 
-        let convertedTitle = document.title;
+        const tabTitleConverterFactory = new TabTitleConverterFactory();
+        const tabTitleConverter        = tabTitleConverterFactory.createTabTitleConverter(conversionMap, conversionMode);
 
-        for (const entry of conversionMap.entries) {
-            console.log(entry.newWord, entry.oldWord);
-            convertedTitle = convertedTitle.replace(entry.newWord, entry.oldWord);
-        }
-        console.log(document.title, convertedTitle);
-        document.title = convertedTitle;
+        document.title = tabTitleConverter.convertTabTitle(document.title);
     })
     .catch((err) => {
         console.log(err);

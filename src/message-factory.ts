@@ -17,9 +17,7 @@ export class MessageFactory {
     }
     public createMessageGetConversionMapResponse(conversionMap: GenreWordConversionMap): Message {
         const msgType = MessageType.GetConversionMapResponse;
-        const msgData = new MessageDataGetConversionMapResponse(
-            conversionMap
-        );
+        const msgData = new MessageDataGetConversionMapResponse(conversionMap);
 
         return new Message(msgType, msgData);
     }
@@ -31,9 +29,7 @@ export class MessageFactory {
     }
     public createMessageGetConversionModeResponse(conversionMode: GenreWordConversionMode): Message {
         const msgType = MessageType.GetConversionModeRequest;
-        const msgData = new MessageDataGetConversionModeResponse(
-            conversionMode
-        );
+        const msgData = new MessageDataGetConversionModeResponse(conversionMode);
 
         return new Message(msgType, msgData);
     }

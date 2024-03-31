@@ -33,7 +33,6 @@ chrome.runtime.onInstalled.addListener(() => {
         messageSender: chrome.runtime.MessageSender,
         sendResponse : (response: any) => void
     ) => {
-        console.log('onMessage...', message);
         switch ((message as Message).type) {
             case MessageType.GetConversionMapRequest: {
                 const msgFactory  = new MessageFactory();
@@ -126,7 +125,7 @@ chrome.runtime.onInstalled.addListener(() => {
             return;
         
         const msgFactory = new MessageFactory();
-        const msgEvent   = msgFactory.createMessagePgaeTabUpdatedEvent();
+        const msgEvent   = msgFactory.createMessageTabUpdatedEvent();
 
         chrome.tabs
         .sendMessage(tabId, msgEvent)

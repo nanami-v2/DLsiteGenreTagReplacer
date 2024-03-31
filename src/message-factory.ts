@@ -3,20 +3,15 @@ import { GenreWordConversionMode } from "./core/genre-word-conversion-mode";
 import { Message } from "./message";
 import { MessageType } from "./message/type";
 import {
-    MessageDataContextMenuClickedEvent,
-    MessageDataGetConversionMapRequest,
     MessageDataGetConversionMapResponse,
-    MessageDataGetConversionModeRequest,
     MessageDataGetConversionModeResponse,
-    MessageDataTabActivatedEvent,
-    MessageDataTabUpdatedEvent
 } from "./message/data";
 
 
 export class MessageFactory {
     public createMessageGetConversionMapRequest(): Message {
         const msgType = MessageType.GetConversionMapRequest;
-        const msgData = new MessageDataGetConversionMapRequest();
+        const msgData = null;
 
         return new Message(msgType, msgData);
     }
@@ -30,7 +25,7 @@ export class MessageFactory {
     }
     public createMessageGetConversionModeRequest(): Message {
         const msgType = MessageType.GetConversionModeRequest;
-        const msgData = new MessageDataGetConversionModeRequest();
+        const msgData = null;
 
         return new Message(msgType, msgData);
     }
@@ -44,19 +39,19 @@ export class MessageFactory {
     }
     public createMessageContextMenuClickedEvent(): Message {
         const msgType = MessageType.ContextMenuClickedEvent;
-        const msgData = new MessageDataContextMenuClickedEvent();
+        const msgData = null;
 
         return new Message(msgType, msgData);
     }
     public createMessageTabActivatedEvent(): Message {
         const msgType = MessageType.TabActivatedEvent;
-        const msgData = new MessageDataTabActivatedEvent();
+        const msgData = null;
 
         return new Message(msgType, msgData);
     }
-    public createMessagePgaeTabUpdatedEvent(): Message {
+    public createMessageTabUpdatedEvent(): Message {
         const msgType = MessageType.TabUpdatedEvent;
-        const msgData = new MessageDataTabUpdatedEvent();
+        const msgData = null;
 
         return new Message(msgType, msgData);
     }

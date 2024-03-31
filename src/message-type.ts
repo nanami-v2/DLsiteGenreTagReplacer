@@ -2,5 +2,7 @@
 export enum MessageType {
     GetGenreWordConversionMap,
     GetGenerWordConversionMode,
-    ReplaceGenreWord,
+    ContextMenuClicked,
+    PageTabActivated,
+    PageTabUpdated,
 }

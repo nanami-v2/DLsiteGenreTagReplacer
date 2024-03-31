@@ -1,7 +1,7 @@
 
 import { Message } from "./message";
 import { MessageType } from "./message-type";
-import { MessageDataReplaceGenreWord } from "./message-data";
+import { MessageDataContextMenuClicked, MessageDataPageTabActivated, MessageDataPageTabUpdated } from "./message-data";
 import { GenreWordConversionMapLoader } from "./core/genre-word-conversion-map-loader";
 import { GenreWordConversionMap } from "./core/genre-word-conversion-map";
 import { GenreWordConversionMode } from "./core/genre-word-conversion-mode";
@@ -70,16 +70,12 @@ chrome.runtime.onInstalled.addListener(() => {
         const menuTitle = getContextMenuTitle(afterNextConversionMode);
     
         chrome.contextMenus.update(menuId, {title: menuTitle});        
-        /*
-            強制的に置換処理を走らせる
-        */
+
         g_conversionMode = nextConversionMode;
     
         const tabId   = tab!.id!;
-        const msgType = MessageType.ReplaceGenreWord;
-        const msgData = new MessageDataReplaceGenreWord();
-
-        console.log('sendMessage-ReplaceGenreWord');
+        const msgType = MessageType.ContextMenuClicked;
+        const msgData = new MessageDataContextMenuClicked();
 
         chrome.tabs.sendMessage(
             tabId,
@@ -98,14 +94,10 @@ chrome.runtime.onInstalled.addListener(() => {
             (tab: chrome.tabs.Tab) => {
                 if (!tab.url || !tab.url.includes('dlsite.com/'))
                     return;
-                /*
-                    強制的に置換処理を走らせる
-                */
+
                 const tabId   = tab.id!;
-                const msgType = MessageType.ReplaceGenreWord;
-                const msgData = new MessageDataReplaceGenreWord();
-                
-                console.log('sendMessage-ReplaceGenreWord');
+                const msgType = MessageType.PageTabActivated;
+                const msgData = new MessageDataPageTabActivated();
 
                 chrome.tabs.sendMessage(
                     tabId,
@@ -125,13 +117,9 @@ chrome.runtime.onInstalled.addListener(() => {
     ) => {
         if (!tab.url || !tab.url.includes('dlsite.com/') || tabChangeInfo.status !== 'complete')
             return;
-        /*
-        強制的に置換処理を走らせる
-        */
-       const msgType = MessageType.ReplaceGenreWord;
-       const msgData = new MessageDataReplaceGenreWord();
-       
-       console.log('sendMessage-ReplaceGenreWord');
+        
+       const msgType = MessageType.PageTabUpdated;
+       const msgData = new MessageDataPageTabUpdated();
 
         chrome.tabs.sendMessage(
             tabId,

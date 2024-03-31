@@ -20,8 +20,12 @@ export class ContentScriptActionForProductPage implements ContentScriptAction {
             sendResponse : (response: any) => void
         ) => {
             switch ((message as Message).type) {
-                case MessageType.ReplaceGenreWord:
-                    doReplaceGenreWords();
+                case MessageType.ContextMenuClicked:
+                    return doReplaceGenreWords();
+                case MessageType.PageTabActivated:
+                    return doReplaceGenreWords();
+                case MessageType.PageTabUpdated:
+                    return doReplaceGenreWords();
             }
         });        
     }

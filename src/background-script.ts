@@ -80,7 +80,9 @@ chrome.runtime.onInstalled.addListener(() => {
         const tabId   = tab!.id!;
         const msgType = MessageType.ReplaceGenreWord;
         const msgData = new MessageDataReplaceGenreWord();
-    
+
+        console.log('sendMessage-ReplaceGenreWord');
+
         chrome.tabs.sendMessage(
             tabId,
             new Message(msgType, msgData)
@@ -123,19 +125,23 @@ chrome.runtime.onInstalled.addListener(() => {
         tabChangeInfo: chrome.tabs.TabChangeInfo,
         tab          : chrome.tabs.Tab
     ) => {
-        if (tabChangeInfo.status === 'complete') {
-            console.log('tab is updated');
-            /*
-                強制的に置換処理を走らせる
-            */
-            const msgType = MessageType.ReplaceGenreWord;
-            const msgData = new MessageDataReplaceGenreWord();
-    
-            chrome.tabs.sendMessage(
-                tabId,
-                new Message(msgType, msgData)
-            ).catch((err) => console.log(err));
-        }
+        if (!tab.url || !tab.url.includes('dlsite.com/'))
+            return;
+        
+        if (tabChangeInfo.status !== 'complete')
+            return;
+        /*
+        強制的に置換処理を走らせる
+        */
+       const msgType = MessageType.ReplaceGenreWord;
+       const msgData = new MessageDataReplaceGenreWord();
+       
+       console.log('sendMessage-ReplaceGenreWord');
+
+        chrome.tabs.sendMessage(
+            tabId,
+            new Message(msgType, msgData)
+        ).catch((err) => console.log(err));
     });
 });
 

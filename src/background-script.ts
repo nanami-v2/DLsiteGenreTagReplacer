@@ -33,8 +33,6 @@ chrome.runtime.onInstalled.addListener(() => {
         messageSender: chrome.runtime.MessageSender,
         sendResponse : (response: any) => void
     ) => {
-        console.log('onMessage', message);
-
         switch ((message as Message).type) {
             case MessageType.GetGenreWordConversionMap:
                 return sendResponse(g_conversionMap);
@@ -125,10 +123,7 @@ chrome.runtime.onInstalled.addListener(() => {
         tabChangeInfo: chrome.tabs.TabChangeInfo,
         tab          : chrome.tabs.Tab
     ) => {
-        if (!tab.url || !tab.url.includes('dlsite.com/'))
-            return;
-        
-        if (tabChangeInfo.status !== 'complete')
+        if (!tab.url || !tab.url.includes('dlsite.com/') || tabChangeInfo.status !== 'complete')
             return;
         /*
         強制的に置換処理を走らせる

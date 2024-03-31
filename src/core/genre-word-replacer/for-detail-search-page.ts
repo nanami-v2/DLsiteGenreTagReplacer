@@ -35,6 +35,8 @@ export class GenreWordReplacerForDetailSearchPage implements GenreWordReplacer {
 
             ```html
             <li class="select_label">
+                XXX
+                <input type="hidden">
             </li>
             ```
             
@@ -47,14 +49,14 @@ export class GenreWordReplacerForDetailSearchPage implements GenreWordReplacer {
             if (selectedLabels[i].tagName !== 'LI')
                 continue;
             /*
-                なんか謎の改行とスペースがあるので強引に対処
+                innterTextで書き換えるとhiddenTagが消えてしまい、絞り込みが意味を成さなくなる
+                よってfirstChildで直接テキストノードを弄って更新する
             */
-            const rawText       = selectedLabels[i].textContent!;
-            const currentWord   = rawText.replace('\n                ', '');
+            const currentWord   = (selectedLabels[i] as HTMLLIElement).innerText!;
             const convertedWord = genreWordConverter.convertGenreWord(currentWord);
 
             if (convertedWord)
-                selectedLabels[i].textContent = convertedWord;
+                selectedLabels[i].firstChild!.nodeValue = convertedWord;
         }
     }
 }

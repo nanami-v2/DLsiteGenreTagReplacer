@@ -92,7 +92,6 @@ function doReplaceGenreWordsAndUpdateTabTitle() {
         if (wordReplacer)
             wordReplacer.replaceGenreWords(document, wordConverter);
 
-        /* あれこれきちんとパースしないとダメでは…？というか現在のDlsite.comがそもそも旧タグ表示のままだから不要じゃね…？ */
         const tabTitleConverterFactory = new TabTitleConverterFactory();
         const tabTitleConverter        = tabTitleConverterFactory.createTabTitleConverter(conversionMap, conversionMode);
 

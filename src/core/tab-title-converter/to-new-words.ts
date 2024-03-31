@@ -7,14 +7,25 @@ export class TabTitleConverterToNewWords implements TabTitleConverter {
         this.conversionMap_ = conversionMap;
     }
     public convertTabTitle(tabTitle: string): string {
-        let newTitle = tabTitle;
-        /*
-            parseするのも面倒なので計算量は多いけど力技で突破
-        */
-        for (const entry of this.conversionMap_.entries)
-            newTitle = newTitle.replace(entry.oldWord, entry.newWord);
+        const matches = tabTitle.match('「\(.+\)」');
+        const matched = (matches !== null);
 
-        return newTitle;
+        if (matched) {
+            const word  = matches[1];
+            const entry = this.conversionMap_.entries.find((e) => e.oldWord === word);
+
+            return tabTitle.replace(word, entry!.newWord);
+        }
+        else {
+            const words          = tabTitle.split(' ');
+            const convertedWords = words.map((word) => {
+                const entry   = this.conversionMap_.entries.find((e) => e.oldWord === word);
+                const newWord = (entry) ? entry.newWord : word;
+
+                return newWord;
+            });
+            return convertedWords.join(' ');
+        }
     }
     private conversionMap_: GenreWordConversionMap;
 }

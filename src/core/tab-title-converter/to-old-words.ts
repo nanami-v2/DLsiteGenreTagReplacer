@@ -7,14 +7,25 @@ export class TabTitleConverterToOldWords implements TabTitleConverter {
         this.conversionMap_ = conversionMap;
     }
     public convertTabTitle(tabTitle: string): string {
-        let newTitle = tabTitle;
-        /*
-            parseするのも面倒なので計算量は多いけど力技で突破
-        */
-        for (const entry of this.conversionMap_.entries)
-            newTitle = newTitle.replace(entry.newWord, entry.oldWord);
+        const matches = tabTitle.match('「\(.+\)」');
+        const matched = (matches !== null);
 
-        return newTitle;
+        if (matched) {
+            const word  = matches[1];
+            const entry = this.conversionMap_.entries.find((e) => e.newWord === word);
+
+            return tabTitle.replace(word, entry!.oldWord);
+        }
+        else {
+            const words          = tabTitle.split(' ');
+            const convertedWords = words.map((word) => {
+                const entry   = this.conversionMap_.entries.find((e) => e.newWord === word);
+                const oldWord = (entry) ? entry.oldWord : word;
+
+                return oldWord;
+            });
+            return convertedWords.join(' ');
+        }
     }
     private conversionMap_: GenreWordConversionMap;
 }

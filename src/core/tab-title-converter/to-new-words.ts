@@ -27,10 +27,10 @@ export class TabTitleConverterToNewWords implements TabTitleConverter {
         else {
             const words          = tabTitle.split(' ');
             const convertedWords = words.map((word) => {
-                const entry   = this.conversionMap_.entries.find((e) => e.oldWord === word);
-                const newWord = (entry) ? entry.newWord : word;
+                const entry         = this.conversionMap_.entries.find((e) => e.oldWord === word);
+                const convertedWord = (entry) ? entry.newWord : word;
 
-                return newWord;
+                return convertedWord;
             });
 
             return convertedWords.join(' ');

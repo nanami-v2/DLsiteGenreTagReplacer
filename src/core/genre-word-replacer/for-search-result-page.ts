@@ -10,11 +10,13 @@ export class GenreWordReplacerForSearchResultPage implements GenreWordReplacer {
         /*
             画面上部の検索タグ
         
+            ```html
             <ul class="search_tag_items>
               <li>
                 <a href="#"></a>
               </li>
             </ul>
+            ```
         
             …という構造になっている
         */
@@ -39,9 +41,11 @@ export class GenreWordReplacerForSearchResultPage implements GenreWordReplacer {
         /*
             画面左側の検索タグ
             
+            ```html
             <li class="left_refine_list_item refine_checkbox">
               <a href="#"></a>
             </li>
+            ```
     
             …という構造になっている
         */

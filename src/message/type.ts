@@ -4,8 +4,6 @@ export enum MessageType {
     GetConversionMapResponse,
     GetConversionModeRequest,
     GetConversionModeResponse,
-    UpdateTabTitleRequest,
-    UpdateTabTitleResponse,
     ContextMenuClickedEvent,
     TabActivatedEvent,
     TabUpdatedEvent,

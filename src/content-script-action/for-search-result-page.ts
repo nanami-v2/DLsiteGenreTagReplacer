@@ -89,6 +89,15 @@ function doReplaceGenreWords() {
     
         if (wordReplacer)
             wordReplacer.replaceGenreWords(document, wordConverter);
+
+        let convertedTitle = document.title;
+
+        for (const entry of conversionMap.entries) {
+            console.log(entry.newWord, entry.oldWord);
+            convertedTitle = convertedTitle.replace(entry.newWord, entry.oldWord);
+        }
+        console.log(document.title, convertedTitle);
+        document.title = convertedTitle;
     })
     .catch((err) => {
         console.log(err);

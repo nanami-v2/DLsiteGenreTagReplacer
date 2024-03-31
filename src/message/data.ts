@@ -18,21 +18,3 @@ export class MessageDataGetConversionModeResponse implements MessageData {
         this.conversionMode = conversionMode;
     }
 }
-
-export class MessageDataUpdateTabTitleRequest implements MessageData {
-    newTitle: string;
-
-    constructor(newTitle: string) {
-        this.newTitle = newTitle;
-    }
-}
-
-export class MessageDataUpdateTabTitleResponse implements MessageData {
-    oldTitle: string;
-    newTitle: string;
-
-    constructor(oldTitle: string, newTitle: string) {
-        this.oldTitle = oldTitle;
-        this.newTitle = newTitle;
-    }
-}

@@ -2,7 +2,7 @@
 
 - [本拡張機能に関して](#本拡張機能に関して)
   - [対応ブラウザ](#対応ブラウザ)
-  - [対応ページ](#対応ページ)
+  - [対応状況](#対応状況)
   - [変換用語一覧](#変換用語一覧)
 - [開発環境](#開発環境)
   - [セットアップ方法](#セットアップ方法)
@@ -21,13 +21,14 @@
 - Firefox
 - Edge
 
-### 対応ページ
+### 対応状況
 
 | ページ名 | 対応状況 | 備考 |
 | --- | :---: | --- |
 | [検索結果ページ](https://www.dlsite.com/maniax/fsr/=/order/trend/genre[0]/525/options[0]/JPN/options[1]/NM/from/work.genre) | &check; | 入力ワードの変換は未対応。ジャンル選択ダイアログは対応済。 |
 | [商品ページ](https://www.dlsite.com/books/work/=/product_id/BJ01328905.html) | &check; | |
 | [ジャンル一覧ページ](https://www.dlsite.com/maniax/genre/list) | &check; | |
+| [こだわり検索ページ](https://www.dlsite.com/books/fs) | | 「ジャンル選択」でのポップアップが未対応。 |
 
 ### 変換用語一覧
 

@@ -20,14 +20,13 @@ export class GenreWordReplacerForDetailSearchPage implements GenreWordReplacer {
         const liTags     = htmlDocument.getElementsByClassName('refine_checkbox');
         const liTagCount = liTags.length;
 
-        console.log(liTags);
-
         for (let i = 0; i < liTagCount; ++i) {
-            const aTag = (liTags[i].children.length > 0) ? liTags[i].children[0] : null;
-            const word = (aTag) ? aTag.textContent! : '';
+            const aTag          = (liTags[i].children.length > 0) ? liTags[i].children[0] : null;
+            const currentWord   = (aTag) ? aTag.textContent! : '';
+            const convertedWord = (currentWord) ? genreWordConverter.convertGenreWord(currentWord) : null;
 
-            if (aTag)
-                aTag.textContent = genreWordConverter.convertGenreWord(word);
+            if (aTag && convertedWord)
+                aTag.textContent = convertedWord;
         }
     }
 }

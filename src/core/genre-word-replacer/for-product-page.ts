@@ -10,9 +10,11 @@ export class GenreWordReplacerForProductPage implements GenreWordReplacer {
         /*
             画面上部のジャンルタグ一覧は
 
+            ```html
             <div class="main_genre">
               <a href="..."></a>
             </div>
+            ```
 
             となっている
         */

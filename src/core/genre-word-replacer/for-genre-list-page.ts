@@ -8,11 +8,13 @@ export class GenreWordReplacerForGenreListPage implements GenreWordReplacer {
         genreWordConverter: GenreWordConverter
     ): void {
         /*
+            ```html
             <li class="versatility_linklist_item">
               <a href="...">
                 <span class="number"></span>
               </a>
             </li>
+            ```
         
             という形式になっている
         */

@@ -5,6 +5,8 @@ import { MessageType } from "./message/type";
 import {
     MessageDataGetConversionMapResponse,
     MessageDataGetConversionModeResponse,
+    MessageDataUpdateTabTitleRequest,
+    MessageDataUpdateTabTitleResponse,
 } from "./message/data";
 
 
@@ -17,9 +19,7 @@ export class MessageFactory {
     }
     public createMessageGetConversionMapResponse(conversionMap: GenreWordConversionMap): Message {
         const msgType = MessageType.GetConversionMapResponse;
-        const msgData = new MessageDataGetConversionMapResponse(
-            conversionMap
-        );
+        const msgData = new MessageDataGetConversionMapResponse(conversionMap);
 
         return new Message(msgType, msgData);
     }
@@ -31,9 +31,19 @@ export class MessageFactory {
     }
     public createMessageGetConversionModeResponse(conversionMode: GenreWordConversionMode): Message {
         const msgType = MessageType.GetConversionModeRequest;
-        const msgData = new MessageDataGetConversionModeResponse(
-            conversionMode
-        );
+        const msgData = new MessageDataGetConversionModeResponse(conversionMode);
+
+        return new Message(msgType, msgData);
+    }
+    public createMessageUpdateTabTitleRequest(newTitle: string): Message {
+        const msgType = MessageType.UpdateTabTitleRequest;
+        const msgData = new MessageDataUpdateTabTitleRequest(newTitle);
+
+        return new Message(msgType, msgData);
+    }
+    public createMessageUpdateTabTitleResponse(oldTitle: string, newTitle: string): Message {
+        const msgType = MessageType.UpdateTabTitleResponse;
+        const msgData = new MessageDataUpdateTabTitleResponse(oldTitle, newTitle);
 
         return new Message(msgType, msgData);
     }

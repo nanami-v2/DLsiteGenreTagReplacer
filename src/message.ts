@@ -1,6 +1,6 @@
 
-import { MessageType } from './message-type'
-import { MessageData } from './message-data';
+import { MessageType } from './message/type'
+import { MessageData } from './message/data';
 
 export class Message {
     type: MessageType;

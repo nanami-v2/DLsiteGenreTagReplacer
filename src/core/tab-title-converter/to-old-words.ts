@@ -7,6 +7,14 @@ export class TabTitleConverterToOldWords implements TabTitleConverter {
         this.conversionMap_ = conversionMap;
     }
     public convertTabTitle(tabTitle: string): string {
+        /*
+            ジャンルに対するタブ名として
+
+            - 「ざぁ～こ♡」
+            - 異種えっち トランス/暗示
+
+            といった2パターンがあるようなので、それぞれで処理を分ける
+        */
         const matches = tabTitle.match('「\(.+\)」');
         const matched = (matches !== null);
 
@@ -14,7 +22,7 @@ export class TabTitleConverterToOldWords implements TabTitleConverter {
             const word  = matches[1];
             const entry = this.conversionMap_.entries.find((e) => e.newWord === word);
 
-            return tabTitle.replace(word, entry!.oldWord);
+            return (entry) ? tabTitle.replace(word, entry.oldWord) : tabTitle;
         }
         else {
             const words          = tabTitle.split(' ');
@@ -24,6 +32,7 @@ export class TabTitleConverterToOldWords implements TabTitleConverter {
 
                 return oldWord;
             });
+
             return convertedWords.join(' ');
         }
     }

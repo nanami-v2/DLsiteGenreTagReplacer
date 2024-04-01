@@ -28,10 +28,44 @@ export class ContentScriptActionForSearchResultPage implements ContentScriptActi
                     return doReplaceGenreWordsAndUpdateTabTitle();
                 case MessageType.TabActivatedEvent:
                     return doReplaceGenreWordsAndUpdateTabTitle();
-                case MessageType.TabUpdatedEvent:
-                    return doReplaceGenreWordsAndUpdateTabTitle();
             }
         });
+        /*
+            画面左のタグの選択状況と、画面上部のタグの選択状況はリンクしている
+            そしてどちらも動的に追加される
+            したがって、両方とも mutationObserver で監視するのが最も適当
+        */
+        const mutationObserverLeftGenreTagsTarget  = document.getElementsByClassName('left_refine_list')[12];
+        const mutationObserverLeftGenreTagsOptions = {childList: true, sbutree: true};
+        const mutationObserverLeftGenreTags        = new MutationObserver((
+            mutations: MutationRecord[],
+            observer : MutationObserver
+        ) => {
+            console.log('mutationObserver', mutations, observer);
+        
+            doReplaceGenreWordsAndUpdateTabTitle();
+        });
+        mutationObserverLeftGenreTags.observe(
+            mutationObserverLeftGenreTagsTarget,
+            mutationObserverLeftGenreTagsOptions
+        );
+        /*
+            画面上部のタグ
+        */
+        const mutationObserverTopGenreTagsTarget  = document.getElementsByClassName('search_tag_items')[0];
+        const mutationObserverTopGenreTagsOptions = {childList: true, sbutree: true};
+        const mutationObserverTopGenreTags        = new MutationObserver((
+            mutations: MutationRecord[],
+            observer : MutationObserver
+        ) => {
+            console.log('mutationObserver', mutations, observer);
+        
+            doReplaceGenreWordsAndUpdateTabTitle();
+        });
+        mutationObserverTopGenreTags.observe(
+            mutationObserverTopGenreTagsTarget,
+            mutationObserverTopGenreTagsOptions
+        );
         /*
             「他のジャンルで探す」などの場合、サーバーから取得したデータを基にダイアログを作成している。
             なので、このような場合にも表記を変えるため、mutatioObserver で対象のノード――検索モーダル――を監視する必要がある。
@@ -51,9 +85,9 @@ export class ContentScriptActionForSearchResultPage implements ContentScriptActi
             </body>
             ```      
         */
-        const mutationObserverTarget  = document.getElementById('wrapper')!.nextElementSibling!;
-        const mutationObserverOptions = {childList: true};
-        const mutationObserver        = new MutationObserver((
+        const mutationObserverSelectGenreTarget  = document.getElementById('wrapper')!.nextElementSibling!;
+        const mutationObserverSelectGenreOptions = {childList: true};
+        const mutationObserverSelectGenre        = new MutationObserver((
             mutations: MutationRecord[],
             observer : MutationObserver
         ) => {
@@ -61,9 +95,9 @@ export class ContentScriptActionForSearchResultPage implements ContentScriptActi
         
             doReplaceGenreWordsAndUpdateTabTitle();
         });
-        mutationObserver.observe(
-            mutationObserverTarget,
-            mutationObserverOptions
+        mutationObserverSelectGenre.observe(
+            mutationObserverSelectGenreTarget,
+            mutationObserverSelectGenreOptions
         );
     }
     public excute(): void {

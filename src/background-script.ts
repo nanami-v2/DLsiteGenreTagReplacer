@@ -60,7 +60,7 @@ chrome.runtime.onInstalled.addListener(() => {
         id                 : '43ae9812-9ca5-425d-b12f-c617f91f9095', /* GUID */
         title              : contextMenuTitle,
         contexts           : ['page'],
-        documentUrlPatterns: ['*://*.dlsite.com/*']
+        documentUrlPatterns: ['*://www.dlsite.com/*']
     });
     /*
         コンテキストメニュークリック時の振る舞いを定義する

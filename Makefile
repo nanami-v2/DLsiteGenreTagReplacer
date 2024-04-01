@@ -23,4 +23,5 @@ $(outDir)/%: $(srcFiles) $(assertFiles) $(manifestFiles)
 	npx esbuild $(entryPoints) --bundle --outdir=$@
 	cp $(assetDir) $@/ -r
 	cp manifest-$*.json $@/manifest.json
+	cp LICENSE $@/
 	touch $@

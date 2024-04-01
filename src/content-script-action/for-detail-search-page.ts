@@ -33,10 +33,10 @@ export class ContentScriptActionForDetailSearchPage implements ContentScriptActi
             ジャンルを選ぶと動的に要素が挿入されるので、mutatioObserver でトラッキング
             ジャンルの場合、search_detail_row は5番目
         */
-        const searchDetailRows        = document.getElementsByClassName('search_detail_row');
-        const mutationObserverTarget  = searchDetailRows[4];
-        const mutationObserverOptions = {childList: true, subtree: true};
-        const mutationObserver        = new MutationObserver((
+        const searchDetailRows                         = document.getElementsByClassName('search_detail_row');
+        const mutationObserverSelectedGenreTagsTarget  = searchDetailRows[4];
+        const mutationObserverSelectedGenreTagsOptions = {childList: true, subtree: true};
+        const mutationObserverSelectedGenreTags        = new MutationObserver((
             mutations: MutationRecord[],
             observer : MutationObserver
         ) => {
@@ -44,9 +44,30 @@ export class ContentScriptActionForDetailSearchPage implements ContentScriptActi
         
             doReplaceGenreWords();
         });
-        mutationObserver.observe(
-            mutationObserverTarget,
-            mutationObserverOptions
+        mutationObserverSelectedGenreTags.observe(
+            mutationObserverSelectedGenreTagsTarget,
+            mutationObserverSelectedGenreTagsOptions
+        );
+        /*
+            ジャンル一覧は非同期で読み込んで、display:none で隠蔽しつつ初期化している
+            なのでこちらも mutationObserver で監視する必要がある
+            
+            ジャンル一覧のモーダルは 0 番目
+        */
+        const seaerchModals                     = document.getElementsByClassName('search_detail_modal');
+        const mutationObserverGenreModalTarget  = seaerchModals[0];
+        const mutationObserverGenreModalOptions = {childList: true, subtree: true};
+        const mutationObserverGenreModal        = new MutationObserver((
+            mutations: MutationRecord[],
+            observer : MutationObserver
+        ) => {
+            console.log('mutationObserver', mutations, observer);
+        
+            doReplaceGenreWords();
+        });
+        mutationObserverGenreModal.observe(
+            mutationObserverGenreModalTarget,
+            mutationObserverGenreModalOptions
         );
     }
     public excute(): void {

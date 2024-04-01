@@ -6,8 +6,9 @@ import { GenreWordConversionMapLoader } from "./core/genre-word-conversion-map-l
 import { GenreWordConversionMap } from "./core/genre-word-conversion-map";
 import { GenreWordConversionMode } from "./core/genre-word-conversion-mode";
 
-let g_conversionMap  = new GenreWordConversionMap();
-let g_conversionMode = GenreWordConversionMode.ToOldWords;
+let g_conversionMap     = new GenreWordConversionMap();
+let g_conversionMode    = GenreWordConversionMode.ToOldWords;
+let g_initializedTabIds = new Array<number>();
 
 chrome.runtime.onInstalled.addListener(() => {
     /*
@@ -33,6 +34,7 @@ chrome.runtime.onInstalled.addListener(() => {
         messageSender: chrome.runtime.MessageSender,
         sendResponse : (response: any) => void
     ) => {
+        console.log('onMessage', message, messageSender);
         switch ((message as Message).type) {
             case MessageType.GetConversionMapRequest: {
                 const msgFactory  = new MessageFactory();
@@ -45,6 +47,15 @@ chrome.runtime.onInstalled.addListener(() => {
                 const msgResponse = msgFactory.createMessageGetConversionModeResponse(g_conversionMode);
 
                 return sendResponse(msgResponse);
+            }
+            case MessageType.ContentScriptSetuppedEvent: {
+                const tabId = messageSender.tab!.id!;
+                const found = g_initializedTabIds.includes(tabId);
+
+                if (!found)
+                    g_initializedTabIds.push(tabId);
+
+                return;
             }
         }
     });
@@ -99,10 +110,15 @@ chrome.runtime.onInstalled.addListener(() => {
         chrome.tabs.get(
             activeInfo.tabId,
             (tab: chrome.tabs.Tab) => {
-                if (!tab.url || !tab.url.includes('dlsite.com/'))
+                if (!tab.url || !tab.url.includes('www.dlsite.com/'))
                     return;
 
-                const tabId      = tab.id!;
+                const tabId       = tab.id!;
+                const initialized = g_initializedTabIds.includes(tabId)
+
+                if (!initialized)
+                    return;
+
                 const msgFactory = new MessageFactory();
                 const msgEvent   = msgFactory.createMessageTabActivatedEvent();
 
@@ -111,6 +127,20 @@ chrome.runtime.onInstalled.addListener(() => {
                 .catch((err) => console.error(err));
             }
         );
+    });
+    /*
+        タブを閉じた時の振る舞い
+        保存してあるタブIDを削除する
+    */
+    chrome.tabs.onRemoved.addListener((
+        tabId     : number,
+        removeInfo: chrome.tabs.TabRemoveInfo
+    ) => {
+        const index = g_initializedTabIds.findIndex((e) => e === tabId);
+        const found = (index !== -1);
+
+        if (found)
+            g_initializedTabIds.splice(index, 1);
     });
 });
 

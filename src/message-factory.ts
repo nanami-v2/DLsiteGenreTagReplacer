@@ -33,6 +33,12 @@ export class MessageFactory {
 
         return new Message(msgType, msgData);
     }
+    public createMessageContentScriptSetuppedEvent(): Message {
+        const msgType = MessageType.ContentScriptSetuppedEvent;
+        const msgData = null;
+
+        return new Message(msgType, msgData);
+    }
     public createMessageContextMenuClickedEvent(): Message {
         const msgType = MessageType.ContextMenuClickedEvent;
         const msgData = null;

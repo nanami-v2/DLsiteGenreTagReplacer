@@ -27,7 +27,16 @@ export class ContentScriptActionForProductPage implements ContentScriptAction {
                 case MessageType.TabActivatedEvent:
                     return doReplaceGenreWords();
             }
-        });        
+        });
+        /*
+            セットアップ完了を通知
+        */
+        const msgFactory = new MessageFactory();
+        const msgEvent   = msgFactory.createMessageContentScriptSetuppedEvent();
+
+        chrome.runtime
+        .sendMessage(msgEvent)
+        .catch((err) => console.error(err));      
     }
     public excute(): void {
         doReplaceGenreWords();

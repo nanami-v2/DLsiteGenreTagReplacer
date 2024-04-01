@@ -23,12 +23,16 @@
 
 ### 対応ページ
 
-- [検索結果ページ](https://www.dlsite.com/maniax/fsr/=/order/trend/genre[0]/525/options[0]/JPN/options[1]/NM/from/work.genre)
-- [商品ページ](https://www.dlsite.com/books/work/=/product_id/BJ01328905.html)
-- [ジャンル一覧ページ](https://www.dlsite.com/maniax/genre/list)
-- [こだわり検索ページ](https://www.dlsite.com/books/fs)
+| ページ名 | 例 |
+| --- | --- |
+| 検索結果ページ | <https://www.dlsite.com/maniax/fsr/=/order/trend/genre[0]/525/options[0]/JPN/options[1]/NM/from/work.genre> |
+| 商品ページ | <https://www.dlsite.com/books/work/=/product_id/BJ01328905.html> |
+| ジャンル一覧ページ | <https://www.dlsite.com/maniax/genre/list> |
+| こだわり検索ページ | <https://www.dlsite.com/books/fs> |
 
-なお、**入力ワードの変換は現在未対応** です。
+なお **検索ワードの変換** については審議中です。
+
+というのは、語句の置換を行ってしまうと、例えば「つるぺた」というワードで作品を検索したい場合などに誤って置換されることになり、不便であるためです。
 
 ### 変換用語一覧
 

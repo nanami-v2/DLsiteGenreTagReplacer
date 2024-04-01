@@ -41,8 +41,6 @@ export class ContentScriptActionForSearchResultPage implements ContentScriptActi
             mutations: MutationRecord[],
             observer : MutationObserver
         ) => {
-            console.log('mutationObserver', mutations, observer);
-        
             doReplaceGenreWordsAndUpdateTabTitle();
         });
         mutationObserverLeftGenreTags.observe(
@@ -58,8 +56,6 @@ export class ContentScriptActionForSearchResultPage implements ContentScriptActi
             mutations: MutationRecord[],
             observer : MutationObserver
         ) => {
-            console.log('mutationObserver', mutations, observer);
-        
             doReplaceGenreWordsAndUpdateTabTitle();
         });
         mutationObserverTopGenreTags.observe(
@@ -91,8 +87,6 @@ export class ContentScriptActionForSearchResultPage implements ContentScriptActi
             mutations: MutationRecord[],
             observer : MutationObserver
         ) => {
-            console.log('mutationObserver', mutations, observer);
-        
             doReplaceGenreWordsAndUpdateTabTitle();
         });
         mutationObserverSelectGenre.observe(

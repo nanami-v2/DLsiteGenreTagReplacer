@@ -28,7 +28,6 @@ export class GenreWordConversionMapLoader {
                         )
                     );
                 }
-                console.log(conversionMap);
                 return Promise.resolve(conversionMap);
             })
             .catch((err) => { throw err; })

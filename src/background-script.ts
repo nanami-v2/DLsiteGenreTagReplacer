@@ -106,8 +106,6 @@ chrome.runtime.onInstalled.addListener(() => {
                 const msgFactory = new MessageFactory();
                 const msgEvent   = msgFactory.createMessageTabActivatedEvent();
 
-                console.log('tab is activated');
-
                 chrome.tabs
                 .sendMessage(tabId, msgEvent)
                 .catch((err) => console.error(err));

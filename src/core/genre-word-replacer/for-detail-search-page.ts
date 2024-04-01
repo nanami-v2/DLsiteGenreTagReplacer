@@ -23,7 +23,6 @@ export class GenreWordReplacerForDetailSearchPage implements GenreWordReplacer {
         const liTagCount = liTags.length;
 
         for (let i = 0; i < liTagCount; ++i) {
-            console.log(liTags[i]);
             const aTag          = (liTags[i].children.length > 0) ? liTags[i].children[0] : null;
             const currentWord   = (aTag) ? aTag.textContent! : '';
             const convertedWord = (currentWord) ? genreWordConverter.convertGenreWord(currentWord) : null;

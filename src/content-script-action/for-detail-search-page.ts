@@ -27,8 +27,6 @@ export class ContentScriptActionForDetailSearchPage implements ContentScriptActi
                     return doReplaceGenreWords();
                 case MessageType.TabActivatedEvent:
                     return doReplaceGenreWords();
-                case MessageType.TabUpdatedEvent:
-                    return doReplaceGenreWords();
             }
         });
         /*
@@ -56,28 +54,27 @@ export class ContentScriptActionForDetailSearchPage implements ContentScriptActi
     }
 }
     
-    function doReplaceGenreWords() {
-        const msgFactory                  = new MessageFactory();
-        const msgGetConversionMapRequest  = msgFactory.createMessageGetConversionMapRequest();
-        const msgGetConversionModeRequest = msgFactory.createMessageGetConversionModeRequest();
+function doReplaceGenreWords() {
+    const msgFactory                  = new MessageFactory();
+    const msgGetConversionMapRequest  = msgFactory.createMessageGetConversionMapRequest();
+    const msgGetConversionModeRequest = msgFactory.createMessageGetConversionModeRequest();
+
+    Promise.all([
+        chrome.runtime.sendMessage(msgGetConversionMapRequest),
+        chrome.runtime.sendMessage(msgGetConversionModeRequest)
+    ])
+    .then((results: Array<any>) => {
+        const conversionMap  = ((results[0] as Message).data as MessageDataGetConversionMapResponse ).conversionMap;
+        const conversionMode = ((results[1] as Message).data as MessageDataGetConversionModeResponse).conversionMode;
     
-        Promise.all([
-            chrome.runtime.sendMessage(msgGetConversionMapRequest),
-            chrome.runtime.sendMessage(msgGetConversionModeRequest)
-        ])
-        .then((results: Array<any>) => {
-            const conversionMap  = ((results[0] as Message).data as MessageDataGetConversionMapResponse ).conversionMap;
-            const conversionMode = ((results[1] as Message).data as MessageDataGetConversionModeResponse).conversionMode;
-        
-            const wordConverterFactory = new GenreWordConverterFactory();
-            const wordReplacerFactory  = new GenreWordReplacerFactory();
-            const wordConverter        = wordConverterFactory.createGenreWordConverter(conversionMap, conversionMode);
-            const wordReplacer         = wordReplacerFactory.createGenreWordReplacer(GenreWordReplaceTargetPage.DetailSearchPage);
-        
-            wordReplacer.replaceGenreWords(document, wordConverter);
-        })
-        .catch((err) => {
-            console.log(err);
-        });   
-    }
+        const wordConverterFactory = new GenreWordConverterFactory();
+        const wordReplacerFactory  = new GenreWordReplacerFactory();
+        const wordConverter        = wordConverterFactory.createGenreWordConverter(conversionMap, conversionMode);
+        const wordReplacer         = wordReplacerFactory.createGenreWordReplacer(GenreWordReplaceTargetPage.DetailSearchPage);
     
+        wordReplacer.replaceGenreWords(document, wordConverter);
+    })
+    .catch((err) => {
+        console.log(err);
+    });   
+}

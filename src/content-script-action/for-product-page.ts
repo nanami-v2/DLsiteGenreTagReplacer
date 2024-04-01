@@ -26,8 +26,6 @@ export class ContentScriptActionForProductPage implements ContentScriptAction {
                     return doReplaceGenreWords();
                 case MessageType.TabActivatedEvent:
                     return doReplaceGenreWords();
-                case MessageType.TabUpdatedEvent:
-                    return doReplaceGenreWords();
             }
         });        
     }

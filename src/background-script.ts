@@ -114,28 +114,6 @@ chrome.runtime.onInstalled.addListener(() => {
             }
         );
     });
-    /*
-        タブ更新時にも置換する必要がある
-        例えば検索結果でジャンルを選ぶとページの内容が更新されるため
-    */
-    chrome.tabs.onUpdated.addListener((
-        tabId        : number,
-        tabChangeInfo: chrome.tabs.TabChangeInfo,
-        tab          : chrome.tabs.Tab
-    ) => {
-        if (!tab.url || !tab.url.includes('dlsite.com/') || tabChangeInfo.status !== 'complete')
-            return;
-        
-        const msgFactory = new MessageFactory();
-        const msgEvent   = msgFactory.createMessageTabUpdatedEvent();
-
-        console.log('tab is updated');
-        return;
-
-        chrome.tabs
-        .sendMessage(tabId, msgEvent)
-        .catch((err) => console.log(err));
-    });
 });
 
 function getContextMenuTitle(conversionMode: GenreWordConversionMode): string {

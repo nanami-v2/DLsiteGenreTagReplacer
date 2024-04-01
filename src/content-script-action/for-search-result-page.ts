@@ -28,8 +28,6 @@ export class ContentScriptActionForSearchResultPage implements ContentScriptActi
                     return doReplaceGenreWordsAndUpdateTabTitle();
                 case MessageType.TabActivatedEvent:
                     return doReplaceGenreWordsAndUpdateTabTitle();
-                case MessageType.TabUpdatedEvent:
-                    return doReplaceGenreWordsAndUpdateTabTitle();
             }
         });
         /*

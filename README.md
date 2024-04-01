@@ -23,12 +23,14 @@
 
 ### 対応ページ
 
-- [検索結果ページ](https://www.dlsite.com/maniax/fsr/=/order/trend/genre[0]/525/options[0]/JPN/options[1]/NM/from/work.genre)
-- [商品ページ](https://www.dlsite.com/books/work/=/product_id/BJ01328905.html)
-- [ジャンル一覧ページ](https://www.dlsite.com/maniax/genre/list)
-- [こだわり検索ページ](https://www.dlsite.com/books/fs)
+| ページ名 | 例 |
+| --- | --- |
+| 検索結果ページ | <https://www.dlsite.com/maniax/fsr/=/order/trend/genre[0]/525/options[0]/JPN/options[1]/NM/from/work.genre> |
+| 商品ページ | <https://www.dlsite.com/books/work/=/product_id/BJ01328905.html> |
+| ジャンル一覧ページ | <https://www.dlsite.com/maniax/genre/list> |
+| こだわり検索ページ | <https://www.dlsite.com/books/fs> |
 
-なお、**入力ワードの変換は現在未対応** です。
+また、**送信時に検索ワードの変換** も行っています。
 
 ### 変換用語一覧
 

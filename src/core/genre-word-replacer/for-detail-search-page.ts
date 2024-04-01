@@ -16,8 +16,7 @@ export class GenreWordReplacerForDetailSearchPage implements GenreWordReplacer {
             </li>
             ```
         
-            …という構造になっている。
-            なお検索結果ページとは違い、ページ構成時に静的に確保されている模様。
+            …という構造になっている
         */
         const liTags     = htmlDocument.getElementsByClassName('refine_checkbox');
         const liTagCount = liTags.length;

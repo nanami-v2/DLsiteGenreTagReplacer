@@ -99,7 +99,7 @@ chrome.runtime.onInstalled.addListener(() => {
         chrome.tabs.get(
             activeInfo.tabId,
             (tab: chrome.tabs.Tab) => {
-                if (!tab.url || !tab.url.includes('dlsite.com/'))
+                if (!tab.url || !tab.url.includes('www.dlsite.com/'))
                     return;
 
                 const tabId      = tab.id!;

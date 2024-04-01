@@ -40,8 +40,6 @@ export class ContentScriptActionForDetailSearchPage implements ContentScriptActi
             mutations: MutationRecord[],
             observer : MutationObserver
         ) => {
-            console.log('mutationObserver', mutations, observer);
-        
             doReplaceGenreWords();
         });
         mutationObserverSelectedGenreTags.observe(
@@ -61,8 +59,6 @@ export class ContentScriptActionForDetailSearchPage implements ContentScriptActi
             mutations: MutationRecord[],
             observer : MutationObserver
         ) => {
-            console.log('mutationObserver', mutations, observer);
-        
             doReplaceGenreWords();
         });
         mutationObserverGenreModal.observe(
@@ -96,6 +92,6 @@ function doReplaceGenreWords() {
         wordReplacer.replaceGenreWords(document, wordConverter);
     })
     .catch((err) => {
-        console.log(err);
+        console.error(err);
     });   
 }

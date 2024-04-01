@@ -23,7 +23,7 @@ chrome.runtime.onInstalled.addListener(() => {
         g_conversionMap = conversionMap;
     })
     .catch((err) => {
-        console.log(err);
+        console.error(err);
     });
     /*
         メッセージハンドラを登録
@@ -87,7 +87,7 @@ chrome.runtime.onInstalled.addListener(() => {
 
         chrome.tabs
         .sendMessage(tabId, msgEvent)
-        .catch((err) => console.log(err));
+        .catch((err) => console.error(err));
     });
     /*
         タブ切り替え時の振る舞いを定義する
@@ -106,11 +106,9 @@ chrome.runtime.onInstalled.addListener(() => {
                 const msgFactory = new MessageFactory();
                 const msgEvent   = msgFactory.createMessageTabActivatedEvent();
 
-                console.log('tab is activated');
-
                 chrome.tabs
                 .sendMessage(tabId, msgEvent)
-                .catch((err) => console.log(err));
+                .catch((err) => console.error(err));
             }
         );
     });

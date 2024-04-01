@@ -30,8 +30,6 @@ export class GenreWordReplacerForGenreListPage implements GenreWordReplacer {
                 const currentWord   = (aTag) ? aTag.childNodes[0].textContent! : '';
                 const convertedWord = (aTag) ? genreWordConverter.convertGenreWord(currentWord) : null;
             
-                console.log('versatility_linklist_item', aTags[j], aTags[j].childNodes, aTags[j].children, currentWord);
-            
                 if (convertedWord)
                     aTag.childNodes[0].textContent = convertedWord;
             }

@@ -32,8 +32,6 @@ export class GenreWordReplacerForSearchResultPage implements GenreWordReplacer {
                 const currentWord   = (aTag) ? aTag.textContent! : '';
                 const convertedWord = (aTag) ? genreWordConverter.convertGenreWord(currentWord) : null;
     
-                console.log('search_tag_items', aTag, currentWord);
-    
                 if (aTag && convertedWord)
                     aTag.textContent = convertedWord;
             }
@@ -65,8 +63,6 @@ export class GenreWordReplacerForSearchResultPage implements GenreWordReplacer {
 
                 const currentWord   = aTags[j].textContent!
                 const convertedWord = genreWordConverter.convertGenreWord(currentWord);
-    
-                console.log('left_refine_list_item', aTags[j], currentWord);
     
                 if (convertedWord)
                     aTags[j].textContent = convertedWord;

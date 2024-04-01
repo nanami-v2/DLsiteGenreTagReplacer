@@ -77,6 +77,12 @@
     apt install -y make
     ```
 
+- zip/unzip
+
+  ```sh
+  apt install -y zip unzip
+  ```
+
 ### ビルド方法
 
 プロジェクトディレクトリ――`Makefile`が存在するディレクトリ――で以下を実行します。

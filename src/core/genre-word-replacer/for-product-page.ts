@@ -37,8 +37,6 @@ export class GenreWordReplacerForProductPage implements GenreWordReplacer {
     
                 if (convertedWord)
                     genreTags[j].textContent = convertedWord;
-    
-                console.log('main_genres', genreTags[j], currentWord);
             }
         }
     }

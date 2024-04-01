@@ -132,6 +132,6 @@ function doReplaceGenreWordsAndUpdateTabTitle() {
         document.title = tabTitleConverter.convertTabTitle(document.title);
     })
     .catch((err) => {
-        console.log(err);
+        console.error(err);
     });   
 }

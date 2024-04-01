@@ -11,13 +11,17 @@ manifestFiles := manifest-chrome.json manifest-firefox.json
 .PHONY: build
 build: $(outDir)/chrome $(outDir)/firefox
 
+.PHONY: zip
+zip: $(outDir)/chrome.zip $(outDir)/firefox.zip
+
 .PHONY: clean
 clean:
 	rm -rf $(outDir)
 
-.PHONY: check-type
-check-type:
+.PHONY: check
+check:
 	npx tsc $(srcDir)/*.ts --noEmit --strict
+
 
 $(outDir)/%: $(srcFiles) $(assertFiles) $(manifestFiles)
 	npx esbuild $(entryPoints) --bundle --outdir=$@
@@ -25,3 +29,6 @@ $(outDir)/%: $(srcFiles) $(assertFiles) $(manifestFiles)
 	cp manifest-$*.json $@/manifest.json
 	cp LICENSE $@/
 	touch $@
+
+$(outDir)/%.zip: $(outDir)/%
+	cd $< && zip -r ../$*.zip .

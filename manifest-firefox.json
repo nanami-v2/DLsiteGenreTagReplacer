@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "DLsite GenreTag Replacer",
   "version": "1.0.0",
-  "description": "DLsite.comでの新タグ名を旧タグに戻す",
+  "description": "DLsite.comでの新タグ名を旧タグ名に戻して表示する",
   "permissions": [
     "contextMenus",
     "tabs"

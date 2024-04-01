@@ -16,15 +16,6 @@ export class ContentScriptActionForOtherPage implements ContentScriptAction {
         ) => {
             /* Do nothing */
         });
-
-        const searchBox   = document.getElementById('search_text')!;
-        const searchButton = document.getElementById('search_button')!;
-
-        searchBox.addEventListener('change', (ev) => console.log(ev));
-        searchButton.addEventListener('click', (ev) => {
-            console.log(ev, searchBox);
-            (searchBox as HTMLInputElement).value = 'ギャル';
-        });
     }
     public excute(): void {
         /* Do nothing */

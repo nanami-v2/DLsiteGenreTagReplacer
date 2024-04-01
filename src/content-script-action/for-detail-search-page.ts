@@ -48,6 +48,12 @@ export class ContentScriptActionForDetailSearchPage implements ContentScriptActi
             mutationObserverSelectedGenreTagsTarget,
             mutationObserverSelectedGenreTagsOptions
         );
+        /*
+            ジャンル一覧は非同期で読み込んで、display:none で隠蔽しつつ初期化している
+            なのでこちらも mutationObserver で監視する必要がある
+            
+            ジャンル一覧のモーダルは 0 番目
+        */
         const seaerchModals                     = document.getElementsByClassName('search_detail_modal');
         const mutationObserverGenreModalTarget  = seaerchModals[0];
         const mutationObserverGenreModalOptions = {childList: true, subtree: true};

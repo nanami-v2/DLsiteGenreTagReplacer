@@ -45,10 +45,4 @@ export class MessageFactory {
 
         return new Message(msgType, msgData);
     }
-    public createMessageTabActivatedEvent(): Message {
-        const msgType = MessageType.TabActivatedEvent;
-        const msgData = null;
-
-        return new Message(msgType, msgData);
-    }
 }

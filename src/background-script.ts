@@ -34,7 +34,6 @@ chrome.runtime.onInstalled.addListener(() => {
         messageSender: chrome.runtime.MessageSender,
         sendResponse : (response: any) => void
     ) => {
-        console.log('onMessage', message, messageSender);
         switch ((message as Message).type) {
             case MessageType.GetConversionMapRequest: {
                 const msgFactory  = new MessageFactory();
@@ -54,7 +53,6 @@ chrome.runtime.onInstalled.addListener(() => {
 
                 if (!found)
                     g_initializedTabIds.push(tabId);
-
                 return;
             }
         }
@@ -88,49 +86,24 @@ chrome.runtime.onInstalled.addListener(() => {
         const menuId    = info.menuItemId;
         const menuTitle = getContextMenuTitle(afterNextConversionMode);
     
-        chrome.contextMenus.update(menuId, {title: menuTitle});        
-
+        chrome.contextMenus.update(menuId, {title: menuTitle});
+        /*
+            個々のページが内容を変更できるように通知
+        */
         g_conversionMode = nextConversionMode;
     
-        const tabId      = tab!.id!;
         const msgFactory = new MessageFactory();
         const msgEvent   = msgFactory.createMessageContextMenuClickedEvent();
 
-        chrome.tabs
-        .sendMessage(tabId, msgEvent)
-        .catch((err) => console.error(err));
-    });
-    /*
-        タブ切り替え時の振る舞いを定義する
-        これにより複数開いているタブの間で変換状態を共有できる
-    */
-    chrome.tabs.onActivated.addListener((
-        activeInfo: chrome.tabs.TabActiveInfo
-    ) => {
-        chrome.tabs.get(
-            activeInfo.tabId,
-            (tab: chrome.tabs.Tab) => {
-                if (!tab.url || !tab.url.includes('www.dlsite.com/'))
-                    return;
-
-                const tabId       = tab.id!;
-                const initialized = g_initializedTabIds.includes(tabId)
-
-                if (!initialized)
-                    return;
-
-                const msgFactory = new MessageFactory();
-                const msgEvent   = msgFactory.createMessageTabActivatedEvent();
-
-                chrome.tabs
-                .sendMessage(tabId, msgEvent)
-                .catch((err) => console.error(err));
-            }
-        );
+        for (const tabId of g_initializedTabIds) {
+            chrome.tabs
+            .sendMessage(tabId, msgEvent)
+            .catch((err) => console.error(err));
+        }
     });
     /*
         タブを閉じた時の振る舞い
-        保存してあるタブIDを削除する
+        保存してあるタブIDを削除するが、このコールバックそのものは任意のタブが閉じられた時に呼び出されることに注意
     */
     chrome.tabs.onRemoved.addListener((
         tabId     : number,

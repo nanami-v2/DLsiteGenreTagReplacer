@@ -11,8 +11,9 @@ export namespace BackgroundScriptHandler {
             コンテキストメニューを作成
             コンテキストメニューの表示はタブ間を跨いで切り替わることに注意
         */
-        const nextConversionMode = GenreWordConversionMode.ToNewWords;
-        const contextMenuTitle   = getContextMenuTitle(nextConversionMode);
+        const defaultConversionMode = GenreWordConversionMode.ToOldWords;
+        const nextConversionMode    = getNextConversionMode(defaultConversionMode);
+        const contextMenuTitle      = getContextMenuTitle(nextConversionMode);
     
         chrome.contextMenus.create({
             type               : 'normal',
@@ -21,23 +22,15 @@ export namespace BackgroundScriptHandler {
             contexts           : ['page'],
             documentUrlPatterns: ['*://www.dlsite.com/*']
         });
-
+        /*
+            ストレージに初期値を保存
+        */
         chrome.storage.local
         .clear()
         .then(() => {
             chrome.storage.local
-            .set({'conversionMode': GenreWordConversionMode.ToOldWords});
+            .set({'conversionMode': defaultConversionMode});
         });
-
-        /*
-            ストレージに初期値を保存
-        */
-        //chrome.tabs.query({
-        //    url: '*://www.dlsite.com/*'
-        //})
-        //.then((machedTabs: Array<chrome.tabs.Tab>) => {
-        //    const tabIds = 
-        //})
     }
     export function onMessage(
         message      : any,
@@ -109,7 +102,9 @@ export namespace BackgroundScriptHandler {
         
             chrome.contextMenus
             .update(itemId, {title: menuTitle});
-
+            /*
+                変換モードを更新
+            */
             chrome.storage.local
             .set({'conversionMode': nextConversionMode});
             /*
@@ -137,29 +132,12 @@ export namespace BackgroundScriptHandler {
             本質的に並行処理であるため、削除処理は atomic でなければならない
             すなわち fetch & remove という戦略は使えない（LostUpdate が生じる）
 
-            なのでデータ構造もそれに制約を受け、setuppedTabId は配列形式で保存することができない
+            なのでデータ構造もそれに制約を受け、setuppedTabId を配列に格納して保存するということができない
         */
         chrome.storage.local
         .remove(`tabId-${tabId}`)
         .then(()       => chrome.storage.local.get())
         .then((result) => console.log('remove tabId...', tabId, result));
-    }
-    export function onTabActivated(
-        activeInfo: chrome.tabs.TabActiveInfo
-    ): void {
-        //chrome.tabs
-        //.get(activeInfo.tabId)
-        //.then((tab: chrome.tabs.Tab) => {
-        //    if (!tab.url || !tab.url.includes('www.dlsite.com'))
-        //        return;
-//
-        //    const tabId = tab.id!;
-        //    const data  = {[`tabId-${tabId}`]: tabId};
-//
-        //    chrome.storage.local
-        //    .set(data)
-        //    .then(() => )
-        //})
     }
 }
 

@@ -92,13 +92,15 @@ chrome.runtime.onInstalled.addListener(() => {
 
         g_conversionMode = nextConversionMode;
     
-        const tabId      = tab!.id!;
+        //const tabId      = tab!.id!;
         const msgFactory = new MessageFactory();
         const msgEvent   = msgFactory.createMessageContextMenuClickedEvent();
 
-        chrome.tabs
-        .sendMessage(tabId, msgEvent)
-        .catch((err) => console.error(err));
+        for (const tabId of g_initializedTabIds) {
+            chrome.tabs
+            .sendMessage(tabId, msgEvent)
+            .catch((err) => console.error(err));
+        }
     });
     /*
         タブ切り替え時の振る舞いを定義する
@@ -110,6 +112,7 @@ chrome.runtime.onInstalled.addListener(() => {
         chrome.tabs.get(
             activeInfo.tabId,
             (tab: chrome.tabs.Tab) => {
+                return;
                 if (!tab.url || !tab.url.includes('www.dlsite.com/'))
                     return;
 

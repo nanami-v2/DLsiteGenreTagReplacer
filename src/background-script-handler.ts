@@ -21,27 +21,23 @@ export namespace BackgroundScriptHandler {
             contexts           : ['page'],
             documentUrlPatterns: ['*://www.dlsite.com/*']
         });
+
+        chrome.storage.local
+        .clear()
+        .then(() => {
+            chrome.storage.local
+            .set({'conversionMode': GenreWordConversionMode.ToOldWords});
+        });
+
         /*
             ストレージに初期値を保存
         */
-        chrome.storage.local
-        .get()
-        .then((result) => {
-            const conversionModeExists = (result['conversionMode'] !== undefined);
-            const setuppedTabIdsExists = (result['setuppedTabIds'] !== undefined);
-
-            if (conversionModeExists && setuppedTabIdsExists)
-                return;
-
-            const conversionMode = (conversionModeExists) ? (result['conversionMode'] as GenreWordConversionMode) : GenreWordConversionMode.ToOldWords;            
-            const setuppedTabIds = (setuppedTabIdsExists) ? (result['setuppedTabIds'] as Array<number>) : [];
-
-            chrome.storage.local
-            .set({
-                'conversionMode': conversionMode,
-                'setuppedTabIds': setuppedTabIds,
-            });
-        })
+        //chrome.tabs.query({
+        //    url: '*://www.dlsite.com/*'
+        //})
+        //.then((machedTabs: Array<chrome.tabs.Tab>) => {
+        //    const tabIds = 
+        //})
     }
     export function onMessage(
         message      : any,
@@ -80,22 +76,14 @@ export namespace BackgroundScriptHandler {
                 return true; /* Keep channel for sendResponse */
             }
             case MessageType.ContentScriptSetuppedEvent: {
+                const tabId = messageSender.tab!.id!;
+                const data  = {[`setuppedTabId-${tabId}`]: tabId};
+
                 chrome.storage.local
-                .get('setuppedTabIds')
-                .then((result) => {
-                    const setuppedTabIds = (result['setuppedTabIds'] as Array<number>);
-                    const tabId          = messageSender.tab!.id!;
-
-                    if (!setuppedTabIds.includes(tabId)) {
-                        setuppedTabIds.push(tabId);
-
-                        chrome.storage.local
-                        .set({'setuppedTabIds': setuppedTabIds});
-
-                        console.log('insert TabIds...', tabId, setuppedTabIds);
-                    }
-                })
-                .catch((err) => console.error(err));
+                .set(data)
+                .then(()       => chrome.storage.local.get())
+                .then((result) => console.log('insert tabId...', tabId, result))
+                .catch((err)   => console.error(err));
 
                 return;
             }
@@ -105,14 +93,12 @@ export namespace BackgroundScriptHandler {
         info: chrome.contextMenus.OnClickData,
         tab : chrome.tabs.Tab | undefined
     ): void {
-        console.log('contextMenuClicked...', tab?.id);
-
         chrome.storage.local
-        .get(['conversionMode', 'setuppedTabIds'])
+        .get('conversionMode')
         .then((result) => {
-            const conversionMode = (result['conversionMode'] as GenreWordConversionMode);
-            const setuppedTabIds = (result['setuppedTabIds'] as Array<number>);
+            console.log('contextMenuClicked...', tab?.id, result);
 
+            const conversionMode          = (result['conversionMode'] as GenreWordConversionMode);
             const nextConversionMode      = getNextConversionMode(conversionMode);
             const afterNextConversionMode = getNextConversionMode(nextConversionMode);
             /*
@@ -123,22 +109,20 @@ export namespace BackgroundScriptHandler {
         
             chrome.contextMenus
             .update(itemId, {title: menuTitle});
-            /*
-                新しく保存
-            */
+
             chrome.storage.local
             .set({'conversionMode': nextConversionMode});
             /*
                 個々のページが内容を変更できるように通知
             */
-            const msgFactory = new MessageFactory();
-            const msgEvent   = msgFactory.createMessageContextMenuClickedEvent();
-            
-            for (const tabId of setuppedTabIds) {
-                chrome.tabs
-                .sendMessage(tabId, msgEvent)
-                .catch((err) => console.error(err));
-            }
+            //const msgFactory = new MessageFactory();
+            //const msgEvent   = msgFactory.createMessageContextMenuClickedEvent();
+            //
+            //for (const tabId of setuppedTabIds) {
+            //    chrome.tabs
+            //    .sendMessage(tabId, msgEvent)
+            //    .catch((err) => console.error(err));
+            //}
         })
         .catch((err) => console.error(err));
     }
@@ -146,24 +130,16 @@ export namespace BackgroundScriptHandler {
         tabId     : number,
         removeInfo: chrome.tabs.TabRemoveInfo
     ): void {
+        /*
+            本質的に並行処理であるため、削除処理は atomic でなければならない
+            すなわち fetch & remove という戦略は使えない（LostUpdate が生じる）
+
+            なのでデータ構造もそれに制約を受け、setuppedTabId は配列形式で保存することができない
+        */
         chrome.storage.local
-        .get('setuppedTabIds')
-        .then((result) => {
-            const setuppedTabIds = (result['setuppedTabIds'] as Array<number>);
-            const matchedIndex   = setuppedTabIds.findIndex((e) => e === tabId);
-
-            if (matchedIndex === -1)
-                return;
-
-            console.log('splice', setuppedTabIds, matchedIndex);
-            setuppedTabIds.splice(matchedIndex, 1);
-            console.log('splice-after', setuppedTabIds, matchedIndex);
-
-            chrome.storage.local
-            .set({'setuppedTabIds': setuppedTabIds})
-            .then(() => chrome.storage.local.get('setuppedTabIds'))
-            .then((result) => console.log('remove tabId...', tabId, result));
-        });
+        .remove(`setuppedTabId-${tabId}`)
+        .then(()       => chrome.storage.local.get())
+        .then((result) => console.log('remove tabId...', tabId, result));
     }
 }
 

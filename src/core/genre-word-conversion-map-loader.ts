@@ -12,23 +12,12 @@ export class GenreWordConversionMapLoader {
                 if (!res.ok)
                     throw new Error(res.statusText);
 
-                return res.json() as Promise<Array<any>>;
+                return res.json() as Promise<Array<GenreWordConversionMapEntry>>;
             })
-            .then((entries: Array<any>) => {
-                const conversionMap = new GenreWordConversionMap();
-
-                for (const entry of entries) {
-                    const oldWord: string = entry.oldWord;
-                    const newWord: string = entry.newWord;
-
-                    conversionMap.entries.push(
-                        new GenreWordConversionMapEntry(
-                            oldWord,
-                            newWord
-                        )
-                    );
-                }
-                return Promise.resolve(conversionMap);
+            .then((entries: Array<GenreWordConversionMapEntry>) => {
+                return Promise.resolve(
+                    new GenreWordConversionMap(entries)
+                );
             })
             .catch((err) => { throw err; })
         );

@@ -6,9 +6,9 @@ import { GenreWordConversionMapLoader } from "./core/genre-word-conversion-map-l
 import { GenreWordConversionMap } from "./core/genre-word-conversion-map";
 import { GenreWordConversionMode } from "./core/genre-word-conversion-mode";
 
-let g_conversionMap     = new GenreWordConversionMap();
-let g_conversionMode    = GenreWordConversionMode.ToOldWords;
-let g_initializedTabIds = new Array<number>();
+let g_conversionMap  = new GenreWordConversionMap();
+let g_conversionMode = GenreWordConversionMode.ToOldWords;
+let g_setuppedTabIds = new Array<number>();
 
 chrome.runtime.onInstalled.addListener(() => {
     /*
@@ -49,10 +49,10 @@ chrome.runtime.onInstalled.addListener(() => {
             }
             case MessageType.ContentScriptSetuppedEvent: {
                 const tabId = messageSender.tab!.id!;
-                const found = g_initializedTabIds.includes(tabId);
+                const found = g_setuppedTabIds.includes(tabId);
 
                 if (!found)
-                    g_initializedTabIds.push(tabId);
+                    g_setuppedTabIds.push(tabId);
                 return;
             }
         }
@@ -95,7 +95,7 @@ chrome.runtime.onInstalled.addListener(() => {
         const msgFactory = new MessageFactory();
         const msgEvent   = msgFactory.createMessageContextMenuClickedEvent();
 
-        for (const tabId of g_initializedTabIds) {
+        for (const tabId of g_setuppedTabIds) {
             chrome.tabs
             .sendMessage(tabId, msgEvent)
             .catch((err) => console.error(err));
@@ -109,11 +109,11 @@ chrome.runtime.onInstalled.addListener(() => {
         tabId     : number,
         removeInfo: chrome.tabs.TabRemoveInfo
     ) => {
-        const index = g_initializedTabIds.findIndex((e) => e === tabId);
+        const index = g_setuppedTabIds.findIndex((e) => e === tabId);
         const found = (index !== -1);
 
         if (found)
-            g_initializedTabIds.splice(index, 1);
+            g_setuppedTabIds.splice(index, 1);
     });
 });
 

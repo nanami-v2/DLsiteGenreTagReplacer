@@ -12,7 +12,7 @@ export class GenreWordConversionMapLoader {
                 if (!res.ok)
                     throw new Error(res.statusText);
 
-                return res.json() as Promise<Array<GenreWordConversionMapEntry>>;
+                return res.json();
             })
             .then((entries: Array<GenreWordConversionMapEntry>) => {
                 return Promise.resolve(

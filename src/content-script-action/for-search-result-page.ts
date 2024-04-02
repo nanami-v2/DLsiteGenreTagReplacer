@@ -114,9 +114,9 @@ function doReplaceGenreWordsAndUpdateTabTitle() {
         chrome.runtime.sendMessage(msgGetConversionMapRequest),
         chrome.runtime.sendMessage(msgGetConversionModeRequest)
     ])
-    .then((results: Array<any>) => {
-        const conversionMap  = ((results[0] as Message).data as MessageDataGetConversionMapResponse ).conversionMap;
-        const conversionMode = ((results[1] as Message).data as MessageDataGetConversionModeResponse).conversionMode;
+    .then((results: Array<Message>) => {
+        const conversionMap  = (results[0].data as MessageDataGetConversionMapResponse ).conversionMap;
+        const conversionMode = (results[1].data as MessageDataGetConversionModeResponse).conversionMode;
     
         const wordConverterFactory = new GenreWordConverterFactory();
         const wordReplacerFactory  = new GenreWordReplacerFactory();

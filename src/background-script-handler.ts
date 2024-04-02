@@ -2,8 +2,8 @@
 import { Message } from "./message";
 import { MessageType } from "./message/type";
 import { MessageFactory } from "./message-factory";
-import { GenreWordConversionMapLoader } from "./core/genre-word-conversion-map-loader";
 import { GenreWordConversionMode } from "./core/genre-word-conversion-mode";
+import { GenreWordConversionMap, GenreWordConversionMapEntry } from "./core/genre-word-conversion-map";
 
 export namespace BackgroundScriptHandler {
     export function onInstalled(): void {
@@ -39,19 +39,25 @@ export namespace BackgroundScriptHandler {
     ): boolean | undefined {
         switch ((message as Message).type) {
             case MessageType.GetConversionMapRequest: {
-                const conversionMapLoader   = new GenreWordConversionMapLoader();
-                const conversionMapFilePath = '/assets/genre-word-conversion-map.json';
-    
-                conversionMapLoader
-                .loadGenreWordConversionMap(conversionMapFilePath)
-                .then((conversionMap) => {
+                fetch(chrome.runtime.getURL(
+                    '/assets/genre-word-conversion-map.json'
+                ))
+                .then((res: Response) => {
+                    if (!res.ok)
+                        throw new Error(res.statusText);
+
+                    return res.json();
+                })
+                .then((entries: Array<GenreWordConversionMapEntry>) => {
                     const msgFactory  = new MessageFactory();
-                    const msgResponse = msgFactory.createMessageGetConversionMapResponse(conversionMap);
-    
+                    const msgResponse = msgFactory.createMessageGetConversionMapResponse(
+                        new GenreWordConversionMap(entries)
+                    );
+
                     sendResponse(msgResponse);
                 })
                 .catch((err) => console.error(err));
-    
+
                 return true; /* Keep channel for sendResponse */
             }
             case MessageType.GetConversionModeRequest: {

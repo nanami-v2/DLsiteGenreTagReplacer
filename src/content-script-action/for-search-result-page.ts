@@ -26,8 +26,6 @@ export class ContentScriptActionForSearchResultPage implements ContentScriptActi
             switch ((message as Message).type) {
                 case MessageType.ContextMenuClickedEvent:
                     return doReplaceGenreWordsAndUpdateTabTitle();
-                case MessageType.TabActivatedEvent:
-                    return doReplaceGenreWordsAndUpdateTabTitle();
             }
         });
         /*

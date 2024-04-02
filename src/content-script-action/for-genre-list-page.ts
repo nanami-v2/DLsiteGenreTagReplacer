@@ -24,8 +24,6 @@ export class ContentScriptActionForGenreListPage implements ContentScriptAction 
             switch ((message as Message).type) {
                 case MessageType.ContextMenuClickedEvent:
                     return doReplaceGenreWords();
-                case MessageType.TabActivatedEvent:
-                    return doReplaceGenreWords();
             }
         });
         /*

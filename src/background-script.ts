@@ -34,7 +34,6 @@ chrome.runtime.onInstalled.addListener(() => {
         messageSender: chrome.runtime.MessageSender,
         sendResponse : (response: any) => void
     ) => {
-        console.log('onMessage', message.name, messageSender);
         switch ((message as Message).type) {
             case MessageType.GetConversionMapRequest: {
                 const msgFactory  = new MessageFactory();
@@ -54,7 +53,6 @@ chrome.runtime.onInstalled.addListener(() => {
 
                 if (!found)
                     g_initializedTabIds.push(tabId);
-
                 return;
             }
         }
@@ -105,7 +103,7 @@ chrome.runtime.onInstalled.addListener(() => {
     });
     /*
         タブを閉じた時の振る舞い
-        保存してあるタブIDを削除する
+        保存してあるタブIDを削除するが、このコールバックそのものは任意のタブが閉じられた時に呼び出されることに注意
     */
     chrome.tabs.onRemoved.addListener((
         tabId     : number,

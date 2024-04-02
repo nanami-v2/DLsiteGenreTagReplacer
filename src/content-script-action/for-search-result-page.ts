@@ -4,7 +4,6 @@ import { GenreWordConverterFactory } from "../core/genre-word-converter-factory"
 import { GenreWordReplacerFactory } from "../core/genre-word-replacer-factory";
 import { GenreWordReplaceTargetPage } from "../core/genre-word-replace-target-page";
 import { TabTitleConverterFactory } from '../core/tab-title-converter-factory'
-import { TabTitleConverter } from '../core/tab-title-converter'
 import { Message } from "../message";
 import { MessageType } from "../message/type";
 import {

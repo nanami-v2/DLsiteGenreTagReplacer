@@ -77,7 +77,7 @@ export namespace BackgroundScriptHandler {
             }
             case MessageType.ContentScriptSetuppedEvent: {
                 const tabId = messageSender.tab!.id!;
-                const data  = {[`setuppedTabId-${tabId}`]: tabId};
+                const data  = {[`tabId-${tabId}`]: tabId};
 
                 chrome.storage.local
                 .set(data)
@@ -94,7 +94,7 @@ export namespace BackgroundScriptHandler {
         tab : chrome.tabs.Tab | undefined
     ): void {
         chrome.storage.local
-        .get('conversionMode')
+        .get()
         .then((result) => {
             console.log('contextMenuClicked...', tab?.id, result);
 
@@ -115,14 +115,17 @@ export namespace BackgroundScriptHandler {
             /*
                 個々のページが内容を変更できるように通知
             */
-            //const msgFactory = new MessageFactory();
-            //const msgEvent   = msgFactory.createMessageContextMenuClickedEvent();
-            //
-            //for (const tabId of setuppedTabIds) {
-            //    chrome.tabs
-            //    .sendMessage(tabId, msgEvent)
-            //    .catch((err) => console.error(err));
-            //}
+            const msgFactory = new MessageFactory();
+            const msgEvent   = msgFactory.createMessageContextMenuClickedEvent();
+            
+            for (const [k, v] of Object.entries(result)) {
+                if (k.includes('tabId-')) {
+                    console.log('sendMessage-onContextMenuClicked', v);
+                    chrome.tabs
+                    .sendMessage(v, msgEvent)
+                    .catch((err) => console.error(err));
+                }
+            }
         })
         .catch((err) => console.error(err));
     }
@@ -137,9 +140,26 @@ export namespace BackgroundScriptHandler {
             なのでデータ構造もそれに制約を受け、setuppedTabId は配列形式で保存することができない
         */
         chrome.storage.local
-        .remove(`setuppedTabId-${tabId}`)
+        .remove(`tabId-${tabId}`)
         .then(()       => chrome.storage.local.get())
         .then((result) => console.log('remove tabId...', tabId, result));
+    }
+    export function onTabActivated(
+        activeInfo: chrome.tabs.TabActiveInfo
+    ): void {
+        //chrome.tabs
+        //.get(activeInfo.tabId)
+        //.then((tab: chrome.tabs.Tab) => {
+        //    if (!tab.url || !tab.url.includes('www.dlsite.com'))
+        //        return;
+//
+        //    const tabId = tab.id!;
+        //    const data  = {[`tabId-${tabId}`]: tabId};
+//
+        //    chrome.storage.local
+        //    .set(data)
+        //    .then(() => )
+        //})
     }
 }
 

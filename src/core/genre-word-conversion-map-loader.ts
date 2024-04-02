@@ -19,7 +19,6 @@ export class GenreWordConversionMapLoader {
                     new GenreWordConversionMap(entries)
                 );
             })
-            .catch((err) => { throw err; })
         );
     }
 }

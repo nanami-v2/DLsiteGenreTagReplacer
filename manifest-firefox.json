@@ -3,6 +3,7 @@
   "name": "DLsite GenreTag Replacer",
   "version": "1.0.0",
   "description": "DLsite.comでの新タグ名を旧タグ名に戻して表示する拡張機能です。",
+  "homepage_url": "https://github.com/nanami-v2/DLsiteGenreTagReplacer",
   "permissions": [
     "contextMenus",
     "tabs",

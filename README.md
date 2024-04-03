@@ -8,6 +8,9 @@
 - [開発環境](#開発環境)
   - [セットアップ方法](#セットアップ方法)
   - [ビルド方法](#ビルド方法)
+- [設計資料](#設計資料)
+  - [概念図](#概念図)
+  - [シーケンス図](#シーケンス図)
 - [リンク](#リンク)
 
 ## 本拡張機能に関して
@@ -66,10 +69,7 @@
 - ビルドやバンドルに必要な`node_modules`
 
     ```sh
-    npm install --save-dev typescript ts-node
-    npm install --save-dev esbuild
-    npm install --save-dev @types/firefox-webext-browser
-    npm install --save-dev @types/chrome
+    npm ci
     ```
 
 - [Gnu Make](https://www.gnu.org/software/make/)
@@ -78,10 +78,10 @@
     apt install -y make
     ```
 
-- zip/unzip
+- zip
 
   ```sh
-  apt install -y zip unzip
+  apt install -y zip
   ```
 
 ### ビルド方法
@@ -90,6 +90,98 @@
 
 ```sh
 make
+```
+
+## 設計資料
+
+### 概念図
+
+```mermaid
+%%{
+    init: {
+        'theme': 'dark'
+    }
+}%%
+
+graph LR
+  BackgroundScript <-- 読み書き --> Storage[(Storage)]
+
+  subgraph Tabs
+    subgraph Tab1
+      ContentScript1
+      DLsitePage1
+    end
+    subgraph Tab2
+      ContentScript2
+      DLsitePage2
+    end
+    subgraph Tab3
+      ContentScript3
+      DLsitePage3
+    end
+  end
+
+  BackgroundScript <-- 通信 --> ContentScript1
+  BackgroundScript <-- 通信 --> ContentScript2
+  BackgroundScript <-- 通信 --> ContentScript3
+
+  ContentScript1 -- 置換処理 --> DLsitePage1
+  ContentScript2 -- 置換処理 --> DLsitePage2
+  ContentScript3 -- 置換処理 --> DLsitePage3
+```
+
+### シーケンス図
+
+```mermaid
+%%{
+    init: {
+        'theme': 'dark'
+    }
+}%%
+
+sequenceDiagram
+  actor User
+
+  User    ->> Browser: タブを開く
+  Browser ->> ContentScript: 呼び出し
+  activate ContentScript
+  ContentScript ->> BackgroundScript: 初期化完了を通知
+  activate BackgroundScript
+  BackgroundScript ->> Storage: タブIDを保存
+  deactivate BackgroundScript
+  ContentScript ->> BackgroundScript: 置換処理に必要なデータをリクエスト
+  activate BackgroundScript
+  BackgroundScript  ->> Storage: 変換表を読み出し
+  BackgroundScript  ->> Storage: 変換モードを読み出し
+  BackgroundScript -->> ContentScript: データ返却
+  deactivate BackgroundScript
+  ContentScript ->> DLsitePage: 置換処理を実行
+  deactivate ContentScript
+
+
+  User    ->> Browser: コンテキストメニューをクリック
+  Browser ->> BackgroundScript: 呼び出し
+  activate BackgroundScript
+  BackgroundScript ->> Storage: タブIDを読み出し
+  BackgroundScript ->> Storage: 変換モードをスイッチングして保存
+  BackgroundScript ->> ContentScript: タブIDに該当するものに通知
+  deactivate BackgroundScript
+  activate   ContentScript
+  ContentScript ->> BackgroundScript: 置換処理に必要なデータをリクエスト
+  activate BackgroundScript
+  BackgroundScript  ->> Storage: 変換表を読み出し
+  BackgroundScript  ->> Storage: 変換モードを読み出し
+  BackgroundScript -->> ContentScript: データ返却
+  deactivate BackgroundScript
+  ContentScript ->> DLsitePage: 置換処理を実行
+  deactivate ContentScript
+
+
+  User    ->> Browser: タブを閉じる
+  Browser ->> BackgroundScript: 呼び出し
+  activate BackgroundScript
+  BackgroundScript ->> Storage: タブIDを削除
+  deactivate BackgroundScript
 ```
 
 ## リンク

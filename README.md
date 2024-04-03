@@ -8,6 +8,8 @@
 - [開発環境](#開発環境)
   - [セットアップ方法](#セットアップ方法)
   - [ビルド方法](#ビルド方法)
+- [設計資料](#設計資料)
+  - [シーケンス図](#シーケンス図)
 - [リンク](#リンク)
 
 ## 本拡張機能に関して
@@ -87,6 +89,62 @@
 
 ```sh
 make
+```
+
+## 設計資料
+
+### シーケンス図
+
+```mermaid
+%%{
+    init: {
+        'theme': 'dark'
+    }
+}%%
+
+sequenceDiagram
+  actor User
+
+  User    ->> Browser: タブを開く
+  Browser ->> ContentScript: 呼び出し
+  activate ContentScript
+  ContentScript ->> BackgroundScript: 初期化完了を通知
+  activate BackgroundScript
+  BackgroundScript ->> Storage: タブIDを保存
+  deactivate BackgroundScript
+  ContentScript ->> BackgroundScript: 置換処理に必要なデータをリクエスト
+  activate BackgroundScript
+  BackgroundScript  ->> Storage: 変換表を読み出し
+  BackgroundScript  ->> Storage: 変換モードを読み出し
+  BackgroundScript -->> ContentScript: データ返却
+  deactivate BackgroundScript
+  ContentScript ->> DLsitePage: 置換処理を実行
+  deactivate ContentScript
+
+
+  User    ->> Browser: コンテキストメニューをクリック
+  Browser ->> BackgroundScript: 呼び出し
+  activate BackgroundScript
+  BackgroundScript ->> Storage: タブIDを読み出し
+  BackgroundScript ->> Storage: 変換モードをスイッチングして保存
+  BackgroundScript ->> ContentScript: タブIDに該当するものに通知
+  deactivate BackgroundScript
+  activate   ContentScript
+  ContentScript ->> BackgroundScript: 置換処理に必要なデータをリクエスト
+  activate BackgroundScript
+  BackgroundScript  ->> Storage: 変換表を読み出し
+  BackgroundScript  ->> Storage: 変換モードを読み出し
+  BackgroundScript -->> ContentScript: データ返却
+  deactivate BackgroundScript
+  ContentScript ->> DLsitePage: 置換処理を実行
+  deactivate ContentScript
+
+
+  User    ->> Browser: タブを閉じる
+  Browser ->> BackgroundScript: 呼び出し
+  activate BackgroundScript
+  BackgroundScript ->> Storage: タブIDを削除
+  deactivate BackgroundScript
 ```
 
 ## リンク

@@ -9,6 +9,7 @@
   - [セットアップ方法](#セットアップ方法)
   - [ビルド方法](#ビルド方法)
 - [設計資料](#設計資料)
+  - [概念図](#概念図)
   - [シーケンス図](#シーケンス図)
 - [リンク](#リンク)
 
@@ -92,6 +93,42 @@ make
 ```
 
 ## 設計資料
+
+### 概念図
+
+```mermaid
+%%{
+    init: {
+        'theme': 'dark'
+    }
+}%%
+
+graph LR
+  BackgroundScript <-- 読み書き --> Storage[(Storage)]
+
+  subgraph Tabs
+    subgraph Tab1
+      ContentScript1
+      DLsitePage1
+    end
+    subgraph Tab2
+      ContentScript2
+      DLsitePage2
+    end
+    subgraph Tab3
+      ContentScript3
+      DLsitePage3
+    end
+  end
+
+  BackgroundScript <-- 通信 --> ContentScript1
+  BackgroundScript <-- 通信 --> ContentScript2
+  BackgroundScript <-- 通信 --> ContentScript3
+
+  ContentScript1 -- 置換処理 --> DLsitePage1
+  ContentScript2 -- 置換処理 --> DLsitePage2
+  ContentScript3 -- 置換処理 --> DLsitePage3
+```
 
 ### シーケンス図
 

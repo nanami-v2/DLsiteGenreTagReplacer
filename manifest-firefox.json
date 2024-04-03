@@ -28,6 +28,12 @@
       "resources": ["/assets/*"],
       "matches": ["*://www.dlsite.com/*"]
     }
-  ]
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "{49585e1b-d5de-4b44-bf60-604fe4299642}",
+      "strict_min_version": "55.0"
+    }
+  }
 }
   

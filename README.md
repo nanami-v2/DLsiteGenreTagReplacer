@@ -66,10 +66,7 @@
 - ビルドやバンドルに必要な`node_modules`
 
     ```sh
-    npm install --save-dev typescript ts-node
-    npm install --save-dev esbuild
-    npm install --save-dev @types/firefox-webext-browser
-    npm install --save-dev @types/chrome
+    npm ci
     ```
 
 - [Gnu Make](https://www.gnu.org/software/make/)
@@ -78,10 +75,10 @@
     apt install -y make
     ```
 
-- zip/unzip
+- zip
 
   ```sh
-  apt install -y zip unzip
+  apt install -y zip
   ```
 
 ### ビルド方法

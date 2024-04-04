@@ -22,7 +22,7 @@ export namespace BackgroundScriptHandler {
             documentUrlPatterns: ['*://www.dlsite.com/*']
         });
         /*
-            ストレージに初期値を保存
+            ストレージを初期化
         */
         const storage = new Storage();
 

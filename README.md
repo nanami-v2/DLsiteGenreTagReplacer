@@ -160,9 +160,10 @@ sequenceDiagram
   User    ->> Browser: コンテキストメニューをクリック
   Browser ->> BackgroundScript: 呼び出し
   activate BackgroundScript
-  BackgroundScript ->> Storage: タブIDを読み出し
   BackgroundScript ->> Storage: 変換モードをスイッチングして保存
-  BackgroundScript ->> ContentScript: タブIDに該当するものに通知
+  BackgroundScript ->> Storage: 保存していた全てのタブIDを読み出し
+  loop タブIDごと
+  BackgroundScript ->> ContentScript: 通知
   deactivate BackgroundScript
   activate   ContentScript
   ContentScript ->> BackgroundScript: 置換処理に必要なデータをリクエスト
@@ -173,6 +174,7 @@ sequenceDiagram
   deactivate BackgroundScript
   ContentScript ->> DLsitePage: 置換処理を実行
   deactivate ContentScript
+  end
 
 
   User    ->> Browser: タブを閉じる

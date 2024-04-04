@@ -99,11 +99,12 @@ export namespace BackgroundScriptHandler {
                 storage.saveConversionMode(
                     switchConversionMode(currentConversionMode)
                 ),
-                Promise.resolve(() => {
+                new Promise((resolve, reject) => {
                     chrome.contextMenus.update(
                         itemId,
-                        {title: getContextMenuTitle(currentConversionMode)}
-                    );
+                        {title: getContextMenuTitle(currentConversionMode)},
+                        () => resolve(undefined)
+                    )
                 })
             ]);
         })

@@ -72,8 +72,6 @@ export namespace BackgroundScriptHandler {
 
                 storage
                 .saveTabId(tabId)
-                .then(() => storage.loadAllTabIds())
-                .then((tabIds) => console.log('insert tabId...', tabId, tabIds))
                 .catch((err) => console.error(err));
 
                 return;
@@ -86,8 +84,6 @@ export namespace BackgroundScriptHandler {
     ): void {
         const itemId  = info.menuItemId
         const storage = new Storage();
-
-        console.log('contextMenuClicked...', tab?.id);
 
         storage
         .loadConversionMode()
@@ -117,8 +113,6 @@ export namespace BackgroundScriptHandler {
             const msg        = msgFactory.createMessageContextMenuClickedEvent();
             
             for (const tabId of tabIds) {
-                console.log('sendMessage...onContextMenuClicked', tabId);
-                
                 chrome.tabs
                 .sendMessage(tabId, msg)
                 .catch((err) => console.error(err));
@@ -134,8 +128,6 @@ export namespace BackgroundScriptHandler {
 
         storage
         .deleteTabId(tabId)
-        .then(() => storage.loadAllTabIds())
-        .then((tabIds) => console.log('remove tabId...', tabId, tabIds))
         .catch((err) => console.error(err));
     }
 }

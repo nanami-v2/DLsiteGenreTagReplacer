@@ -102,7 +102,7 @@ make
 }%%
 
 graph LR
-  BackgroundScript <-- 読み書き --> Storage[(Storage)]
+  BackgroundScript -- 読み書き --> Storage[(Storage)]
 
   subgraph Tabs
     subgraph Tab1

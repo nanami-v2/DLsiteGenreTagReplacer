@@ -1,12 +1,12 @@
 
-import { TabTitleConverter } from "../tab-title-converter";
+import { DocumentTitleConverter } from "../tab-title-converter";
 import { GenreWordConversionMap } from "../genre-word-conversion-map";
 
-export class TabTitleConverterToNewWords implements TabTitleConverter {
+export class DocumentTitleConverterToNewWords implements DocumentTitleConverter {
     constructor(conversionMap: GenreWordConversionMap) {
         this.conversionMap_ = conversionMap;
     }
-    public convertTabTitle(tabTitle: string): string {
+    public convertDocumentTitle(documentTitle: string): string {
         /*
             ジャンルに対するタブ名として
 
@@ -15,17 +15,17 @@ export class TabTitleConverterToNewWords implements TabTitleConverter {
 
             といった2パターンがあるようなので、それぞれで処理を分ける
         */
-        const matches = tabTitle.match('「\(.+\)」');
+        const matches = documentTitle.match('「\(.+\)」');
         const matched = (matches !== null);
 
         if (matched) {
             const word  = matches[1];
             const entry = this.conversionMap_.entries.find((e) => e.oldWord === word);
 
-            return (entry) ? tabTitle.replace(word, entry.newWord) : tabTitle;
+            return (entry) ? documentTitle.replace(word, entry.newWord) : documentTitle;
         }
         else {
-            const words          = tabTitle.split(' ');
+            const words          = documentTitle.split(' ');
             const convertedWords = words.map((word) => {
                 const entry         = this.conversionMap_.entries.find((e) => e.oldWord === word);
                 const convertedWord = (entry) ? entry.newWord : word;

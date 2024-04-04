@@ -1,4 +1,4 @@
 
-export interface TabTitleConverter {
-    convertTabTitle(tabTitle: string): string;
+export interface DocumentTitleConverter {
+    convertDocumentTitle(documentTitle: string): string;
 }

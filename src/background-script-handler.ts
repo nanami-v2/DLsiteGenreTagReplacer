@@ -11,9 +11,9 @@ export namespace BackgroundScriptHandler {
             コンテキストメニューを作成
             コンテキストメニューの表示はタブ間を跨いで切り替わることに注意
         */
-        const defaultConversionMode = GenreWordConversionMode.ToOldWords;
-        const nextConversionMode    = getNextConversionMode(defaultConversionMode);
-        const contextMenuTitle      = getContextMenuTitle(nextConversionMode);
+        const defaultConversionMode  = GenreWordConversionMode.ToOldWords;
+        const switchedConversionMode = switchConversionMode(defaultConversionMode);
+        const contextMenuTitle       = getContextMenuTitle(switchedConversionMode);
     
         chrome.contextMenus.create({
             type               : 'normal',
@@ -64,9 +64,9 @@ export namespace BackgroundScriptHandler {
                 chrome.storage.local
                 .get('conversionMode')
                 .then((result) => {
-                    const conversionMode = (result['conversionMode'] as GenreWordConversionMode);
-                    const msgFactory     = new MessageFactory();
-                    const msgResponse    = msgFactory.createMessageGetConversionModeResponse(conversionMode);
+                    const currentConversionMode = (result['conversionMode'] as GenreWordConversionMode);
+                    const msgFactory            = new MessageFactory();
+                    const msgResponse           = msgFactory.createMessageGetConversionModeResponse(currentConversionMode);
     
                     sendResponse(msgResponse);
                 })
@@ -97,22 +97,20 @@ export namespace BackgroundScriptHandler {
         .then((result) => {
             console.log('contextMenuClicked...', tab?.id, result);
 
-            const conversionMode          = (result['conversionMode'] as GenreWordConversionMode);
-            const nextConversionMode      = getNextConversionMode(conversionMode);
-            const afterNextConversionMode = getNextConversionMode(nextConversionMode);
-            /*
-                コンテキストメニューのテキストを切り替える
-            */
-            const itemId    = info.menuItemId;
-            const menuTitle = getContextMenuTitle(afterNextConversionMode);
-        
-            chrome.contextMenus
-            .update(itemId, {title: menuTitle});
+            const currentConversionMode  = (result['conversionMode'] as GenreWordConversionMode);
+            const switchedConversionMode = switchConversionMode(currentConversionMode);
             /*
                 変換モードを更新
             */
             chrome.storage.local
-            .set({'conversionMode': nextConversionMode});
+            .set({'conversionMode': switchedConversionMode});
+            /*
+                コンテキストメニューのテキストを切り替える
+            */
+            const itemId    = info.menuItemId;
+            const menuTitle = getContextMenuTitle(currentConversionMode);
+        
+            chrome.contextMenus.update(itemId, {title: menuTitle});
             /*
                 個々のページが内容を変更できるように通知
             */
@@ -154,7 +152,7 @@ function getContextMenuTitle(conversionMode: GenreWordConversionMode): string {
         : '新タグ名で表示';
 }
 
-function getNextConversionMode(conversionMode: GenreWordConversionMode): GenreWordConversionMode {
+function switchConversionMode(conversionMode: GenreWordConversionMode): GenreWordConversionMode {
     return (conversionMode === GenreWordConversionMode.ToOldWords)
         ? GenreWordConversionMode.ToNewWords
         : GenreWordConversionMode.ToOldWords;

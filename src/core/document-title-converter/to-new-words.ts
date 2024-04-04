@@ -1,8 +1,8 @@
 
-import { DocumentTitleConverter } from "../tab-title-converter";
+import { DocumentTitleConverter } from "../document-title-converter";
 import { GenreWordConversionMap } from "../genre-word-conversion-map";
 
-export class DocumentTitleConverterToOldWords implements DocumentTitleConverter {
+export class DocumentTitleConverterToNewWords implements DocumentTitleConverter {
     constructor(conversionMap: GenreWordConversionMap) {
         this.conversionMap_ = conversionMap;
     }
@@ -20,15 +20,15 @@ export class DocumentTitleConverterToOldWords implements DocumentTitleConverter 
 
         if (matched) {
             const word  = matches[1];
-            const entry = this.conversionMap_.entries.find((e) => e.newWord === word);
+            const entry = this.conversionMap_.entries.find((e) => e.oldWord === word);
 
-            return (entry) ? documentTitle.replace(word, entry.oldWord) : documentTitle;
+            return (entry) ? documentTitle.replace(word, entry.newWord) : documentTitle;
         }
         else {
             const words          = documentTitle.split(' ');
             const convertedWords = words.map((word) => {
-                const entry         = this.conversionMap_.entries.find((e) => e.newWord === word);
-                const convertedWord = (entry) ? entry.oldWord : word;
+                const entry         = this.conversionMap_.entries.find((e) => e.oldWord === word);
+                const convertedWord = (entry) ? entry.newWord : word;
 
                 return convertedWord;
             });

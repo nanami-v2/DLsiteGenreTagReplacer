@@ -41,7 +41,7 @@ export class Storage {
     }
     public loadAllTabIds(): Promise<Array<number>> {
         return (
-            chrome.storage.local
+            chrome.storage.session
             .get()
             .then((result) => {
                 const tabIds = new Array<number>();
@@ -68,7 +68,7 @@ export class Storage {
             なのでデータ構造もそれに制約を受け、tabIdを配列形式で保存しておくということができない。
         */
         return (
-            chrome.storage.local
+            chrome.storage.session
             .set({[`tabId-${tabId}`]: tabId})
         );
     }
@@ -80,7 +80,7 @@ export class Storage {
             なのでデータ構造もそれに制約を受け、tabIdを配列形式で保存しておくということができない。
         */
         return (
-            chrome.storage.local
+            chrome.storage.session
             .remove(`tabId-${tabId}`)
         );
     }

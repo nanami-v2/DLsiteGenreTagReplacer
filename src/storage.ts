@@ -13,7 +13,7 @@ export class Storage {
     }
     public loadConversionMap(): Promise<GenreWordConversionMap> {
         return (
-            fetch(chrome.runtime.getURL('/assets/genre-word-conversion-map.json'))
+            fetch(chrome.runtime.getURL('/assets/genre-word-conversion-map-ja.json'))
             .then((res: Response) => {
                 if (!res.ok)
                     throw new Error(res.statusText);

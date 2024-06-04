@@ -2,8 +2,12 @@
 import { Message } from "./message";
 import { MessageType } from "./message/type";
 import { MessageFactory } from "./message-factory";
+import { GenreWordConversionMapLoader } from './core/genre-word-conversion-map-loader';
 import { GenreWordConversionMode } from "./core/genre-word-conversion-mode";
-import { Storage } from "./storage";
+import { GenreWordConversionModeFlipper } from "./core/genre-word-conversion-mode-flipper";
+import { ContextMenu } from "./core/context-menu";
+import { LocalStorage } from './core/local-storage';
+import { SessionStorage } from './core/session-storage';
 
 export namespace BackgroundScriptHandler {
     export function onInstalled(): void {
@@ -11,23 +15,13 @@ export namespace BackgroundScriptHandler {
             コンテキストメニューを作成
             コンテキストメニューの表示はタブ間を跨いで切り替わることに注意
         */
-        const defaultConversionMode  = GenreWordConversionMode.ToOldWords;
-        const switchedConversionMode = switchConversionMode(defaultConversionMode);
-    
-        chrome.contextMenus.create({
-            type               : 'normal',
-            id                 : '43ae9812-9ca5-425d-b12f-c617f91f9095', /* GUID */
-            title              : getContextMenuTitle(switchedConversionMode),
-            contexts           : ['page'],
-            documentUrlPatterns: ['*://www.dlsite.com/*']
-        });
-        /*
-            ストレージを初期化
-        */
-        const storage = new Storage();
+       const contextMenu           = new ContextMenu();
+       const localStorage          = new LocalStorage();
+       const defaultConversionMode = GenreWordConversionMode.ToOldWords;
 
-        storage
-        .init(defaultConversionMode)
+        contextMenu.create(defaultConversionMode)
+        .then(() => localStorage.clear())
+        .then(() => localStorage.saveConversionMode(defaultConversionMode))
         .catch((err) => console.error(err));
     }
     export function onMessage(
@@ -37,41 +31,34 @@ export namespace BackgroundScriptHandler {
     ): boolean | undefined {
         switch ((message as Message).type) {
             case MessageType.GetConversionMapRequest: {
-                const storage = new Storage();
-
-                storage
-                .loadConversionMap()
+                const conversionMapLoader = new GenreWordConversionMapLoader();
+                const msgFactory          = new MessageFactory();
+                
+                conversionMapLoader.loadConversionMap()
                 .then((conversionMap) => {
-                    const msgFactory = new MessageFactory();
-                    const msg        = msgFactory.createMessageGetConversionMapResponse(conversionMap);
-
-                    sendResponse(msg);
+                    sendResponse(msgFactory.createMessageGetConversionMapResponse(conversionMap));
                 })
                 .catch((err) => console.error(err));
 
                 return true; /* Keep channel for sendResponse */
             }
             case MessageType.GetConversionModeRequest: {
-                const storage = new Storage();
+                const localStorage = new LocalStorage();
+                const msgFactory   = new MessageFactory();
 
-                storage
-                .loadConversionMode()
+                localStorage.loadConversionMode()
                 .then((conversionMode) => {
-                    const msgFactory = new MessageFactory();
-                    const msg        = msgFactory.createMessageGetConversionModeResponse(conversionMode);
-
-                    sendResponse(msg);
+                    sendResponse(msgFactory.createMessageGetConversionModeResponse(conversionMode!));
                 })
                 .catch((err) => console.error(err));
 
                 return true; /* Keep channel for sendResponse */
             }
             case MessageType.ContentScriptSetuppedEvent: {
-                const tabId   = messageSender.tab!.id!;
-                const storage = new Storage();
+                const sessionStorage = new SessionStorage();
+                const tabId          = messageSender.tab!.id!;
 
-                storage
-                .saveTabId(tabId)
+                sessionStorage.saveTabId(tabId)
                 .catch((err) => console.error(err));
 
                 return;
@@ -82,35 +69,29 @@ export namespace BackgroundScriptHandler {
         info: chrome.contextMenus.OnClickData,
         tab : chrome.tabs.Tab | undefined
     ): void {
-        const itemId  = info.menuItemId
-        const storage = new Storage();
+        const contextMenu    = new ContextMenu();
+        const localStorage   = new LocalStorage();
+        const sessionStorage = new SessionStorage();
+        const msgFactory     = new MessageFactory();
+        /*
+            - contextMenuのテキストを切り替える
+            - フリップ後の変換モードを保存
+            - 現状の DLsite.com のタブ全てに通知
+        */
+        localStorage.loadConversionMode()
+        .then((conversionMode) => {
+            const conversionModeFlipper = new GenreWordConversionModeFlipper();
+            const flippedConversionMode = conversionModeFlipper.flipConversionMode(conversionMode!);
 
-        storage
-        .loadConversionMode()
-        .then((currentConversionMode) => {
-            /*
-                コンテキストメニューの更新と、スイッチングした変換モードの保存は独立して行える
-            */
             return Promise.all([
-                storage.saveConversionMode(
-                    switchConversionMode(currentConversionMode)
-                ),
-                new Promise((resolve, reject) => {
-                    chrome.contextMenus.update(
-                        itemId,
-                        {title: getContextMenuTitle(currentConversionMode)},
-                        () => resolve(undefined)
-                    )
-                })
+                localStorage.saveConversionMode(flippedConversionMode),
+                contextMenu.updateTitleText(info.menuItemId, flippedConversionMode),
+                sessionStorage.loadAllTabIds()
             ]);
         })
-        .then(() => storage.loadAllTabIds())
-        .then((tabIds) => {
-            /*
-                複数タブにまとめて通知
-            */
-            const msgFactory = new MessageFactory();
-            const msg        = msgFactory.createMessageContextMenuClickedEvent();
+        .then((results) => {
+            const tabIds = results[2];
+            const msg    = msgFactory.createMessageContextMenuClickedEvent();
             
             for (const tabId of tabIds) {
                 chrome.tabs
@@ -124,23 +105,9 @@ export namespace BackgroundScriptHandler {
         tabId     : number,
         removeInfo: chrome.tabs.TabRemoveInfo
     ): void {
-        const storage = new Storage();
-
-        storage
-        .deleteTabId(tabId)
+        const sessionStorage = new SessionStorage();
+        
+        sessionStorage.deleteTabId(tabId)
         .catch((err) => console.error(err));
     }
-}
-
-
-function getContextMenuTitle(conversionMode: GenreWordConversionMode): string {
-    return (conversionMode === GenreWordConversionMode.ToOldWords)
-        ? '旧タグ名で表示'
-        : '新タグ名で表示';
-}
-
-function switchConversionMode(conversionMode: GenreWordConversionMode): GenreWordConversionMode {
-    return (conversionMode === GenreWordConversionMode.ToOldWords)
-        ? GenreWordConversionMode.ToNewWords
-        : GenreWordConversionMode.ToOldWords;
 }

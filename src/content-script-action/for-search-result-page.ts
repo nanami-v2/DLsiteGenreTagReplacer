@@ -118,15 +118,12 @@ function doReplaceGenreWordsAndUpdateTabTitle() {
         const conversionMap  = (results[0].data as MessageDataGetConversionMapResponse ).conversionMap;
         const conversionMode = (results[1].data as MessageDataGetConversionModeResponse).conversionMode;
     
-        const wordConverter        = new GenreWordConverter(conversionMap, conversionMode);
-        const wordReplacerFactory  = new GenreWordReplacerFactory();
-        const wordReplacer         = wordReplacerFactory.createGenreWordReplacer(GenreWordReplaceTargetPage.SearchResultPage);
-    
-        if (wordReplacer)
-            wordReplacer.replaceGenreWords(document, wordConverter);
-
+        const wordConverter          = new GenreWordConverter(conversionMap, conversionMode);
+        const wordReplacerFactory    = new GenreWordReplacerFactory();
+        const wordReplacer           = wordReplacerFactory.createGenreWordReplacer(GenreWordReplaceTargetPage.SearchResultPage);
         const documentTitleConverter = new DocumentTitleConverter(conversionMap, conversionMode);
-
+    
+        wordReplacer.replaceGenreWords(document, wordConverter);
         document.title = documentTitleConverter.convertDocumentTitle(document.title);
     })
     .catch((err) => {

@@ -3,15 +3,16 @@ import { GenreWordConversionMode } from "./core/genre-word-conversion-mode";
 import { Message } from "./message";
 import { MessageType } from "./message/type";
 import {
+    MessagDataeGetConversionMapRequest,
     MessageDataGetConversionMapResponse,
     MessageDataGetConversionModeResponse,
 } from "./message/data";
 
 
 export class MessageFactory {
-    public createMessageGetConversionMapRequest(): Message {
+    public createMessageGetConversionMapRequest(langCode: string): Message {
         const msgType = MessageType.GetConversionMapRequest;
-        const msgData = null;
+        const msgData = new MessagDataeGetConversionMapRequest(langCode);
 
         return new Message(msgType, msgData);
     }

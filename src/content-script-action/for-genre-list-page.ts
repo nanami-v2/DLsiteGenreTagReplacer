@@ -43,7 +43,8 @@ export class ContentScriptActionForGenreListPage implements ContentScriptAction 
 
 function doReplaceGenreWords() {
     const msgFactory                  = new MessageFactory();
-    const msgGetConversionMapRequest  = msgFactory.createMessageGetConversionMapRequest();
+    const langCode                    = document.documentElement.lang;
+    const msgGetConversionMapRequest  = msgFactory.createMessageGetConversionMapRequest(langCode);
     const msgGetConversionModeRequest = msgFactory.createMessageGetConversionModeRequest();
 
     Promise.all([

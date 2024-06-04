@@ -107,7 +107,8 @@ export class ContentScriptActionForSearchResultPage implements ContentScriptActi
 
 function doReplaceGenreWordsAndUpdateTabTitle() {
     const msgFactory                  = new MessageFactory();
-    const msgGetConversionMapRequest  = msgFactory.createMessageGetConversionMapRequest();
+    const langCode                    = document.documentElement.lang;
+    const msgGetConversionMapRequest  = msgFactory.createMessageGetConversionMapRequest(langCode);
     const msgGetConversionModeRequest = msgFactory.createMessageGetConversionModeRequest();
 
     Promise.all([

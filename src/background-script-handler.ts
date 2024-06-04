@@ -1,5 +1,6 @@
 
 import { Message } from "./message";
+import { MessagDataeGetConversionMapRequest } from './message/data'
 import { MessageType } from "./message/type";
 import { MessageFactory } from "./message-factory";
 import { GenreWordConversionMapLoader } from './core/genre-word-conversion-map-loader';
@@ -32,8 +33,9 @@ export namespace BackgroundScriptHandler {
             case MessageType.GetConversionMapRequest: {
                 const conversionMapLoader = new GenreWordConversionMapLoader();
                 const msgFactory          = new MessageFactory();
+                const langCode            = (message.data as MessagDataeGetConversionMapRequest).langCode;
                 
-                conversionMapLoader.loadConversionMap()
+                conversionMapLoader.loadConversionMap(langCode)
                 .then((conversionMap) => {
                     sendResponse(msgFactory.createMessageGetConversionMapResponse(conversionMap));
                 })

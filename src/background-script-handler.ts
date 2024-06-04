@@ -4,7 +4,6 @@ import { MessageType } from "./message/type";
 import { MessageFactory } from "./message-factory";
 import { GenreWordConversionMapLoader } from './core/genre-word-conversion-map-loader';
 import { GenreWordConversionMode } from "./core/genre-word-conversion-mode";
-import { GenreWordConversionModeFlipper } from "./core/genre-word-conversion-mode-flipper";
 import { ContextMenu } from "./core/context-menu";
 import { LocalStorage } from './core/local-storage';
 import { SessionStorage } from './core/session-storage';
@@ -80,8 +79,9 @@ export namespace BackgroundScriptHandler {
         */
         localStorage.loadConversionMode()
         .then((conversionMode) => {
-            const conversionModeFlipper = new GenreWordConversionModeFlipper();
-            const flippedConversionMode = conversionModeFlipper.flipConversionMode(conversionMode!);
+            const flippedConversionMode = (conversionMode === GenreWordConversionMode.ToOldWords)
+                ? GenreWordConversionMode.ToNewWords
+                : GenreWordConversionMode.ToOldWords;
 
             return Promise.all([
                 localStorage.saveConversionMode(flippedConversionMode),

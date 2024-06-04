@@ -6,7 +6,7 @@ chrome.runtime.onInstalled.addListener(
 );
 chrome.runtime.onMessage.addListener(
     BackgroundScriptHandler.onMessage
-)
+);
 chrome.contextMenus.onClicked.addListener(
     BackgroundScriptHandler.onContextMenuClicked
 );

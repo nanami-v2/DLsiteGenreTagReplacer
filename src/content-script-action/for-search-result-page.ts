@@ -1,6 +1,6 @@
 
 import { ContentScriptAction } from "../content-script-action";
-import { GenreWordConverterFactory } from "../core/genre-word-converter-factory";
+import { GenreWordConverter } from "../core/genre-word-converter";
 import { GenreWordReplacerFactory } from "../core/genre-word-replacer-factory";
 import { GenreWordReplaceTargetPage } from "../core/genre-word-replace-target-page";
 import { DocumentTitleConverterFactory } from '../core/document-title-converter-factory'
@@ -118,9 +118,8 @@ function doReplaceGenreWordsAndUpdateTabTitle() {
         const conversionMap  = (results[0].data as MessageDataGetConversionMapResponse ).conversionMap;
         const conversionMode = (results[1].data as MessageDataGetConversionModeResponse).conversionMode;
     
-        const wordConverterFactory = new GenreWordConverterFactory();
+        const wordConverter        = new GenreWordConverter(conversionMap, conversionMode);
         const wordReplacerFactory  = new GenreWordReplacerFactory();
-        const wordConverter        = wordConverterFactory.createGenreWordConverter(conversionMap, conversionMode);
         const wordReplacer         = wordReplacerFactory.createGenreWordReplacer(GenreWordReplaceTargetPage.SearchResultPage);
     
         if (wordReplacer)

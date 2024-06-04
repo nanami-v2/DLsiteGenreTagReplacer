@@ -23,7 +23,7 @@ export class ContentScriptActionForOtherPage implements ContentScriptAction {
             セットアップ完了を通知
         */
         const msgFactory = new MessageFactory();
-        const msgEvent   = msgFactory.createMessageContentScriptSetuppedEvent();
+        const msgEvent   = msgFactory.createContentScriptSetuppedEvent();
         
         chrome.runtime
         .sendMessage(msgEvent)

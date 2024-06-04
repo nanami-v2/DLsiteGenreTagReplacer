@@ -30,7 +30,7 @@ export class ContentScriptActionForProductPage implements ContentScriptAction {
             セットアップ完了を通知
         */
         const msgFactory = new MessageFactory();
-        const msgEvent   = msgFactory.createMessageContentScriptSetuppedEvent();
+        const msgEvent   = msgFactory.createContentScriptSetuppedEvent();
 
         chrome.runtime
         .sendMessage(msgEvent)
@@ -43,9 +43,8 @@ export class ContentScriptActionForProductPage implements ContentScriptAction {
 
 function doReplaceGenreWords() {
     const msgFactory                  = new MessageFactory();
-    const langCode                    = document.documentElement.lang;
-    const msgGetConversionMapRequest  = msgFactory.createMessageGetConversionMapRequest(langCode);
-    const msgGetConversionModeRequest = msgFactory.createMessageGetConversionModeRequest();
+    const msgGetConversionMapRequest  = msgFactory.createGetConversionMapRequest(document.documentElement.lang);
+    const msgGetConversionModeRequest = msgFactory.createGetConversionModeRequest();
 
     Promise.all([
         chrome.runtime.sendMessage(msgGetConversionMapRequest),

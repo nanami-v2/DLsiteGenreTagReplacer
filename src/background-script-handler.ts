@@ -37,7 +37,7 @@ export namespace BackgroundScriptHandler {
                 
                 conversionMapLoader.loadConversionMap(langCode)
                 .then((conversionMap) => {
-                    sendResponse(msgFactory.createMessageGetConversionMapResponse(conversionMap));
+                    sendResponse(msgFactory.createGetConversionMapResponse(conversionMap));
                 })
                 .catch((err) => console.error(err));
 
@@ -49,7 +49,7 @@ export namespace BackgroundScriptHandler {
 
                 localStorage.loadConversionMode()
                 .then((conversionMode) => {
-                    sendResponse(msgFactory.createMessageGetConversionModeResponse(conversionMode!));
+                    sendResponse(msgFactory.createGetConversionModeResponse(conversionMode!));
                 })
                 .catch((err) => console.error(err));
 
@@ -93,7 +93,7 @@ export namespace BackgroundScriptHandler {
         })
         .then((results) => {
             const tabIds = results[2];
-            const msg    = msgFactory.createMessageContextMenuClickedEvent();
+            const msg    = msgFactory.createContextMenuClickedEvent();
             
             for (const tabId of tabIds) {
                 chrome.tabs

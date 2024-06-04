@@ -3,7 +3,7 @@ import { ContentScriptAction } from "../content-script-action";
 import { GenreWordConverter } from "../core/genre-word-converter";
 import { GenreWordReplacerFactory } from "../core/genre-word-replacer-factory";
 import { GenreWordReplaceTargetPage } from "../core/genre-word-replace-target-page";
-import { DocumentTitleConverterFactory } from '../core/document-title-converter-factory'
+import { DocumentTitleConverter } from '../core/document-title-converter'
 import { Message } from "../message";
 import { MessageType } from "../message/type";
 import {
@@ -125,8 +125,7 @@ function doReplaceGenreWordsAndUpdateTabTitle() {
         if (wordReplacer)
             wordReplacer.replaceGenreWords(document, wordConverter);
 
-        const documentTitleConverterFactory = new DocumentTitleConverterFactory();
-        const documentTitleConverter        = documentTitleConverterFactory.createDocumentTitleConverter(conversionMap, conversionMode);
+        const documentTitleConverter = new DocumentTitleConverter(conversionMap, conversionMode);
 
         document.title = documentTitleConverter.convertDocumentTitle(document.title);
     })

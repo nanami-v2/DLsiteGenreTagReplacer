@@ -1,7 +1,7 @@
 
 import { ContentScriptAction } from "../content-script-action";
 import { GenreWordConverter } from "../core/genre-word-converter";
-import { GenreWordReplacerFactory } from "../core/genre-word-replacer-factory";
+import { GenreWordReplacer } from "../core/genre-word-replacer";
 import { GenreWordReplaceTargetPage } from "../core/genre-word-replace-target-page";
 import { DocumentTitleConverter } from '../core/document-title-converter'
 import { Message } from "../message";
@@ -118,13 +118,14 @@ function doReplaceGenreWordsAndUpdateTabTitle() {
         const conversionMap  = (results[0].data as MessageDataGetConversionMapResponse ).conversionMap;
         const conversionMode = (results[1].data as MessageDataGetConversionModeResponse).conversionMode;
     
-        const wordConverter          = new GenreWordConverter(conversionMap, conversionMode);
-        const wordReplacerFactory    = new GenreWordReplacerFactory();
-        const wordReplacer           = wordReplacerFactory.createGenreWordReplacer(GenreWordReplaceTargetPage.SearchResultPage);
-        const documentTitleConverter = new DocumentTitleConverter(conversionMap, conversionMode);
+        const wordConverter  = new GenreWordConverter(conversionMap, conversionMode);
+        const wordReplacer   = new GenreWordReplacer(GenreWordReplaceTargetPage.SearchResultPage);
+        const titleConverter = new DocumentTitleConverter(conversionMap, conversionMode);
     
+        console.log(titleConverter.convertDocumentTitle(document.title));
+
         wordReplacer.replaceGenreWords(document, wordConverter);
-        document.title = documentTitleConverter.convertDocumentTitle(document.title);
+        document.title = titleConverter.convertDocumentTitle(document.title);
     })
     .catch((err) => {
         console.error(err);

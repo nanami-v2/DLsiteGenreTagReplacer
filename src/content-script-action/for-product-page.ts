@@ -1,7 +1,7 @@
 
 import { ContentScriptAction } from "../content-script-action";
 import { GenreWordConverter } from "../core/genre-word-converter";
-import { GenreWordReplacerFactory } from "../core/genre-word-replacer-factory";
+import { GenreWordReplacer } from "../core/genre-word-replacer";
 import { GenreWordReplaceTargetPage } from "../core/genre-word-replace-target-page";
 import { Message } from "../message";
 import { MessageType } from "../message/type";
@@ -54,9 +54,8 @@ function doReplaceGenreWords() {
         const conversionMap  = (results[0].data as MessageDataGetConversionMapResponse ).conversionMap;
         const conversionMode = (results[1].data as MessageDataGetConversionModeResponse).conversionMode;
     
-        const wordConverter       = new GenreWordConverter(conversionMap, conversionMode);
-        const wordReplacerFactory = new GenreWordReplacerFactory();
-        const wordReplacer        = wordReplacerFactory.createGenreWordReplacer(GenreWordReplaceTargetPage.ProductPage);
+        const wordConverter = new GenreWordConverter(conversionMap, conversionMode);
+        const wordReplacer  = new GenreWordReplacer(GenreWordReplaceTargetPage.ProductPage);
     
         wordReplacer.replaceGenreWords(document, wordConverter);
     })

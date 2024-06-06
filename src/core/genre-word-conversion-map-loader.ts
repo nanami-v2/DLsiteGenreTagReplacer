@@ -21,7 +21,7 @@ export class GenreWordConversionMapLoader {
             })
             .then((entries: Array<GenreWordConversionMapEntry>) => {
                 return Promise.resolve(
-                    new GenreWordConversionMap(langCode, entries)
+                    new GenreWordConversionMap(entries)
                 );
             })
         );

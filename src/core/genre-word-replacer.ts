@@ -3,9 +3,7 @@ import { GenreWordConverter } from "./genre-word-converter";
 import { GenreWordReplaceTargetPage } from "./genre-word-replace-target-page";
 
 export class GenreWordReplacer {
-    constructor(
-        targetPage: GenreWordReplaceTargetPage
-    ) {
+    constructor(targetPage: GenreWordReplaceTargetPage) {
         this.target_ = targetPage;
     }
     public replaceGenreWords(

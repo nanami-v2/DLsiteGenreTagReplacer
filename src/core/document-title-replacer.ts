@@ -1,57 +1,48 @@
 
 import { GenreWordConversionMap } from "./genre-word-conversion-map";
 import { GenreWordConversionMode } from "./genre-word-conversion-mode";
+import { GenreWordConverter } from "./genre-word-converter";
 
 export class DocumentTitleReplacer {
-    constructor(
-        conversionMap : GenreWordConversionMap,
-        conversionMode: GenreWordConversionMode
-    ) {
-        this.conversionMap_ = conversionMap;
-        this.conversionMode_ = conversionMode;
+    public replaceDocumentTitle(
+        htmlDocument      : Document,
+        genreWordConverter: GenreWordConverter
+    ): void {
+        if (htmlDocument.documentElement.lang === 'ja-jp')
+            return onJapanesePage(htmlDocument, genreWordConverter);
     }
-    public replaceDocumentTitle(htmlDocument: Document): void {
-        /*
-            ジャンルに対するタブ名として
+}
 
-            - 「ざぁ～こ♡」
-            - 異種えっち トランス/暗示
+function onJapanesePage(
+    htmlDocument      : Document,
+    genreWordConverter: GenreWordConverter
+): void {
+    /*
+        ジャンルに対するタブ名として
 
-            といった2パターンがあるようなので、それぞれで処理を分ける
-        */
-        const matches = htmlDocument.title.match('「\(.+\)」');
-        const matched = (matches !== null);
+        - 「ざぁ～こ♡」
+        - 異種えっち トランス/暗示
 
-        if (matched) {
-            const word  = matches[1];
-            const entry = (this.conversionMode_ === GenreWordConversionMode.ToOldWords)
-                ? this.conversionMap_.entries.find((e) => e.newWord === word)
-                : this.conversionMap_.entries.find((e) => e.oldWord === word);
+        といった2パターンがあるようなので、それぞれで処理を分ける
+    */
+    const matches = htmlDocument.title.match('「\(.+\)」');
+    const matched = (matches !== null);
 
-            if (!entry)
-                return;
-
-            htmlDocument.title = (this.conversionMode_ === GenreWordConversionMode.ToOldWords)
-                ? htmlDocument.title.replace(word, entry.oldWord)
-                : htmlDocument.title.replace(word, entry.newWord);
-        }
-        else {
-            const words          = htmlDocument.title.split(' ');
-            const convertedWords = words.map((word) => {
-                const entry = (this.conversionMode_ === GenreWordConversionMode.ToOldWords)
-                    ? this.conversionMap_.entries.find((e) => e.newWord === word)
-                    : this.conversionMap_.entries.find((e) => e.oldWord === word);
-
-                if (!entry)
-                    return word;
-
-                return (this.conversionMode_ === GenreWordConversionMode.ToOldWords)
-                    ? entry.oldWord
-                    : entry.newWord;
-            });
-            htmlDocument.title = convertedWords.join(' ');
-        }
+    if (matched) {
+        const word          = matches[1];
+        const convertedWord = genreWordConverter.convertGenreWord(word);
+        
+        if (convertedWord)
+            htmlDocument.title = htmlDocument.title.replace(word, convertedWord);
     }
-    private conversionMap_ : GenreWordConversionMap;
-    private conversionMode_: GenreWordConversionMode;
+    else {
+        const words          = htmlDocument.title.split(' ');
+        const convertedWords = words.map((word) => {
+            const convertedWord      = genreWordConverter.convertGenreWord(word);
+            const convertedWordExists = (convertedWord !== null);
+
+            return (convertedWordExists) ? convertedWord : word;
+        });
+        htmlDocument.title = convertedWords.join(' ');
+    }
 }

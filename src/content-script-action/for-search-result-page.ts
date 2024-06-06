@@ -123,10 +123,10 @@ function doReplaceGenreWordsAndUpdateTabTitle() {
 
         const wordConverter  = new GenreWordConverter(conversionMap, conversionMode);
         const wordReplacer   = new GenreWordReplacer(GenreWordReplaceTargetPage.SearchResultPage);
-        const titleConverter = new DocumentTitleReplacer(conversionMap, conversionMode);
+        const titleConverter = new DocumentTitleReplacer();
     
         wordReplacer.replaceGenreWords(document, wordConverter);
-        titleConverter.replaceDocumentTitle(document);
+        titleConverter.replaceDocumentTitle(document, wordConverter);
     })
     .catch((err) => {
         console.error(err);

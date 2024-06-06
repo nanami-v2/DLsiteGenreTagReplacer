@@ -17,8 +17,8 @@ export class GenreWordReplacer {
                 return onProductPage(htmlDocument, genreWordConverter);
             case GenreWordReplaceTargetPage.SearchResultPage:
                 return onSearchResultPage(htmlDocument, genreWordConverter);
-            case GenreWordReplaceTargetPage.DetailSearchPage:
-                return onDetailSearchPage(htmlDocument, genreWordConverter);
+            case GenreWordReplaceTargetPage.AdvancedSearchPage:
+                return onAdvancedSearchPage(htmlDocument, genreWordConverter);
         }
     }
     private target_: GenreWordReplaceTargetPage;
@@ -153,7 +153,7 @@ function onSearchResultPage(htmlDocument: Document, genreWordConverter: GenreWor
     }
 }
 
-function onDetailSearchPage(htmlDocument: Document, genreWordConverter: GenreWordConverter): void {
+function onAdvancedSearchPage(htmlDocument: Document, genreWordConverter: GenreWordConverter): void {
     /*
     「ジャンルを選択」で登場するダイアログの中身は
 

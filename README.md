@@ -1,4 +1,4 @@
-# DLsite GenreTag Replacer <!-- omit in toc -->
+# DLsite Genre Tag Replacer <!-- omit in toc -->
 
 - [本拡張機能に関して](#本拡張機能に関して)
   - [機能](#機能)

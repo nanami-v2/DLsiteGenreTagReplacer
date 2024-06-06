@@ -1,0 +1,11 @@
+{
+    "description": {
+        "message": "Replace new tag name on DLsite.com with old tag name."
+    },
+    "toOldTagName": {
+        "message": "Display with old tag name"
+    },
+    "toNewTagName": {
+        "message": "Display with new tag name"
+    }
+}

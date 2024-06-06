@@ -3,8 +3,8 @@ import { GenreWordConversionMap, GenreWordConversionMapEntry } from "./genre-wor
 export class GenreWordConversionMapLoader {
     public loadConversionMap(langCode: string): Promise<GenreWordConversionMap | null> {
         const filePath = (
-            (langCode === 'ja-jp') ? '/assets/genre-word-conversion-map-ja.json':
-            (langCode === 'en-us') ? '/assets/genre-word-conversion-map-en.json'
+            (langCode === 'en-us') ? '/genre-word-conversion-map/en.json':
+            (langCode === 'ja-jp') ? '/genre-word-conversion-map/ja.json'
                                    : null
         );
 

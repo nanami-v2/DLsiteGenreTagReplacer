@@ -11,10 +11,6 @@ import { SessionStorage } from './core/session-storage';
 
 export namespace BackgroundScriptHandler {
     export function onInstalled(): void {
-        /*
-            コンテキストメニューを作成
-            コンテキストメニューの表示はタブ間を跨いで切り替わることに注意
-        */
        const contextMenu           = new ContextMenu();
        const localStorage          = new LocalStorage();
        const defaultConversionMode = GenreWordConversionMode.ToOldWords;
@@ -86,8 +82,8 @@ export namespace BackgroundScriptHandler {
                 : GenreWordConversionMode.ToOldWords;
 
             return Promise.all([
-                localStorage.saveConversionMode(flippedConversionMode),
                 contextMenu.updateTitleText(info.menuItemId, flippedConversionMode),
+                localStorage.saveConversionMode(flippedConversionMode),
                 sessionStorage.loadAllTabIds()
             ]);
         })
@@ -96,8 +92,7 @@ export namespace BackgroundScriptHandler {
             const msg    = msgFactory.createContextMenuClickedEvent();
             
             for (const tabId of tabIds) {
-                chrome.tabs
-                .sendMessage(tabId, msg)
+                chrome.tabs.sendMessage(tabId, msg)
                 .catch((err) => console.error(err));
             }
         })

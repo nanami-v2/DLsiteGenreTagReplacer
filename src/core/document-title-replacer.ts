@@ -1,6 +1,4 @@
 
-import { GenreWordConversionMap } from "./genre-word-conversion-map";
-import { GenreWordConversionMode } from "./genre-word-conversion-mode";
 import { GenreWordConverter } from "./genre-word-converter";
 
 export class DocumentTitleReplacer {
@@ -10,6 +8,9 @@ export class DocumentTitleReplacer {
     ): void {
         if (htmlDocument.documentElement.lang === 'ja-jp')
             return onJapanesePage(htmlDocument, genreWordConverter);
+
+        if (htmlDocument.documentElement.lang === 'en-us')
+            return onEnglishPage(htmlDocument, genreWordConverter);
     }
 }
 
@@ -44,5 +45,28 @@ function onJapanesePage(
             return (convertedWordExists) ? convertedWord : word;
         });
         htmlDocument.title = convertedWords.join(' ');
+    }
+}
+
+function onEnglishPage(
+    htmlDocument      : Document,
+    genreWordConverter: GenreWordConverter
+): void {
+    /*
+        日本語版と違い、ジャンルタグ名に対して
+
+        - [Petite]
+
+        という[]で囲った形式しか見当たらなかったので1パターンっぽい
+    */
+    const matches = htmlDocument.title.match(/\[(.+)\]/);
+    const matched = (matches !== null);
+
+    if (matched) {
+        const word          = matches[1];
+        const convertedWord = genreWordConverter.convertGenreWord(word);
+
+        if (convertedWord)
+            htmlDocument.title = htmlDocument.title.replace(word, convertedWord);
     }
 }

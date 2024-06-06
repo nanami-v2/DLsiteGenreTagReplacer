@@ -26,9 +26,9 @@
 
 ### 対応ブラウザ
 
-- Chrome
-- Firefox
-- Edge
+- [Chrome](https://microsoftedge.microsoft.com/addons/detail/dlsite-genretag-replacer/dgjijmflhnpaopkmmllioggkkalpdlgn)
+- [Firefox](https://addons.mozilla.org/ja/firefox/addon/dlsite-genretag-replacer/)
+- [Edge](https://microsoftedge.microsoft.com/addons/detail/dlsite-genretag-replacer/dgjijmflhnpaopkmmllioggkkalpdlgn)
 
 ### 対応言語
 
@@ -44,8 +44,8 @@
 
 ### 変換用語一覧
 
-- [jsonファイル(ja)](./assets/genre-word-conversion-map-ja.json)
-- [jsonファイル(en)](./assets/genre-word-conversion-map-en.json)
+- [jsonファイル (ja)](./assets/genre-word-conversion-map-ja.json)
+- [jsonファイル (en)](./assets/genre-word-conversion-map-en.json)
 
 をご参照ください。
 

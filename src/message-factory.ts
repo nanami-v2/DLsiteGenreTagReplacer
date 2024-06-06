@@ -16,7 +16,7 @@ export class MessageFactory {
 
         return new Message(msgType, msgData);
     }
-    public createGetConversionMapResponse(conversionMap: GenreWordConversionMap): Message {
+    public createGetConversionMapResponse(conversionMap: GenreWordConversionMap | null): Message {
         const msgType = MessageType.GetConversionMapResponse;
         const msgData = new MessageDataGetConversionMapResponse(conversionMap);
 

@@ -90,7 +90,10 @@ function doReplaceGenreWords() {
     .then((results: Array<Message>) => {
         const conversionMap  = (results[0].data as MessageDataGetConversionMapResponse ).conversionMap;
         const conversionMode = (results[1].data as MessageDataGetConversionModeResponse).conversionMode;
-    
+
+        if (!conversionMap)
+            return;
+
         const wordConverter = new GenreWordConverter(conversionMap, conversionMode);
         const wordReplacer  = new GenreWordReplacer(GenreWordReplaceTargetPage.DetailSearchPage);
     

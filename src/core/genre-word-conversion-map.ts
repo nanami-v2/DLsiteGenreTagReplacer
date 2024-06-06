@@ -13,9 +13,14 @@ export class GenreWordConversionMapEntry {
 }
 
 export class GenreWordConversionMap {
-    entries: Array<GenreWordConversionMapEntry>;
+    langCode: string;
+    entries : Array<GenreWordConversionMapEntry>;
 
-    constructor(entries: Array<GenreWordConversionMapEntry> = []) {
-        this.entries = entries;
+    constructor(
+        langCode: string,
+        entries : Array<GenreWordConversionMapEntry>
+    ) {
+        this.langCode = langCode;
+        this.entries  = entries;
     }
 }

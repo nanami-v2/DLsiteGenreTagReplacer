@@ -12,9 +12,9 @@ export class MessagDataeGetConversionMapRequest implements MessageData {
 }
 
 export class MessageDataGetConversionMapResponse implements MessageData {
-    conversionMap: GenreWordConversionMap;
+    conversionMap: GenreWordConversionMap | null;
 
-    constructor(conversionMap: GenreWordConversionMap) {
+    constructor(conversionMap: GenreWordConversionMap | null) {
         this.conversionMap = conversionMap;
     }
 }

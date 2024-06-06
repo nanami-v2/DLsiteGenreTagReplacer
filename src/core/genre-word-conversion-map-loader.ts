@@ -1,7 +1,10 @@
 import { GenreWordConversionMap, GenreWordConversionMapEntry } from "./genre-word-conversion-map";
 
 export class GenreWordConversionMapLoader {
-    public loadConversionMap(langCode: string): Promise<GenreWordConversionMap> {
+    public loadConversionMap(langCode: string): Promise<GenreWordConversionMap | null> {
+        if (!(langCode === 'ja-jp' || langCode === 'en-us'))
+            return Promise.resolve(null);
+
         const filePath = (langCode === 'ja-jp')
             ? '/assets/genre-word-conversion-map-ja.json'
             : '/assets/genre-word-conversion-map-en.json';
@@ -16,7 +19,7 @@ export class GenreWordConversionMapLoader {
             })
             .then((entries: Array<GenreWordConversionMapEntry>) => {
                 return Promise.resolve(
-                    new GenreWordConversionMap(entries)
+                    new GenreWordConversionMap(langCode, entries)
                 );
             })
         );

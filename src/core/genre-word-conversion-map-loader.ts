@@ -2,12 +2,14 @@ import { GenreWordConversionMap, GenreWordConversionMapEntry } from "./genre-wor
 
 export class GenreWordConversionMapLoader {
     public loadConversionMap(langCode: string): Promise<GenreWordConversionMap | null> {
-        if (!(langCode === 'ja-jp' || langCode === 'en-us'))
-            return Promise.resolve(null);
+        const filePath = (
+            (langCode === 'ja-jp') ? '/assets/genre-word-conversion-map-ja.json':
+            (langCode === 'en-us') ? '/assets/genre-word-conversion-map-en.json'
+                                   : null
+        );
 
-        const filePath = (langCode === 'ja-jp')
-            ? '/assets/genre-word-conversion-map-ja.json'
-            : '/assets/genre-word-conversion-map-en.json';
+        if (!filePath)
+            return Promise.resolve(null);
 
         return (
             fetch(chrome.runtime.getURL(filePath))

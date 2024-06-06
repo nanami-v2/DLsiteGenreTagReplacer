@@ -3,10 +3,18 @@ import { GenreWordConversionMode } from "../core/genre-word-conversion-mode";
 
 export interface MessageData {}
 
-export class MessageDataGetConversionMapResponse implements MessageData {
-    conversionMap: GenreWordConversionMap;
+export class MessagDataeGetConversionMapRequest implements MessageData {
+    langCode: string;
 
-    constructor(conversionMap: GenreWordConversionMap) {
+    constructor(langCode: string) {
+        this.langCode = langCode;
+    }
+}
+
+export class MessageDataGetConversionMapResponse implements MessageData {
+    conversionMap: GenreWordConversionMap | null;
+
+    constructor(conversionMap: GenreWordConversionMap | null) {
         this.conversionMap = conversionMap;
     }
 }

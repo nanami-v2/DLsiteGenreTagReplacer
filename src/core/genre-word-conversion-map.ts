@@ -15,7 +15,7 @@ export class GenreWordConversionMapEntry {
 export class GenreWordConversionMap {
     entries: Array<GenreWordConversionMapEntry>;
 
-    constructor(entries: Array<GenreWordConversionMapEntry> = []) {
+    constructor(entries: Array<GenreWordConversionMapEntry>) {
         this.entries = entries;
     }
 }

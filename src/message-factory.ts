@@ -3,43 +3,44 @@ import { GenreWordConversionMode } from "./core/genre-word-conversion-mode";
 import { Message } from "./message";
 import { MessageType } from "./message/type";
 import {
+    MessagDataeGetConversionMapRequest,
     MessageDataGetConversionMapResponse,
     MessageDataGetConversionModeResponse,
 } from "./message/data";
 
 
 export class MessageFactory {
-    public createMessageGetConversionMapRequest(): Message {
+    public createGetConversionMapRequest(langCode: string): Message {
         const msgType = MessageType.GetConversionMapRequest;
-        const msgData = null;
+        const msgData = new MessagDataeGetConversionMapRequest(langCode);
 
         return new Message(msgType, msgData);
     }
-    public createMessageGetConversionMapResponse(conversionMap: GenreWordConversionMap): Message {
+    public createGetConversionMapResponse(conversionMap: GenreWordConversionMap | null): Message {
         const msgType = MessageType.GetConversionMapResponse;
         const msgData = new MessageDataGetConversionMapResponse(conversionMap);
 
         return new Message(msgType, msgData);
     }
-    public createMessageGetConversionModeRequest(): Message {
+    public createGetConversionModeRequest(): Message {
         const msgType = MessageType.GetConversionModeRequest;
         const msgData = null;
 
         return new Message(msgType, msgData);
     }
-    public createMessageGetConversionModeResponse(conversionMode: GenreWordConversionMode): Message {
+    public createGetConversionModeResponse(conversionMode: GenreWordConversionMode): Message {
         const msgType = MessageType.GetConversionModeRequest;
         const msgData = new MessageDataGetConversionModeResponse(conversionMode);
 
         return new Message(msgType, msgData);
     }
-    public createMessageContentScriptSetuppedEvent(): Message {
+    public createContentScriptSetuppedEvent(): Message {
         const msgType = MessageType.ContentScriptSetuppedEvent;
         const msgData = null;
 
         return new Message(msgType, msgData);
     }
-    public createMessageContextMenuClickedEvent(): Message {
+    public createContextMenuClickedEvent(): Message {
         const msgType = MessageType.ContextMenuClickedEvent;
         const msgData = null;
 

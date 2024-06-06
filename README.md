@@ -33,12 +33,11 @@
 
 - [検索結果ページ](https://www.dlsite.com/maniax/fsr/=/order/trend/genre[0]/525/options[0]/JPN/options[1]/NM/from/work.genre)
 - [商品ページ](https://www.dlsite.com/books/work/=/product_id/BJ01328905.html)
-- [ジャンル一覧ページ](https://www.dlsite.com/maniax/genre/list)
 - [こだわり検索ページ](https://www.dlsite.com/books/fs)
 
 ### 変換用語一覧
 
-[jsonファイル](./assets/genre-word-conversion-map.json)をご参照ください。
+[jsonファイル](./assets/genre-word-conversion-map-ja.json)をご参照ください。
 
 ## 開発環境
 

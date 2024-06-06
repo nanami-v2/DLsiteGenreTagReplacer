@@ -22,9 +22,6 @@ check:
 	npx tsc $(srcDir)/*.ts --noEmit --strict
 
 
-test:
-	find $(assetDir) | grep 'i18n' | 
-
 $(outDir)/%: $(srcFiles) $(assertFiles) $(manifestFiles)
 	npx esbuild $(entryPoints) --bundle --outdir=$@
 	mkdir -p $@/icons

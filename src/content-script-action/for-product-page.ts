@@ -36,7 +36,7 @@ export class ContentScriptActionForProductPage implements ContentScriptAction {
         .sendMessage(msgEvent)
         .catch((err) => console.error(err));      
     }
-    public excute(): void {
+    public execute(): void {
         doReplaceGenreWords();
     }
 }

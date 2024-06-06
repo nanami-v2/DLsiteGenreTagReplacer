@@ -100,7 +100,7 @@ export class ContentScriptActionForSearchResultPage implements ContentScriptActi
         .sendMessage(msgEvent)
         .catch((err) => console.error(err));
     }
-    public excute(): void {
+    public execute(): void {
         doReplaceGenreWordsAndUpdateTabTitle();
     }
 }

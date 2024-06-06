@@ -3,7 +3,7 @@ import { ContentScriptAction } from "../content-script-action";
 import { GenreWordConverter } from "../core/genre-word-converter";
 import { GenreWordReplacer } from "../core/genre-word-replacer";
 import { GenreWordReplaceTargetPage } from "../core/genre-word-replace-target-page";
-import { DocumentTitleConverter } from '../core/document-title-converter'
+import { DocumentTitleReplacer } from '../core/document-title-replacer'
 import { Message } from "../message";
 import { MessageType } from "../message/type";
 import {
@@ -120,12 +120,10 @@ function doReplaceGenreWordsAndUpdateTabTitle() {
     
         const wordConverter  = new GenreWordConverter(conversionMap, conversionMode);
         const wordReplacer   = new GenreWordReplacer(GenreWordReplaceTargetPage.SearchResultPage);
-        const titleConverter = new DocumentTitleConverter(conversionMap, conversionMode);
+        const titleConverter = new DocumentTitleReplacer(conversionMap, conversionMode);
     
-        console.log(titleConverter.convertDocumentTitle(document.title));
-
         wordReplacer.replaceGenreWords(document, wordConverter);
-        document.title = titleConverter.convertDocumentTitle(document.title);
+        titleConverter.replaceDocumentTitle(document);
     })
     .catch((err) => {
         console.error(err);

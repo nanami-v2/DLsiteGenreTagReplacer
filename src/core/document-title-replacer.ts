@@ -2,7 +2,7 @@
 import { GenreWordConversionMap } from "./genre-word-conversion-map";
 import { GenreWordConversionMode } from "./genre-word-conversion-mode";
 
-export class DocumentTitleConverter {
+export class DocumentTitleReplacer {
     constructor(
         conversionMap : GenreWordConversionMap,
         conversionMode: GenreWordConversionMode
@@ -10,7 +10,7 @@ export class DocumentTitleConverter {
         this.conversionMap_ = conversionMap;
         this.conversionMode_ = conversionMode;
     }
-    public convertDocumentTitle(documentTitle: string): string {
+    public replaceDocumentTitle(htmlDocument: Document): void {
         /*
             ジャンルに対するタブ名として
 
@@ -19,7 +19,7 @@ export class DocumentTitleConverter {
 
             といった2パターンがあるようなので、それぞれで処理を分ける
         */
-        const matches = documentTitle.match('「\(.+\)」');
+        const matches = htmlDocument.title.match('「\(.+\)」');
         const matched = (matches !== null);
 
         if (matched) {
@@ -29,14 +29,14 @@ export class DocumentTitleConverter {
                 : this.conversionMap_.entries.find((e) => e.oldWord === word);
 
             if (!entry)
-                return documentTitle;
+                return;
 
-            return (this.conversionMode_ === GenreWordConversionMode.ToOldWords)
-                ? documentTitle.replace(word, entry.oldWord)
-                : documentTitle.replace(word, entry.newWord);
+            htmlDocument.title = (this.conversionMode_ === GenreWordConversionMode.ToOldWords)
+                ? htmlDocument.title.replace(word, entry.oldWord)
+                : htmlDocument.title.replace(word, entry.newWord);
         }
         else {
-            const words          = documentTitle.split(' ');
+            const words          = htmlDocument.title.split(' ');
             const convertedWords = words.map((word) => {
                 const entry = (this.conversionMode_ === GenreWordConversionMode.ToOldWords)
                     ? this.conversionMap_.entries.find((e) => e.newWord === word)
@@ -49,7 +49,7 @@ export class DocumentTitleConverter {
                     ? entry.oldWord
                     : entry.newWord;
             });
-            return convertedWords.join(' ');
+            htmlDocument.title = convertedWords.join(' ');
         }
     }
     private conversionMap_ : GenreWordConversionMap;

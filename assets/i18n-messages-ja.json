@@ -1,4 +1,7 @@
 {
+    "description": {
+        "message": "DLsite.comでの新タグ名を旧タグ名に戻して表示します。"
+    },
     "toOldTagName": {
         "message": "旧タグ名で表示"
     },

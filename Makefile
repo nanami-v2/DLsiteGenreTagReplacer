@@ -22,9 +22,17 @@ check:
 	npx tsc $(srcDir)/*.ts --noEmit --strict
 
 
+test:
+	find $(assetDir) | grep 'i18n' | 
+
 $(outDir)/%: $(srcFiles) $(assertFiles) $(manifestFiles)
 	npx esbuild $(entryPoints) --bundle --outdir=$@
-	cp $(assetDir) $@/ -r
+	mkdir -p $@/icons
+	mkdir -p $@/genre-word-conversion-map
+	find $(assetDir) -type f | grep 'i18n' | sed -e 's!$(assetDir)/i18n-messages-\(.*\)\.json!$@/_locales/\1!g' | xargs mkdir -p 
+	find $(assetDir) -type f | grep 'i18n' | sed -e 'p;s!$(assetDir)/i18n-messages-\(.*\)\.json!$@/_locales/\1/messages\.json!g' | xargs -n2 cp
+	find $(assetDir) -type f | grep 'icon' | sed -e 'p;s!$(assetDir)/icon-\(.*\)!$@/icons/\1!g' | xargs -n2 cp
+	find $(assetDir) -type f | grep 'map'  | sed -e 'p;s!$(assetDir)/genre-word-conversion-map-\(.*\)!$@/genre-word-conversion-map/\1!g' | xargs -n2 cp
 	cp manifest-$*.json $@/manifest.json
 	cp LICENSE $@/
 	touch $@

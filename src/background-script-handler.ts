@@ -11,10 +11,6 @@ import { SessionStorage } from './core/session-storage';
 
 export namespace BackgroundScriptHandler {
     export function onInstalled(): void {
-        /*
-            コンテキストメニューを作成
-            コンテキストメニューの表示はタブ間を跨いで切り替わることに注意
-        */
        const contextMenu           = new ContextMenu();
        const localStorage          = new LocalStorage();
        const defaultConversionMode = GenreWordConversionMode.ToOldWords;

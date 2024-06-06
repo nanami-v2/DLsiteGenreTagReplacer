@@ -1,16 +1,16 @@
 {
   "manifest_version": 3,
-  "name": "DLsite GenreTag Replacer",
-  "version": "1.0.2",
-  "description": "DLsite.comでの新タグ名を旧タグ名に戻して表示します。",
+  "name": "DLsite Genre Tag Replacer",
+  "version": "1.1.0",
+  "description": "__MSG_description__",
   "homepage_url": "https://github.com/nanami-v2/DLsiteGenreTagReplacer",
   "permissions": [
     "contextMenus",
     "storage"
   ],
   "icons": {
-    "48": "assets/icon-48x48.png",
-    "128": "assets/icon-128x128.png"
+    "48": "icons/48x48.png",
+    "128": "icons/128x128.png"
   },
   "content_scripts": [
     {
@@ -33,6 +33,7 @@
       "id": "{49585e1b-d5de-4b44-bf60-604fe4299642}",
       "strict_min_version": "115.0"
     }
-  }
+  },
+  "default_locale": "en"
 }
   

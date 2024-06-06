@@ -12,7 +12,7 @@ import {
 import { MessageFactory } from '../message-factory';
 
 
-export class ContentScriptActionForDetailSearchPage implements ContentScriptAction {
+export class ContentScriptActionForAdvancedSearchPage implements ContentScriptAction {
     public setup(): void {
         /*
             メッセージハンドラを登録
@@ -95,7 +95,7 @@ function doReplaceGenreWords() {
             return;
 
         const wordConverter = new GenreWordConverter(conversionMap, conversionMode);
-        const wordReplacer  = new GenreWordReplacer(GenreWordReplaceTargetPage.DetailSearchPage);
+        const wordReplacer  = new GenreWordReplacer(GenreWordReplaceTargetPage.AdvancedSearchPage);
     
         wordReplacer.replaceGenreWords(document, wordConverter);
     })

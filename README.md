@@ -3,6 +3,7 @@
 - [本拡張機能に関して](#本拡張機能に関して)
   - [機能](#機能)
   - [対応ブラウザ](#対応ブラウザ)
+  - [対応言語](#対応言語)
   - [対応ページ](#対応ページ)
   - [変換用語一覧](#変換用語一覧)
 - [開発環境](#開発環境)
@@ -29,16 +30,24 @@
 - Firefox
 - Edge
 
+### 対応言語
+
+- 日本語
+- 英語
+
 ### 対応ページ
 
 - [検索結果ページ](https://www.dlsite.com/maniax/fsr/=/order/trend/genre[0]/525/options[0]/JPN/options[1]/NM/from/work.genre)
 - [商品ページ](https://www.dlsite.com/books/work/=/product_id/BJ01328905.html)
-- [ジャンル一覧ページ](https://www.dlsite.com/maniax/genre/list)
 - [こだわり検索ページ](https://www.dlsite.com/books/fs)
+- [ジャンル一覧ページ](https://www.dlsite.com/maniax/genre/list)
 
 ### 変換用語一覧
 
-[jsonファイル](./assets/genre-word-conversion-map.json)をご参照ください。
+- [jsonファイル(ja)](./assets/genre-word-conversion-map-ja.json)
+- [jsonファイル(en)](./assets/genre-word-conversion-map-en.json)
+
+をご参照ください。
 
 ## 開発環境
 

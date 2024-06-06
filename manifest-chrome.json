@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "DLsite Genre Tag Replacer",
-  "version": "1.1.0",
+  "name": "DLsite GenreTag Replacer",
+  "version": "1.1.1",
   "description": "__MSG_description__",
   "homepage_url": "https://github.com/nanami-v2/DLsiteGenreTagReplacer",
   "permissions": [

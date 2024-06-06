@@ -41,6 +41,4 @@ function getTitleTextForNextFlip(
     return (currentConversionMode === GenreWordConversionMode.ToOldWords)
         ? chrome.i18n.getMessage('toNewTagName')
         : chrome.i18n.getMessage('toOldTagName');
-        //? '新タグ名で表示'
-        //: '旧タグ名で表示';
 }

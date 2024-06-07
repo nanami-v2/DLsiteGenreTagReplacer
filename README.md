@@ -26,7 +26,7 @@
 
 ### 対応ブラウザ
 
-- [Chrome](https://microsoftedge.microsoft.com/addons/detail/dlsite-genretag-replacer/dgjijmflhnpaopkmmllioggkkalpdlgn)
+- [Chrome](https://chromewebstore.google.com/detail/dlsite-genretag-replacer/eaoaibmfcpbloafddfghnhpolibdnlpg)
 - [Firefox](https://addons.mozilla.org/ja/firefox/addon/dlsite-genretag-replacer/)
 - [Edge](https://microsoftedge.microsoft.com/addons/detail/dlsite-genretag-replacer/dgjijmflhnpaopkmmllioggkkalpdlgn)
 
@@ -46,8 +46,6 @@
 
 - [jsonファイル (ja)](./assets/genre-word-conversion-map-ja.json)
 - [jsonファイル (en)](./assets/genre-word-conversion-map-en.json)
-
-をご参照ください。
 
 ## 開発環境
 

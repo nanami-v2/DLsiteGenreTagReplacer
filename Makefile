@@ -1,11 +1,10 @@
 
-srcDir        := src
-outDir        := dist
-assetDir      := assets
-entryPoints   := $(srcDir)/content-script.ts $(srcDir)/background-script.ts
-srcFiles      := $(shell find $(srcDir) -type f) 
-assertFiles   := $(shell find $(assetDir) -type f)
-manifestFiles := manifest-chrome.json manifest-firefox.json
+srcDir      := src
+outDir      := dist
+assetDir    := assets
+entryPoints := $(srcDir)/content-script.ts $(srcDir)/background-script.ts
+srcFiles    := $(shell find $(srcDir) -type f) 
+assertFiles := $(shell find $(assetDir) -type f)
 
 .PHONY: build
 build: $(outDir)/chrome $(outDir)/firefox
@@ -22,7 +21,7 @@ check:
 	npx tsc $(srcDir)/*.ts --noEmit --strict
 
 
-$(outDir)/%: $(srcFiles) $(assertFiles) $(manifestFiles)
+$(outDir)/%: $(srcFiles) $(assertFiles) manifest-%.json
 	npx esbuild $(entryPoints) --bundle --outdir=$@
 	mkdir -p $@/icons
 	mkdir -p $@/genre-word-conversion-map

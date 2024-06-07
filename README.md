@@ -26,7 +26,7 @@
 
 ### 対応ブラウザ
 
-- [Chrome](https://microsoftedge.microsoft.com/addons/detail/dlsite-genretag-replacer/dgjijmflhnpaopkmmllioggkkalpdlgn)
+- [Chrome](https://chromewebstore.google.com/detail/dlsite-genretag-replacer/eaoaibmfcpbloafddfghnhpolibdnlpg)
 - [Firefox](https://addons.mozilla.org/ja/firefox/addon/dlsite-genretag-replacer/)
 - [Edge](https://microsoftedge.microsoft.com/addons/detail/dlsite-genretag-replacer/dgjijmflhnpaopkmmllioggkkalpdlgn)
 

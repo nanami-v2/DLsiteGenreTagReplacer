@@ -47,8 +47,6 @@
 - [jsonファイル (ja)](./assets/genre-word-conversion-map-ja.json)
 - [jsonファイル (en)](./assets/genre-word-conversion-map-en.json)
 
-をご参照ください。
-
 ## 開発環境
 
 開発にあたっては[TypeScript](https://www.typescriptlang.org/)を使用しています。また、以下の利用を前提としています。

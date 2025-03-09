@@ -1,9 +1,9 @@
 {
   "devDependencies": {
-    "@types/chrome": "^0.0.263",
-    "@types/firefox-webext-browser": "^120.0.3",
-    "esbuild": "^0.20.2",
+    "@types/chrome": "^0.0.308",
+    "@types/firefox-webext-browser": "^120.0.4",
+    "esbuild": "^0.25.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.3"
+    "typescript": "^5.8.2"
   }
 }

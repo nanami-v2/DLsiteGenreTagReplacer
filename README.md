@@ -65,7 +65,7 @@
     source ~/.bashrc
     ```
 
-- [Node.js](https://nodejs.org/en)（現時点ではLTSのバージョンは`v20.11.1`）
+- [Node.js](https://nodejs.org/en)（現時点ではLTSのバージョンは`v22.14.0`）
 
     ```sh
     nvm install --lts

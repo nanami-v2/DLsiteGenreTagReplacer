@@ -1,0 +1,11 @@
+{
+    "description": {
+        "message": "恢復 DLsite.com 被自主規制的標籤名字"
+    },
+    "toOldTagName": {
+        "message": "顯示被和諧前的標籤"
+    },
+    "toNewTagName": {
+        "message": "顯示被和諧後的標籤"
+    }
+}

@@ -100,7 +100,7 @@ export namespace BackgroundScriptHandler {
     }
     export function onTabRemoved(
         tabId     : number,
-        removeInfo: chrome.tabs.TabRemoveInfo
+        removeInfo: chrome.tabs.OnRemovedInfo
     ): void {
         const sessionStorage = new SessionStorage();
         

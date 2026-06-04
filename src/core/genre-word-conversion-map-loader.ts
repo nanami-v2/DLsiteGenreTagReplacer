@@ -6,9 +6,9 @@ export class GenreWordConversionMapLoader {
             DLsite.comの言語コードに対応
         */
         const filePath = (
-            (langCode === 'en-US') ? '/genre-word-conversion-map/en-US.json' :
-            (langCode === 'ja-JP') ? '/genre-word-conversion-map/ja-JP.json' :
-            (langCode === 'zh-TW') ? '/genre-word-conversion-map/zh-TW.json' : null
+            (langCode === 'en-US' || langCode === 'en-us') ? '/genre-word-conversion-map/en-US.json' :
+            (langCode === 'ja-JP' || langCode === 'ja-jp') ? '/genre-word-conversion-map/ja-JP.json' :
+            (langCode === 'zh-TW' || langCode === 'zh-tw') ? '/genre-word-conversion-map/zh-TW.json' : null
         );
 
         if (!filePath)

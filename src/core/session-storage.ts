@@ -8,7 +8,7 @@ export class SessionStorage {
 
                 for (const [k, v] of Object.entries(result))
                     if (k.includes('tabId-'))
-                        tabIds.push(v);
+                        tabIds.push(v as number);
                 
                 return Promise.resolve(tabIds);
             })

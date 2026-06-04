@@ -3,8 +3,9 @@ import { GenreWordConversionMap, GenreWordConversionMapEntry } from "./genre-wor
 export class GenreWordConversionMapLoader {
     public loadConversionMap(langCode: string): Promise<GenreWordConversionMap | null> {
         const filePath = (
-            (langCode === 'en-us') ? '/genre-word-conversion-map/en.json' :
-            (langCode === 'ja-jp') ? '/genre-word-conversion-map/ja.json' : null
+            (langCode === 'en-US') ? '/genre-word-conversion-map/en.json'    :
+            (langCode === 'ja-JP') ? '/genre-word-conversion-map/ja.json'    :
+            (langCode === 'zh-TW') ? '/genre-word-conversion-map/zh_TW.json' : null
         );
 
         if (!filePath)
